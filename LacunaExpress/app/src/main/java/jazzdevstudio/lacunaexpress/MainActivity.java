@@ -1,15 +1,14 @@
 package jazzdevstudio.lacunaexpress;
 
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 
 
 public class MainActivity extends Activity {
@@ -60,7 +59,25 @@ public class MainActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
+
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //After creating the load file code need to setup if fill not found
+            //start add account, otherwise if 1 account open account, if multiple accounts
+            //open account selection
+            if(AccountMan.AccountMan.CheckForFile()){
+                Intent intent = new Intent(getActivity(), SelectAccount.class);
+                startActivity(intent);
+                return rootView;
+            }
+            else {
+                Intent intent = new Intent(getActivity(), AddAccount.class);
+                startActivity(intent);
+                return rootView;
+            }
         }
     }
 }
