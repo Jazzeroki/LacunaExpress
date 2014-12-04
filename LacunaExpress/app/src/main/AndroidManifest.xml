@@ -16,6 +16,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="jazzdevstudio.lacunaexpress.AddAccount"
+            android:label="@string/title_activity_add_account"
+            android:parentActivityName="jazzdevstudio.lacunaexpress.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="jazzdevstudio.lacunaexpress.MainActivity" />
+        </activity>
+        <activity
+            android:name="jazzdevstudio.lacunaexpress.SelectAccount"
+            android:label="@string/title_activity_select_account"
+            android:parentActivityName="jazzdevstudio.lacunaexpress.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="jazzdevstudio.lacunaexpress.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
