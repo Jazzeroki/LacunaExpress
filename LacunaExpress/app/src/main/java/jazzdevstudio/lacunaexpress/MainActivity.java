@@ -76,6 +76,7 @@ public class MainActivity extends Activity {
             else {
                 Intent intent = new Intent(getActivity(), AddAccount.class);
                 startActivity(intent);
+                R.id
                 return rootView;
             }
         }

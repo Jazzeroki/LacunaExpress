@@ -13,6 +13,31 @@ android {
     }
     buildTypes {
         release {
+            apply plugin: 'java'
+            apply plugin: 'maven'
+            apply plugin: 'osgi'
+            apply plugin: 'osgi'
+            apply plugin: 'pmd'
+            apply plugin: 'project-report'
+            apply plugin: 'scala'
+            apply plugin: 'signing'
+            apply plugin: 'sonar'
+            apply plugin: 'war'
+            apply plugin: 'jetty'
+            apply plugin: 'jdepend'
+            apply plugin: 'java'
+            apply plugin: 'idea'
+            //apply plugin: 'groovy'
+            apply plugin: 'findbugs'
+            apply plugin: 'eclipse-wtp'
+            apply plugin: 'eclipse'
+            apply plugin: 'ear'
+            apply plugin: 'codenarc'
+            apply plugin: 'checkstyle'
+            apply plugin: 'build-announcements'
+            apply plugin: 'application'
+            apply plugin: 'antlr'
+            apply plugin: 'antlr'
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

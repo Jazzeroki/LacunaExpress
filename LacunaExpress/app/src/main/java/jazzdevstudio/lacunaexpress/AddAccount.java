@@ -2,6 +2,7 @@ package jazzdevstudio.lacunaexpress;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,6 +45,10 @@ public class AddAccount extends Activity implements serverFinishedListener {
 
             AccountMan.AccountMan a = new AccountMan.AccountMan();
             a.AddAccount(account);
+
+            Intent intent = new Intent(getActivity(), SelectAccount.class);
+            startActivity(intent);
+            return rootView;
         }
 
     }
