@@ -2,17 +2,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.JazzDevStudio.LacunaExpress"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.00" >
 
+    <!-- SDK Levels -->
     <uses-sdk
-        android:minSdkVersion="16"
-        android:targetSdkVersion="16" />
+        android:minSdkVersion="14"
+        android:targetSdkVersion="20" />
 
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    
+    <!-- Application Declarations -->
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
+        <!-- This is the main Activity -->
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -22,6 +29,39 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+    
+    	<!-- This is the Add Account Activity -->
+    	<activity 
+    	    android:name="com.JazzDevStudio.LacunaExpress.AddAccount"
+    	    android:label="@string/app_name" >
+        </activity>
+    	
+    	<!-- This is the Add Select Account Activity for selecting the login account-->
+    	<activity 
+    	    android:name="com.JazzDevStudio.LacunaExpress.SelectAccount"
+    	    android:label="@string/app_name" >
+        </activity>
+            
+    	<!-- This is the Add Account Manager Activity -->
+    	<activity 
+    	    android:name="com.JazzDevStudio.LacunaExpress.AccountMan"
+    	    android:label="@string/app_name" >
+        </activity>
+            
+    	<!-- This is the Add Account Info Activity -->
+    	<activity 
+    	    android:name="com.JazzDevStudio.LacunaExpress.AccountInfo"
+    	    android:label="@string/app_name" >
+        </activity>
+        
+    	<!-- This is the Accounts Activity -->
+    	<activity 
+    	    android:name="com.JazzDevStudio.LacunaExpress.Accounts"
+    	    android:label="@string/app_name" >
+        </activity>    	
+    		
+    <!-- End Application -->
     </application>
-
+    
+<!-- End Manifest -->
 </manifest>
