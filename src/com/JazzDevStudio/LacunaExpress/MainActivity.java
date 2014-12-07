@@ -1,9 +1,19 @@
 package com.JazzDevStudio.LacunaExpress;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +32,23 @@ public class MainActivity extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+        
+        //This adds a text file to the phone and then reads it for testing purpose
+        File file = this.getFileStreamPath("test123.txt");
+        if(file.exists()){
+        	Log.d("The File", "Exists");
+        } else {
+	        try {
+	        	writeToFile("TESTING JAZZ! TESTING");
+	        	Log.d("The File", "Has Been Written");
+	        	String test = readFromFile();
+	        	Log.d("READ FILE", test);
+	        } catch (Exception e){
+	        	e.printStackTrace();
+	        }
+        }
+        //End adding text file
+        
     }
 
 
@@ -65,11 +92,11 @@ public class MainActivity extends Activity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            
             //After creating the load file code need to setup if fill not found
             //start add account, otherwise if 1 account open account, if multiple accounts
-            //open account selection
-            
-            if(AccountMan.AccountMan.CheckForFile()){
+            //open account selection            
+            if (AccountMan.AccountMan.CheckForFile()) {
                 Intent intent = new Intent(getActivity(), SelectAccount.class);
                 startActivity(intent);
                 return rootView;
@@ -82,4 +109,47 @@ public class MainActivity extends Activity {
             }  
         }
     }
+    
+    //Write a file to disk
+    private void writeToFile(String data) {
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("test123.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        } 
+    }
+    
+    //Read a file from disk
+    private String readFromFile() {
+
+        String ret = "";
+
+        try {
+            InputStream inputStream = openFileInput("test123.txt");
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+
+        return ret;
+    }    
 }

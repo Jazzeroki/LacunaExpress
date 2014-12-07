@@ -15,22 +15,41 @@
         android:id="@+id/select_account_account_list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_weight="1" >
     </ListView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical" >
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/select_account_add_modify"
+            android:id="@+id/select_account_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Add / Modify Account" />
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_weight="1"
+            android:text="Login" />
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/select_account_modify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/button1"
+            android:layout_toRightOf="@+id/select_account_add"
+            android:layout_weight="1"
+            android:text="Modify Account" />
+
+        <Button
+            android:id="@+id/select_account_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_weight="1"
+            android:text="Add Account" />
+
+    </RelativeLayout>
 
 </LinearLayout>

@@ -54,6 +54,12 @@
     	    android:label="@string/app_name" >
         </activity>
         
+    	<!-- This is the Modify Account Info Activity -->
+    	<activity 
+    	    android:name="com.JazzDevStudio.LacunaExpress.ModifyAccount"
+    	    android:label="@string/app_name" >
+        </activity>    	
+        
     	<!-- This is the Accounts Activity -->
     	<activity 
     	    android:name="com.JazzDevStudio.LacunaExpress.Accounts"
