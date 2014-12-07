@@ -155,9 +155,11 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 			account.userName = etusername.getText().toString();
 			account.password = etpassword.getText().toString();
 			account.server = server;
+			account.defaultAccount = cbdfAccount.isChecked();
 			Log.d("username", account.userName);
 			Log.d("password", account.password);
 			Log.d("server", account.server);
+			Log.d("default account", account.defaultAccount.toString());
 			
 	        //if all required fields are filled in then the request will be sent to the server
 	        if(!account.userName.isEmpty()&&!account.password.isEmpty()&&!account.server.isEmpty()){
