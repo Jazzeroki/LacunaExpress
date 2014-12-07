@@ -42,17 +42,20 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
     public void onResponseRecieved(String reply) {
         //This is the listener to the server event
         //if server request errors it returns error
+    	Log.d("Server Reply", reply);
 
         if(!reply.equals("error")) {
+        	
             Context context = getApplicationContext();
             CharSequence text = reply;
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+            //int duration = Toast.LENGTH_LONG;
+            //Toast toast = Toast.makeText(context, text, duration);
+            //toast.show();
             TextView serverReply = (TextView) findViewById(R.id.textViewServerReply);
             serverReply.setText((CharSequence) serverReply, EditText.BufferType.NORMAL);
 
             //Deserializing response and pulling session data out
+            
             Response r = new Gson().fromJson(reply, Response.class);
 
             account.sessionID = r.result.session_id;
@@ -84,7 +87,7 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
     private void Initialize() {
 
     	//Server String set to nothing upon initialization
-    	server ="";
+    	server ="https://us1.lacunaexpanse.com";
     	
     	//Default the remember me box to false
     	remember_me = false;
@@ -138,17 +141,62 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 
 	//This handles the click methods of the buttons so when they are clicked, the actions are defined here
 	public void onClick(View v) {
-
-		switch (v.getId()){
+		TextView serverReply = (TextView) findViewById(R.id.textViewServerReply);
+		serverReply.setText((CharSequence) "A button was clicked", EditText.BufferType.NORMAL);
+		//serverReply.setText((CharSequence) "A button was clicked", EditText.BufferType.NORMAL);
 		
+		try {
+			
+			account.userName = etusername.getText().toString();
+			account.password = etpassword.getText().toString();
+			account.server = server;
+			Log.d("username", account.userName);
+			Log.d("password", account.password);
+			Log.d("server", account.server);
+			
+	        //if all required fields are filled in then the request will be sent to the server
+	        if(!account.userName.isEmpty()&&!account.password.isEmpty()&&!account.server.isEmpty()){
+	            Empire e = new Empire();
+	            String request = e.Login(account.userName, account.password, 1);
+	            Log.d("Request to server", request);
+	            ServerRequest sRequest = new ServerRequest(server, Empire.url, request);
+	            AsyncServer s = new AsyncServer();
+	            s.addListener(this);
+	            s.execute(sRequest);
+	            Log.d("Login", "Login Success");
+	            //AsyncServer clears all listeners after the requests have been recieved.
+	        }
+	        else{
+	        	Log.d("Blank Info", "account fields are blank?");
+	        	if(account.userName.isEmpty())
+	        		serverReply.setText((CharSequence) "No username Entered", EditText.BufferType.NORMAL);
+	        	if(account.password.isEmpty())
+	        		serverReply.setText((CharSequence) "No Password Entered", EditText.BufferType.NORMAL);
+	        	if(account.server.isEmpty())
+	        		serverReply.setText((CharSequence) "server is blank", EditText.BufferType.NORMAL);
+	        	//serverReply.setText((CharSequence) "A button was clicked", EditText.BufferType.NORMAL);
+	        }
+			
+		} catch (Exception e){
+			e.printStackTrace();
+			Log.d("Error", "Login Error");
+		}
+		
+		
+		/*
+		switch (v.getId()){
 		//When the login button is clicked
 		case R.id.add_account_login:
-			
+			//serverReply.setText((CharSequence) "login Clicked", EditText.BufferType.NORMAL);
+			int duration = Toast.LENGTH_LONG;
+			//TextView serverReply = (TextView) findViewById(R.id.textViewServerReply);
+            //serverReply.setText((CharSequence) "Starting Login", EditText.BufferType.NORMAL);
 			try {
 				
 				account.userName = etusername.getText().toString();
 				account.password = etpassword.getText().toString();
-				
+				//account.server = server;
+				serverReply.setText((CharSequence) account.server, EditText.BufferType.NORMAL);
 		        //if all required fields are filled in then the request will be sent to the server
 		        if(!account.userName.isEmpty()&&!account.password.isEmpty()&&!account.server.isEmpty()){
 		            Empire e = new Empire();
@@ -169,6 +217,7 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 			
 		//When the add account button is clicked
 		case R.id.add_account_add_account:
+			//serverReply.setText((CharSequence) "Add Account Clicked", EditText.BufferType.NORMAL);
 			try {
 			
 				account.userName = etusername.getText().toString();
@@ -181,7 +230,7 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 			}
 			break;
 			
-		}
+		} */
 		
 	}
 

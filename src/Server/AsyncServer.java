@@ -1,6 +1,7 @@
 package Server;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -28,15 +29,17 @@ public class AsyncServer extends AsyncTask<ServerRequest, Void, String> {
 
     }
 	
-    public String ServerRequest(String gameServer, String methodURL, String JsonRequest) {
+    private String ServerRequest(String gameServer, String methodURL, String JsonRequest) {
         String output = "";
         try {
             try { //putting thread to sleep for just over a second to throttle client because of the limit of 60 calls per minute
+            	Log.d("Throttle Pause", "Pausing for server throttling");
                 Thread.sleep(1100);
             } catch(InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }
-            System.out.println((gameServer+"/" + methodURL));
+            Log.d("URL", (gameServer+"/" + methodURL));
+            //System.out.println((gameServer+"/" + methodURL));
             //SaveToLog("Request");
             //SaveToLog((gameServer+"/" + methodURL));
             //SaveToLog(JsonRequest);

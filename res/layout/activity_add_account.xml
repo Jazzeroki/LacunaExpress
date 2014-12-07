@@ -105,7 +105,9 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_weight="1"
-            android:text="Login" />
+            android:text="Login" 
+            
+            />
 
         <Button
             android:id="@+id/add_account_add_account"
