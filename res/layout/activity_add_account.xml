@@ -72,6 +72,7 @@
             android:id="@+id/add_account_pt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="false"
             android:text="PT" />
 
     </RadioGroup>
@@ -111,8 +112,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Add Account"
-            android:onClick="OnLoginClick"/>
+            android:text="Add Account"/>
 
     </LinearLayout>
 
