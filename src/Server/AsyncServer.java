@@ -13,24 +13,34 @@ import java.util.List;
 
 public class AsyncServer extends AsyncTask<ServerRequest, Void, String> {
     List<serverFinishedListener> listeners = new ArrayList<serverFinishedListener>();
+    private String output = "";
     public void addListener(serverFinishedListener toAdd){
         listeners.add(toAdd);
     }
-	protected String doInBackground(ServerRequest... a){
-		return ServerRequest(a[0].server, a[0].methodURL, a[0].json);
+	
+    protected String doInBackground(ServerRequest... a){
+		
+    	ServerRequest(a[0].server, a[0].methodURL, a[0].json);
+    	//ResponseReceived();
+    	return output;
 	}
-    private void ResponseRecieved(String reply){
+    
+    private void ResponseReceived(){
+    	Log.d("Firing Event", "Sending out response to listeners");
         for(serverFinishedListener i: listeners){
-            i.onResponseRecieved(reply);
+            i.onResponseRecieved(output);
         }
         listeners.clear();
     }
-    protected void onPostExecute(){
+    @Override
+    protected void onPostExecute(String r){
+    	Log.d("OnPostExecute", "Firing On Post Execute");
+    	ResponseReceived();
 
     }
 	
     private String ServerRequest(String gameServer, String methodURL, String JsonRequest) {
-        String output = "";
+        //String output = "";
         try {
             try { //putting thread to sleep for just over a second to throttle client because of the limit of 60 calls per minute
             	Log.d("Throttle Pause", "Pausing for server throttling");
@@ -52,20 +62,24 @@ public class AsyncServer extends AsyncTask<ServerRequest, Void, String> {
             out.close();
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             output = in.readLine();
+            Log.d("Server reply", output);
+            //ResponseRecieved();
             //SaveToLog("Reply");
             //SaveToLog(output);
             //SaveToLog("");
 
         } catch (java.net.MalformedURLException e) {
-            System.out.println("Server Error IO Exception possible bad url");
+            Log.d("Server Error", "Malformed URL Exception");
             output = "error";
+            //ResponseRecieved();
             //SaveToLog("Reply");
             //SaveToLog("Malformed URL Exception");
             //SaveToLog(output);
             //SaveToLog(e.getMessage());
         } catch (java.io.IOException e) {
-            System.out.println("Server Error IO Exception possible bad url");
+        	Log.d("Server Error", "Malformed IO Exception");
             output = "error";
+            //ResponseRecieved();
             //SaveToLog("Reply");
             //SaveToLog("IO Exception");
             //SaveToLog(output);

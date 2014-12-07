@@ -1,5 +1,7 @@
 package AccountMan;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,20 +28,26 @@ public class AccountMan {
         return null;
     }
     public static void AddAccount(AccountInfo acnt){
+    	Log.d("AcountMan", "Starting Add Account");
         Accounts accounts = new Accounts();
+        Log.d("AccountMan", "Checking for file");
         if(CheckForFile())
+        	Log.d("AccountMan", "Loading Accounts");
             accounts = Load();
         //if an account is being set as default this will reset all other accounts and then a default account will be set later
         if(acnt.defaultAccount){
+        	Log.d("AccountMan", "Default Account check");
             for(AccountInfo i: accounts.accounts){
                 i.defaultAccount = false;
             }
         }
         //in case there is only 1 account in the file this ensures that one account will be default
         if(accounts.accounts.size() == 1)
+        	Log.d("AccountMan", "Only 1 account setting as default");
             acnt.defaultAccount = true;
         //AccountInfo a = new AccountInfo(username, password, server, aPIKey, sessionID, sessionDate, defaultAccount);
         accounts.accounts.add(acnt);
+        Log.d("AccountMan", "Calling Save Accounts");
         Save(accounts);
     }
 
@@ -73,15 +81,18 @@ public class AccountMan {
         Save(accounts);
     }
     private static void Save(Accounts accounts){
+    	Log.d("AccountMan.Save", "Serializing File");
 
         String i = gson.toJson(accounts, Accounts.class);
         try {
+        	Log.d("AccountMan.Save", "Writing to file");
             PrintWriter writer = new PrintWriter("acnt.jazz");
             //System.out.println("saving");
             writer.print(i);
             //System.out.println("closing writer");
             writer.close();
         } catch (FileNotFoundException e) {
+        	Log.d("AccountMan.Save", "File Not Found Exception");
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -137,7 +148,11 @@ public class AccountMan {
         return accounts;
     }
     public static boolean CheckForFile(){
-        return new File("acnt.jazz").isFile();
+    	Log.d("AccountMan.CheckForFile", "Checking if File Exists");
+    	Boolean b = new File("acnt.jazz").isFile();
+    	Log.d("AccountMan.CheckForFile", b.toString());
+        //return new File("acnt.jazz").isFile();
+    	return b;
     }
 
 }

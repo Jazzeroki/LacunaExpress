@@ -42,30 +42,35 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
     public void onResponseRecieved(String reply) {
         //This is the listener to the server event
         //if server request errors it returns error
-    	Log.d("Server Reply", reply);
-
+    	Log.d("onResponse Recieved", reply);
+    	//TextView serverReply = (TextView) findViewById(R.id.textViewServerReply);
+        //serverReply.setText((CharSequence)reply, EditText.BufferType.NORMAL);
+    	
         if(!reply.equals("error")) {
-        	
-            Context context = getApplicationContext();
-            CharSequence text = reply;
+        	Log.d("Deserializing Response", "Creating Response Object");
+            //Context context = getApplicationContext();
+            //CharSequence text = reply;
             //int duration = Toast.LENGTH_LONG;
             //Toast toast = Toast.makeText(context, text, duration);
             //toast.show();
-            TextView serverReply = (TextView) findViewById(R.id.textViewServerReply);
-            serverReply.setText((CharSequence) serverReply, EditText.BufferType.NORMAL);
+            //TextView serverReply = (TextView) findViewById(R.id.textViewServerReply);
+            //serverReply.setText((CharSequence) serverReply, EditText.BufferType.NORMAL);
 
             //Deserializing response and pulling session data out
             
             Response r = new Gson().fromJson(reply, Response.class);
+            Log.d("Getting Session ID","");
 
             account.sessionID = r.result.session_id;
-
+            Log.d("Saving Account", "Creating AccountMan");
             AccountMan.AccountMan acm = new AccountMan.AccountMan();
+            Log.d("Saving Account", "AddAccount called to finish save");
             acm.AddAccount(account);
-
+            
+            Log.d("Select Acount", "Launching Select Account");
             Intent intent = new Intent(this, SelectAccount.class);
             startActivity(intent);          
-        }
+        } 
     }
 
     @Override
