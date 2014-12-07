@@ -31,10 +31,12 @@ public class AccountMan {
     	Log.d("AcountMan", "Starting Add Account");
         Accounts accounts = new Accounts();
         Log.d("AccountMan", "Checking for file");
-        if(CheckForFile())
+        if(CheckForFile()){
         	Log.d("AccountMan", "Loading Accounts");
             accounts = Load();
+            }
         //if an account is being set as default this will reset all other accounts and then a default account will be set later
+        Log.d("AccountMan", "Checking for Default Account");
         if(acnt.defaultAccount){
         	Log.d("AccountMan", "Default Account check");
             for(AccountInfo i: accounts.accounts){
@@ -42,10 +44,12 @@ public class AccountMan {
             }
         }
         //in case there is only 1 account in the file this ensures that one account will be default
-        if(accounts.accounts.size() == 1)
+        if(accounts.accounts.size() == 1){
         	Log.d("AccountMan", "Only 1 account setting as default");
             acnt.defaultAccount = true;
+        }
         //AccountInfo a = new AccountInfo(username, password, server, aPIKey, sessionID, sessionDate, defaultAccount);
+        Log.d("AccountMan", "Adding Account to Account Array");
         accounts.accounts.add(acnt);
         Log.d("AccountMan", "Calling Save Accounts");
         Save(accounts);
