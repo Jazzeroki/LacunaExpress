@@ -4,7 +4,10 @@ import java.util.ArrayList;
  
 import AccountMan.AccountInfo;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,10 +15,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import AccountMan.*;
+import MISCClasses.UserSettingActivity;
  
 public class SelectAccount extends Activity implements OnClickListener {
 	ArrayList<AccountInfo> accounts;
 	Button login, modifyAccount, addAccount;
+	
+	private static final int RESULT_SETTINGS = 1;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +59,7 @@ public class SelectAccount extends Activity implements OnClickListener {
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_select_account, menu);
+        getMenuInflater().inflate(R.menu.settings, menu);
         Log.d("Select Account", "Select Account on create options");
         
         return true;
@@ -64,16 +70,46 @@ public class SelectAccount extends Activity implements OnClickListener {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+
+        switch (item.getItemId()) {
+        
+        case R.id.menu_settings:
+            Intent i = new Intent(this, UserSettingActivity.class);
+            startActivityForResult(i, RESULT_SETTINGS);
+            break;
  
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
         }
- 
-        return super.onOptionsItemSelected(item);
+		return true;
     }
  
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+ 
+        switch (requestCode) {
+        case RESULT_SETTINGS:
+            showUserSettings();
+            break;
+ 
+        }
+ 
+    }
+    
+    private void showUserSettings() {
+        SharedPreferences sharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(this);
+ 
+        StringBuilder builder = new StringBuilder();
+ 
+        builder.append("\n Username: "
+                + sharedPrefs.getString("prefUsername", "NULL"));
+ 
+        builder.append("\n Send report:"
+                + sharedPrefs.getBoolean("prefSendReport", false));
+ 
+        builder.append("\n Sync Frequency: "
+                + sharedPrefs.getString("prefSyncFrequency", "NULL"));
+ 
+    }    
 	@Override
 	public void onClick(View v) {
 		
