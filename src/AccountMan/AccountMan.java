@@ -97,6 +97,7 @@ public class AccountMan {
     	Log.d("AccountMan.Save", "Serializing File");
 
         String i = gson.toJson(accounts, Accounts.class);
+        Log.d("AccountMan.Save", i);
         try {
         	Log.d("AccountMan.Save", "Writing to file");
             PrintWriter writer = new PrintWriter("acnt.jazz");
@@ -135,7 +136,7 @@ public class AccountMan {
         }
         return accounts.accounts;
     }
-    private static Accounts Load(){
+    private static Accounts Load(){/*
     	String filename = "myfile";
     	String string = "Hello world!";
     	FileOutputStream outputStream;
@@ -165,8 +166,8 @@ public class AccountMan {
 	        } catch (Exception e){
 	        	e.printStackTrace();
 	        }
-        }
-    	/*
+        } */
+    	
         Accounts accounts=new Accounts();
         //if(!new File("accounts.jazz").isFile()) //if an account file doesn't exist one is created
         //    CreateAccount();
@@ -177,7 +178,6 @@ public class AccountMan {
             br = new BufferedReader(new FileReader("acnt.jazz"));
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
-
             while (line != null) {
                 sb.append(line);
                 line = br.readLine();
@@ -188,7 +188,7 @@ public class AccountMan {
             // CreateAccount();
         }catch(IOException e){
 
-        } */
+        } 
         return accounts;
     }
     public static boolean CheckForFile(){

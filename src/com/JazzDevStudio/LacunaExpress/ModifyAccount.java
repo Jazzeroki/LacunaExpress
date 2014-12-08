@@ -4,6 +4,7 @@ import AccountMan.AccountInfo;
 import JavaLEWrapper.Empire;
 import Server.AsyncServer;
 import Server.ServerRequest;
+import Server.serverFinishedListener;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +18,7 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
-public class ModifyAccount extends Activity implements OnClickListener, OnCheckedChangeListener, android.widget.CompoundButton.OnCheckedChangeListener {
+public class ModifyAccount extends Activity implements serverFinishedListener, OnClickListener, OnCheckedChangeListener, android.widget.CompoundButton.OnCheckedChangeListener {
 
 	private AccountInfo account = new AccountInfo();
 	
@@ -143,6 +144,12 @@ public class ModifyAccount extends Activity implements OnClickListener, OnChecke
 			Log.d("Checkbox", "Default Button Unchecked");
 			remember_me = false;
 		} 
+	}
+
+	@Override
+	public void onResponseRecieved(String reply) {
+		// TODO Auto-generated method stub
+		
 	}
 		
 }
