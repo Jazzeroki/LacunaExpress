@@ -1,16 +1,19 @@
 package AccountMan;
 
+import android.content.Context;
+import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-
+//import java.io.FileOutputStream.openFileOutput;
 /**
  * Notes on usage
  * DeleteAccount and ModifyAccount both assume that a check has been made for the existance of an account file
@@ -133,6 +136,37 @@ public class AccountMan {
         return accounts.accounts;
     }
     private static Accounts Load(){
+    	String filename = "myfile";
+    	String string = "Hello world!";
+    	FileOutputStream outputStream;
+    	Context cont;
+    	
+
+    	try {
+    	  outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+    	  
+    	  outputStream.write(string.getBytes());
+    	  outputStream.close();
+    	} catch (Exception e) {
+    	  e.printStackTrace();
+    	}
+    	
+        //This adds a text file to the phone and then reads it for testing purpose
+        File file = this.getFileStreamPath("acnts.jazz");
+        File file = getFileStreamPath("acnts.jazz");
+        if(file.exists()){
+        	Log.d("The File", "Exists");
+        } else {
+	        try {
+	        	writeToFile("TESTING JAZZ! TESTING");
+	        	Log.d("The File", "Has Been Written");
+	        	String test = readFromFile();
+	        	Log.d("READ FILE", test);
+	        } catch (Exception e){
+	        	e.printStackTrace();
+	        }
+        }
+    	/*
         Accounts accounts=new Accounts();
         //if(!new File("accounts.jazz").isFile()) //if an account file doesn't exist one is created
         //    CreateAccount();
@@ -154,7 +188,7 @@ public class AccountMan {
             // CreateAccount();
         }catch(IOException e){
 
-        }
+        } */
         return accounts;
     }
     public static boolean CheckForFile(){
