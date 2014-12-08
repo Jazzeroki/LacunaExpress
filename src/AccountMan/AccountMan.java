@@ -95,10 +95,11 @@ public class AccountMan {
     }
     private static void Save(Accounts accounts){
     	Log.d("AccountMan.Save", "Serializing File");
+    	
 
         String i = gson.toJson(accounts, Accounts.class);
         Log.d("AccountMan.Save", i);
-        File file = new File("acnt.jazz");
+        File file = new File("/data/data/com.JazzDevStudio.LacunaExpress/files/acnt.jazz");
         file.setReadable(true);
         file.setWritable(true);
         try {
