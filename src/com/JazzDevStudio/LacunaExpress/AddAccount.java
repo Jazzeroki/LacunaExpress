@@ -170,6 +170,9 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 	            s.execute(sRequest);
 	            Log.d("Login", "Login Success");
 	            //AsyncServer clears all listeners after the requests have been recieved.
+	            
+	            Intent openActivity = new Intent(this, SelectAccount.class);
+                startActivity(openActivity);
 	        }
 	        else{
 	        	Log.d("Blank Info", "account fields are blank?");

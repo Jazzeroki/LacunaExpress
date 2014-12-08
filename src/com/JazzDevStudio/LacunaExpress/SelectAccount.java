@@ -1,8 +1,9 @@
 package com.JazzDevStudio.LacunaExpress;
  
 import java.util.ArrayList;
- 
+
 import AccountMan.AccountInfo;
+import AccountMan.AccountMan;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,13 +14,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import AccountMan.*;
-import MISCClasses.UserSettingActivity;
+import android.widget.Spinner;
+
  
 public class SelectAccount extends Activity implements OnClickListener {
 	ArrayList<AccountInfo> accounts;
 	Button modifyAccount, addAccount;
+	Spinner account_list;
 	
 	private static final int RESULT_SETTINGS = 1;
 	
@@ -28,11 +31,20 @@ public class SelectAccount extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_account);
         Log.d("Select Account", "Select Account oncreate");
+        
+        ArrayList<String> user_accounts = new ArrayList<String>();
+        
         Initialize();
         ReadInAccounts();
         for(AccountInfo i: accounts){
         	Log.d("Select Account", i.userName);
+        	user_accounts.add(i.userName);
         }
+        
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, user_accounts);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+         
+        account_list.setAdapter(adapter);
     }
  
     private void ReadInAccounts() {
@@ -51,6 +63,7 @@ public class SelectAccount extends Activity implements OnClickListener {
     	modifyAccount.setOnClickListener(this);
     	addAccount.setOnClickListener(this);
 		
+    	account_list = (Spinner) findViewById(R.id.select_account_spinner);
 	}
  
  
@@ -129,7 +142,8 @@ public class SelectAccount extends Activity implements OnClickListener {
 		case R.id.select_account_add:
 			try {
 			
-			
+	            Intent openActivity1 = new Intent(this, AddAccount.class);
+                startActivity(openActivity1);
 				
 			} catch (Exception e){
 				e.printStackTrace();
