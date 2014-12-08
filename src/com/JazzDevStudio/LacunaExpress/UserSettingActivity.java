@@ -1,4 +1,4 @@
-package MISCClasses;
+package com.JazzDevStudio.LacunaExpress;
 
 import com.JazzDevStudio.LacunaExpress.R;
 

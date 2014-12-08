@@ -71,7 +71,7 @@
     		
     	<!-- This is the Accounts Activity -->
     	<activity 
-    	    android:name="MISCClasses.UserSettingActivity"
+    	    android:name="com.JazzDevStudio.LacunaExpress.UserSettingActivity"
     	    android:label="@string/app_name" >
         </activity>        	
     	
