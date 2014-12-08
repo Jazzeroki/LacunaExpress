@@ -49,7 +49,10 @@ public class SelectAccount extends Activity implements OnClickListener {
  
     private void ReadInAccounts() {
 		Log.d("SelectAccountActivity.ReadInAccounts", "checking for file" + AccountMan.CheckForFile());
-		accounts = AccountMan.GetAccounts();
+		//accounts = AccountMan.GetAccounts();
+		//Comment out this line and uncomment the line above after purging the excess accounts
+		accounts = AccountMan.PurgeDuplicateAccounts(AccountMan.GetAccounts());
+		
 		Log.d("SelectAccountActivity.ReadInAccounts", String.valueOf(accounts.size()));
 		
 	}

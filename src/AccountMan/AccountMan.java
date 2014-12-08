@@ -82,6 +82,7 @@ public class AccountMan {
     	AccountInfo account = arrayToPurge.get(0);
     	arrayToPurge.clear();
     	arrayToPurge.add(account);
+    	Save(arrayToPurge);
     	return arrayToPurge;
     }
     
