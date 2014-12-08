@@ -98,9 +98,13 @@ public class AccountMan {
 
         String i = gson.toJson(accounts, Accounts.class);
         Log.d("AccountMan.Save", i);
+        File file = new File("acnt.jazz");
+        file.setReadable(true);
+        file.setWritable(true);
         try {
         	Log.d("AccountMan.Save", "Writing to file");
-            PrintWriter writer = new PrintWriter("acnt.jazz");
+            //PrintWriter writer = new PrintWriter("acnt.jazz");
+            PrintWriter writer = new PrintWriter(file);
             //System.out.println("saving");
             writer.print(i);
             //System.out.println("closing writer");
