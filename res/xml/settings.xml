@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+ 
+    <PreferenceCategory android:title="temp" >
+        <EditTextPreference
+                android:title="temp2"
+                android:summary="temp3"
+                android:key="prefUsername"/>
+    </PreferenceCategory>
+     
+    <PreferenceCategory android:title="temp4" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefSendReport"
+            android:summary="temp5"
+            android:title="temp6" >
+        </CheckBoxPreference>
+ 
+        <ListPreference
+            android:key="prefSyncFrequency"
+            android:entries="@array/syncFrequency"
+            android:summary="temp8"
+            android:entryValues="@array/syncFrequencyValues"
+            android:title="temp9" />
+    </PreferenceCategory>
+ 
+</PreferenceScreen>
