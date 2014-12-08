@@ -1,9 +1,9 @@
 package AccountMan;
-
+ 
 import android.content.Context;
 import android.content.Context;
 import android.util.Log;
-
+ 
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 //import java.io.FileOutputStream.openFileOutput;
 /**
  * Notes on usage
- * DeleteAccount and ModifyAccount both assume that a check has been made for the existance of an account file
+ * DeleteAccount and ModifyAccount both assume that a check has been made for the existence of an account file
  * Load and AddAccount will both meet the requirements for this check.
  * Support for a default account still needs to be added.  There is meant to be only a single default account
  */
@@ -56,14 +56,14 @@ public class AccountMan {
             }
         }
         //in case there is only 1 account in the file this ensures that one account will be default
-
+ 
         //AccountInfo a = new AccountInfo(username, password, server, aPIKey, sessionID, sessionDate, defaultAccount);
         Log.d("AccountMan", "Adding Account to Account Array");
         accounts.accounts.add(acnt);
         Log.d("AccountMan", "Calling Save Accounts");
         Save(accounts);
     }
-
+ 
     //This method assumes a check has already been made for the existance of the accounts file
     public static void DeleteAccount(String username, String server){
         Accounts accounts = Load();
@@ -96,7 +96,7 @@ public class AccountMan {
     private static void Save(Accounts accounts){
     	Log.d("AccountMan.Save", "Serializing File");
     	
-
+ 
         String i = gson.toJson(accounts, Accounts.class);
         Log.d("AccountMan.Save", i);
         File file = new File("/data/data/com.JazzDevStudio.LacunaExpress/files/acnt.jazz");
@@ -124,10 +124,10 @@ public class AccountMan {
         BufferedReader br;
         String i = "";
         try{
-            br = new BufferedReader(new FileReader("acnt.jazz"));
+            br = new BufferedReader(new FileReader("/data/data/com.JazzDevStudio.LacunaExpress/files/acnt.jazz"));
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
-
+ 
             while (line != null) {
                 sb.append(line);
                 line = br.readLine();
@@ -137,41 +137,11 @@ public class AccountMan {
         }catch (FileNotFoundException e){
             // CreateAccount();
         }catch(IOException e){
-
+ 
         }
         return accounts.accounts;
     }
-    private static Accounts Load(){/*
-    	String filename = "myfile";
-    	String string = "Hello world!";
-    	FileOutputStream outputStream;
-    	Context cont;
-    	
-
-    	try {
-    	  outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-    	  
-    	  outputStream.write(string.getBytes());
-    	  outputStream.close();
-    	} catch (Exception e) {
-    	  e.printStackTrace();
-    	}
-    	
-        //This adds a text file to the phone and then reads it for testing purpose
-        File file = this.getFileStreamPath("acnts.jazz");
-        File file = getFileStreamPath("acnts.jazz");
-        if(file.exists()){
-        	Log.d("The File", "Exists");
-        } else {
-	        try {
-	        	writeToFile("TESTING JAZZ! TESTING");
-	        	Log.d("The File", "Has Been Written");
-	        	String test = readFromFile();
-	        	Log.d("READ FILE", test);
-	        } catch (Exception e){
-	        	e.printStackTrace();
-	        }
-        } */
+    private static Accounts Load(){
     	
         Accounts accounts=new Accounts();
         //if(!new File("accounts.jazz").isFile()) //if an account file doesn't exist one is created
@@ -180,7 +150,7 @@ public class AccountMan {
         BufferedReader br;
         String i = "";
         try{
-            br = new BufferedReader(new FileReader("acnt.jazz"));
+            br = new BufferedReader(new FileReader("/data/data/com.JazzDevStudio.LacunaExpress/files/acnt.jazz"));
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
             while (line != null) {
@@ -192,16 +162,16 @@ public class AccountMan {
         }catch (FileNotFoundException e){
             // CreateAccount();
         }catch(IOException e){
-
+ 
         } 
         return accounts;
     }
     public static boolean CheckForFile(){
     	Log.d("AccountMan.CheckForFile", "Checking if File Exists");
-    	Boolean b = new File("acnt.jazz").isFile();
+    	Boolean b = new File("/data/data/com.JazzDevStudio.LacunaExpress/files/acnt.jazz").isFile();
     	Log.d("AccountMan.CheckForFile", b.toString());
         //return new File("acnt.jazz").isFile();
     	return b;
     }
-
+ 
 }
