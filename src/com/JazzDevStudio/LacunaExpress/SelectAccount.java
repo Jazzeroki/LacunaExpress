@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import AccountMan.*;
+import MISCClasses.UserSettingActivity;
  
 public class SelectAccount extends Activity implements OnClickListener {
 	ArrayList<AccountInfo> accounts;
