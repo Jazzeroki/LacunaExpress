@@ -129,6 +129,7 @@ public class MainActivity extends Activity {
 
         try {
             InputStream inputStream = openFileInput("test123.txt");
+            InputStream is = openFileInput("test");
 
             if ( inputStream != null ) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);

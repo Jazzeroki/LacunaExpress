@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 /**
  * Notes on usage
- * DeleteAccount and ModifyAccount both assume that a check has been made for the existance of an account file
+ * DeleteAccount and ModifyAccount both assume that a check has been made for the existence of an account file
  * Load and AddAccount will both meet the requirements for this check.
  * Support for a default account still needs to be added.  There is meant to be only a single default account
  */
@@ -90,6 +90,7 @@ public class AccountMan {
         accounts.accounts.add(a);
         Save(accounts);
     }
+    
     private static void Save(Accounts accounts){
     	Log.d("AccountMan.Save", "Serializing File");
 
@@ -107,6 +108,7 @@ public class AccountMan {
             e.printStackTrace();
         }
     }
+    
     public static ArrayList<AccountInfo> GetAccounts(){
         Accounts accounts=new Accounts();
         //if(!new File("accounts.jazz").isFile()) //if an account file doesn't exist one is created
@@ -125,10 +127,12 @@ public class AccountMan {
                 i = sb.toString();
             }
             accounts = gson.fromJson(i, Accounts.class);
+            
         }catch (FileNotFoundException e){
             // CreateAccount();
+        	e.printStackTrace();
         }catch(IOException e){
-
+        	e.printStackTrace();
         }
         return accounts.accounts;
     }
