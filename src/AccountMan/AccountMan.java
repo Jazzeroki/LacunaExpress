@@ -1,14 +1,14 @@
 package AccountMan;
  
-import android.content.Context;
-import android.content.Context;
+//import android.content.Context;
+//import android.content.Context;
 import android.util.Log;
  
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+//import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -35,12 +35,26 @@ public class AccountMan {
     	Log.d("AccountInfo username", acnt.password);
     	Log.d("AccountInfo username", acnt.sessionID);
     	Log.d("AccountInfo username", acnt.defaultAccount.toString());
+    	
     	Log.d("AcountMan", "Starting Add Account");
         Accounts accounts = new Accounts();
         Log.d("AccountMan", "Checking for file");
         if(CheckForFile()){
         	Log.d("AccountMan", "Loading Accounts");
             accounts = Load();
+            
+            //This block checks for and removes duplicates before adding the new account
+            if(accounts.accounts.size() >1){
+            	int indexToRemove = -1;
+            	for(AccountInfo i: accounts.accounts)
+                if(i.userName.equals(acnt.userName)&& i.server.equals(acnt.server) ){
+                	indexToRemove = accounts.accounts.indexOf(i);
+                    break;
+                }
+            	if(indexToRemove >= 0)
+            		accounts.accounts.remove(indexToRemove);
+            }
+            
             Log.d("AccountMan", "if there's only 1 account");
             if(accounts.accounts.size() == 1){
             	Log.d("AccountMan", "Only 1 account setting as default");
@@ -63,16 +77,28 @@ public class AccountMan {
         Log.d("AccountMan", "Calling Save Accounts");
         Save(accounts);
     }
- 
+    //troubleshooting method that removes all but the first account
+    public static ArrayList<AccountInfo> PurgeDuplicateAccounts(ArrayList<AccountInfo> arrayToPurge){
+    	AccountInfo account = arrayToPurge.get(0);
+    	arrayToPurge.clear();
+    	arrayToPurge.add(account);
+    	return arrayToPurge;
+    }
+    
     //This method assumes a check has already been made for the existance of the accounts file
-    public static void DeleteAccount(String username, String server){
+    public static void DeleteAccount(String userName, String server){
         Accounts accounts = Load();
-        for(AccountInfo i: accounts.accounts){
-            if(i.userName.equals(username)&& i.server.equals(server) ){
-                accounts.accounts.remove(accounts.accounts.indexOf(i));
+        if(accounts.accounts.size() >1){
+        	int indexToRemove = -1;
+        	for(AccountInfo i: accounts.accounts)
+            if(i.userName.equals(userName)&& i.server.equals(server) ){
+            	indexToRemove = accounts.accounts.indexOf(i);
                 break;
             }
+        	if(indexToRemove >= 0)
+        		accounts.accounts.remove(indexToRemove);
         }
+        Save(accounts);
     }
     //This method assumes you've already checked for the existance of an account file
     public static void ModifyAccount(String username, String password, String server, String aPIKey, String sessionID, String sessionDate, Boolean defaultAccount){
@@ -93,10 +119,9 @@ public class AccountMan {
         accounts.accounts.add(a);
         Save(accounts);
     }
+    //for use internally by accountman to save accounts
     private static void Save(Accounts accounts){
     	Log.d("AccountMan.Save", "Serializing File");
-    	
- 
         String i = gson.toJson(accounts, Accounts.class);
         Log.d("AccountMan.Save", i);
         File file = new File("/data/data/com.JazzDevStudio.LacunaExpress/files/acnt.jazz");
@@ -116,6 +141,12 @@ public class AccountMan {
             e.printStackTrace();
         }
     }
+    //An overloaded save method to make saving accounts easier
+    private static void Save(ArrayList<AccountInfo> accounts){
+    	Accounts a = new Accounts();
+    	a.accounts = accounts;
+    	Save(a);
+    }
     public static ArrayList<AccountInfo> GetAccounts(){
         Accounts accounts=new Accounts();
         //if(!new File("accounts.jazz").isFile()) //if an account file doesn't exist one is created
@@ -133,6 +164,7 @@ public class AccountMan {
                 line = br.readLine();
                 i = sb.toString();
             }
+            br.close();
             accounts = gson.fromJson(i, Accounts.class);
         }catch (FileNotFoundException e){
             // CreateAccount();
@@ -158,6 +190,7 @@ public class AccountMan {
                 line = br.readLine();
                 i = sb.toString();
             }
+            br.close();
             accounts = gson.fromJson(i, Accounts.class);
         }catch (FileNotFoundException e){
             // CreateAccount();
