@@ -188,8 +188,8 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f0b001d;
-        public static final int action_stuff=0x7f0b001e;
+        public static final int action_settings=0x7f0b001b;
+        public static final int action_stuff=0x7f0b001c;
         public static final int add_account_add_account=0x7f0b000c;
         public static final int add_account_default=0x7f0b000a;
         public static final int add_account_password=0x7f0b0005;
@@ -197,10 +197,9 @@ public final class R {
         public static final int add_account_server_choices=0x7f0b0007;
         public static final int add_account_us1=0x7f0b0008;
         public static final int add_account_username=0x7f0b0003;
-        public static final int button1=0x7f0b0019;
         public static final int container=0x7f0b000e;
-        public static final int lacuna_image=0x7f0b001b;
-        public static final int menu_settings=0x7f0b001f;
+        public static final int lacuna_image=0x7f0b0019;
+        public static final int menu_settings=0x7f0b001d;
         public static final int modify_account_default=0x7f0b0014;
         public static final int modify_account_modify_account=0x7f0b0015;
         public static final int modify_account_password=0x7f0b0010;
@@ -209,10 +208,9 @@ public final class R {
         public static final int modify_account_us1=0x7f0b0012;
         public static final int modify_account_username=0x7f0b000f;
         public static final int select_account_account_list=0x7f0b0016;
-        public static final int select_account_add=0x7f0b001a;
-        public static final int select_account_login=0x7f0b0017;
+        public static final int select_account_add=0x7f0b0017;
         public static final int select_account_modify=0x7f0b0018;
-        public static final int splash_screen_text=0x7f0b001c;
+        public static final int splash_screen_text=0x7f0b001a;
         public static final int textView1=0x7f0b0002;
         public static final int textView2=0x7f0b0001;
         public static final int textView3=0x7f0b0004;

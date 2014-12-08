@@ -23,25 +23,6 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/select_account_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_weight="1"
-            android:text="Login" />
-
-        <Button
-            android:id="@+id/select_account_modify"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/button1"
-            android:layout_toRightOf="@+id/select_account_add"
-            android:layout_weight="1"
-            android:text="Modify Account" />
-
-        <Button
             android:id="@+id/select_account_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,6 +30,15 @@
             android:layout_alignParentTop="true"
             android:layout_weight="1"
             android:text="Add Account" />
+
+        <Button
+            android:id="@+id/select_account_modify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_weight="1"
+            android:text="Modify Account" />
 
     </RelativeLayout>
 

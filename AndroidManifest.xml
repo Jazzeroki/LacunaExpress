@@ -69,7 +69,13 @@
     	    android:label="@string/app_name" >
         </activity>    	
     		
-		<!-- Test on 2014-12-07 -->
+    	<!-- This is the Accounts Activity -->
+    	<activity 
+    	    android:name="MISCClasses.UserSettingActivity"
+    	    android:label="@string/app_name" >
+        </activity>        	
+    	
+
     <!-- End Application -->
     </application>
     

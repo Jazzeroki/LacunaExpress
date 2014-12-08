@@ -19,7 +19,7 @@ import MISCClasses.UserSettingActivity;
  
 public class SelectAccount extends Activity implements OnClickListener {
 	ArrayList<AccountInfo> accounts;
-	Button login, modifyAccount, addAccount;
+	Button modifyAccount, addAccount;
 	
 	private static final int RESULT_SETTINGS = 1;
 	
@@ -45,11 +45,9 @@ public class SelectAccount extends Activity implements OnClickListener {
 	//Initialize Variables
     private void Initialize() {
  
-    	login = (Button) findViewById(R.id.select_account_login);
     	modifyAccount = (Button) findViewById(R.id.select_account_modify);
     	addAccount = (Button) findViewById(R.id.select_account_add);
     	
-    	login.setOnClickListener(this);
     	modifyAccount.setOnClickListener(this);
     	addAccount.setOnClickListener(this);
 		
@@ -115,17 +113,6 @@ public class SelectAccount extends Activity implements OnClickListener {
 		
 		switch (v.getId()){
 		
-		//Login
-		case R.id.select_account_login:
-			
-			try {
-				
-				
-				
-			} catch (Exception e){
-				e.printStackTrace();
-			}
-			break;
 		
 		//Modify Account
 		case R.id.select_account_modify:
