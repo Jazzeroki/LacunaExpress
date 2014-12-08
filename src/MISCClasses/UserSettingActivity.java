@@ -7,7 +7,8 @@ import android.preference.PreferenceActivity;
 
 public class UserSettingActivity extends PreferenceActivity {
  
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
  
