@@ -80,6 +80,13 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
         
         //Clearing up the onCreate by adding this method, initializes variables
         Initialize();
+        Intent i = getIntent();
+        if(i.hasExtra("username")){
+        	Log.d("AddAccount.onCreate", "Intent is type Modify");
+        }
+        else{
+        	Log.d("AddAccount.onCreate", "Intent is type addAccount");
+        }
     }
 
     /*
