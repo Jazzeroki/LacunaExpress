@@ -133,9 +133,12 @@ public class SelectAccount extends Activity implements OnClickListener {
 		//Modify Account
 		case R.id.select_account_modify:
 			try {
-			
-			
-				
+				//Starting to add intent code to launch addAccount as a modified account
+				Intent openActivity = new Intent(this, SelectAccount.class);
+				openActivity.putExtra("username", "");
+				openActivity.putExtra("server", "");
+				openActivity.putExtra("defaultAccount", "");
+                startActivity(openActivity);
 			} catch (Exception e){
 				e.printStackTrace();
 			}
