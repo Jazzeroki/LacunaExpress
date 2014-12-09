@@ -2,9 +2,10 @@ package com.JazzDevStudio.LacunaExpress;
  
 import java.util.ArrayList;
 
+import com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.Adapter;
+
 import AccountMan.AccountInfo;
 import AccountMan.AccountMan;
-import MISCClasses.SwipeDismissListViewTouchListener;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,21 +48,7 @@ public class SelectAccount extends Activity implements OnClickListener {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, user_accounts);
         account_list.setAdapter(arrayAdapter);
 
-    	SwipeDismissListViewTouchListener touchListener = 
-    			new SwipeDismissListViewTouchListener(
-	    			account_list,
-    	            	new SwipeDismissListViewTouchListener.OnDismissCallback() {
-    	                	public void onDismiss(ListView listView, int[] reverseSortedPositions) {
-    	                    	for (int position : reverseSortedPositions) {
-    	                        	adapter.remove(adapter.getItem(position));
-    	                      	}
-    	                     	adapter.notifyDataSetChanged();
-    	                 	}
-    	            	});
-    				account_list.setOnTouchListener(touchListener);
-    				account_list.setOnScrollListener(touchListener.makeScrollListener());        
-        
-        
+    	
         
         
         
@@ -185,6 +172,7 @@ public class SelectAccount extends Activity implements OnClickListener {
 			
 		}
 	}
+
 	
 		
 	
