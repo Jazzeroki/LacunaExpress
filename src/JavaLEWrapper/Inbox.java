@@ -3,16 +3,17 @@ package JavaLEWrapper;
 import java.io.IOException;
 
 public class Inbox extends LESuperClass {
-    String url = "inbox";
+    public static final String url = "inbox";
 
-    String ViewInbox(String sessionID, String tag ){
+    public static String ViewInbox(String sessionID, String tag ){
         return "{\"jsonrpc\":2,\"id\":1,\"method\":\"view_inbox\",\"params\":[\""+sessionID+"\",{\"tags\":[\""+tag+"\"],\"page_number\":1}]}";
     }
-    String ViewInbox(String sessionID, String tag, int pageNumber ){
+    public static String ViewInbox(String sessionID, String tag, int pageNumber ){
         return "{\"jsonrpc\":2,\"id\":1,\"method\":\"view_inbox\",\"params\":[\""+sessionID+"\",{\"tags\":[\""+tag+"\"],\"page_number\":"+pageNumber+"}]}";
     }
     String ReadMessage(int RequestID, String sessionID, String MessageID){
-        StartOfObject(RequestID, "read_message");
+    	return Request("read_message", sessionID, String.valueOf(RequestID), MessageID);
+        /*StartOfObject(RequestID, "read_message");
         String i = "nothing";
         try {
             writer.value(sessionID);
@@ -29,7 +30,7 @@ public class Inbox extends LESuperClass {
             i = "request build failed";
             e.printStackTrace();
         }
-        return i;
+        return i; */
     }
     String SendMessage(String sessionID, String recipients, String subject, String body){
         StartOfObject(1, "send_message");

@@ -110,55 +110,40 @@ public class Response {
         public String id, date_arrives;
         public int is_ally, is_own;
     }
-    class Body{
+    public class Body{
 
-        String surface_image, name, type, zone, x, y, surface_refresh, size, orbit, surface_version, image, num_incoming_own, num_incoming_ally, num_incoming_enemy, star_name, propaganda_boost, plots_available;
-        Double population, ore_capacity, water_stored, waste_stored, food_stored, ore_stored, ore_hour, energy_capacity, water_hour, happiness, happiness_hour, food_hour, building_count, water_capacity, energy_stored, energy_hour, waste_hour, food_capacity;
-        Ore ore;
-        Station station;
-        IncomingShips[] incoming_enemy_ships, incoming_own_ships;
+        public String surface_image, name, type, zone, x, y, surface_refresh, size, orbit, surface_version, image, num_incoming_own, num_incoming_ally, num_incoming_enemy, star_name, propaganda_boost, plots_available;
+        public Double population, ore_capacity, water_stored, waste_stored, food_stored, ore_stored, ore_hour, energy_capacity, water_hour, happiness, happiness_hour, food_hour, building_count, water_capacity, energy_stored, energy_hour, waste_hour, food_capacity;
+        public Ore ore;
+        public Station station;
+        public IncomingShips[] incoming_enemy_ships, incoming_own_ships;
     }
-    class Status{
-        Empire empire;
-        Body body;
-        Server server;
+    public class Status{
+        public Empire empire;
+        public Body body;
+        public Server server;
     }
-    class Empire{
-        int rpc_count;
-        int has_new_messages;
-        HashMap <String, String> planets;
-        HashMap <String, String> space_stations;
-        String self_destruct_active;
-        String name;
-        String status_message;
-        String self_destruct_date;
-        String is_isolationist;
-        String latest_message_id;
-        String home_planet_id;
-        String tech_level;
-        String id;
-        String essentia;
-        Server server;
-        String alignment;
+    public class Empire{
+        public int rpc_count, has_new_messages;
+        public HashMap <String, String> planets, space_stations;
+        public String self_destruct_active, name, status_message, self_destruct_date, is_isolationist, latest_message_id, home_planet_id;
+        public String tech_level, id, essentia, server, alignment;
     }
-    class Server{
-        String rpc_limit;
-        String version;
-        String time;
-
+    public class Server{
+        public String rpc_limit, version, time;
     }
 
-    class Error{
-        int code;
-        Data data;
+    public class Error{
+        public int code;
+        public Data data;
     }
-    class Data{
-        String guid, url;
+    public class Data{
+        public String guid, url;
     }
-    class Messages{
-        String from, to, subject, date, in_reply_to, body_preview, body;
-        String [] tags, recipients;
-        int has_read, has_replied, has_archived, has_trashed, id, from_id, to_id;
+    public class Messages{
+        public String from, to, subject, date, in_reply_to, body_preview, body;
+        public String [] tags, recipients;
+        public int has_read, has_replied, has_archived, has_trashed, id, from_id, to_id;
     }
 
 }
