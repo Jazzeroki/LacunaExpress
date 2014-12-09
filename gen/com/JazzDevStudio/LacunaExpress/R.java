@@ -208,8 +208,8 @@ public final class R {
         public static final int modify_account_us1=0x7f0b0012;
         public static final int modify_account_username=0x7f0b000f;
         public static final int select_account_add=0x7f0b0017;
+        public static final int select_account_list_view=0x7f0b0016;
         public static final int select_account_modify=0x7f0b0018;
-        public static final int select_account_spinner=0x7f0b0016;
         public static final int splash_screen_text=0x7f0b001a;
         public static final int textView1=0x7f0b0002;
         public static final int textView2=0x7f0b0001;

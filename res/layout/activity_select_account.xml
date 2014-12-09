@@ -11,12 +11,21 @@
         android:layout_gravity="center"
         android:text="Account Selection" />
 
+    <!-- 
     <Spinner
         android:id="@+id/select_account_spinner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
     </Spinner>
+    
+     -->
+
+    <ListView
+        android:id="@+id/select_account_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
 
     <RelativeLayout
         android:layout_width="fill_parent"
