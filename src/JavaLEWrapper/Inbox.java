@@ -53,6 +53,7 @@ public class Inbox extends LESuperClass {
         }
         return i;
     }
+    //{"id":9,"method":"send_message","jsonrpc":"2.0","params":["7190e43d-8722-4e5a-ad72-3aacdacfe0df","Norway,icydee","Account List","Could a method be added to the api that returns a list of all current valid accounts for mailing purposes.  I was checking what the current web client does and it spends a lot of rpcs looking up each individual account.\n\nI thought it might be nice to have a single request which just returns a list of all current account names that I could use to compare to instead.\n\n-=Jazz=-",null]}
 /*enum MessageTags{  //will be leaving this as an option to use in the future, but currently just passing a string directly to the methods instead
 		Tutorial, Correspondence, Medal, Intelligence, Alert, Attack, Colonization, Complaint, Excavator, Mission, Parliament, Probe, Spies, Trade, Fissure;
 	} */

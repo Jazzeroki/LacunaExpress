@@ -37,6 +37,7 @@ public class Empire extends LESuperClass{
         }
         return i;
     }
+    //{"id":6,"method":"find","jsonrpc":"2.0","params":["7190e43d-8722-4e5a-ad72-3aacdacfe0df","Norway"]}
     private class LoginObject{
 
         LoginObject(int i, String u, String p) {
