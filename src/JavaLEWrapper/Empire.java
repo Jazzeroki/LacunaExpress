@@ -37,6 +37,9 @@ public class Empire extends LESuperClass{
         }
         return i;
     }
+    public String Find(int requestID, String sessionID, String nameToFind){
+    	return Request("find", sessionID, String.valueOf(requestID), nameToFind );
+    }
     //{"id":6,"method":"find","jsonrpc":"2.0","params":["7190e43d-8722-4e5a-ad72-3aacdacfe0df","Norway"]}
     private class LoginObject{
 
