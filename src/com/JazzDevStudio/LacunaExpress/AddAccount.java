@@ -36,7 +36,7 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
     CheckBox cbdfAccount;
     EditText etusername, etpassword;
     
-    String server;
+    String mServer = "https://us1.lacunaexpanse.com";
     boolean remember_me;
     
     public void onResponseRecieved(String reply) {
@@ -99,8 +99,6 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
         	Log.d("AddAccount.onCreate", "Intent is type addAccount");
         }
 
-    	//Server String set to nothing upon initialization
-    	server ="https://us1.lacunaexpanse.com";
     	
     	//Default the remember me box to false
     	remember_me = false;
@@ -160,7 +158,7 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 			
 			account.userName = etusername.getText().toString();
 			account.password = etpassword.getText().toString();
-			account.server = server;
+			account.server = mServer;
 			account.defaultAccount = cbdfAccount.isChecked();
 			Log.d("username", account.userName);
 			Log.d("password", account.password);
@@ -172,7 +170,7 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 	            Empire e = new Empire();
 	            String request = e.Login(account.userName, account.password, 1);
 	            Log.d("Request to server", request);
-	            ServerRequest sRequest = new ServerRequest(server, Empire.url, request);
+	            ServerRequest sRequest = new ServerRequest(mServer, Empire.url, request);
 	            AsyncServer s = new AsyncServer();
 	            s.addListener(this);
 	            s.execute(sRequest);
@@ -211,16 +209,16 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 		//US1, set the server choice to US1
 		case R.id.add_account_us1:
 			Log.d("AddAccount.onCheckedChange", "Setting Server to US1");
-			server = "https://us1.lacunaexpanse.com";
-			account.server = "https://us1.lacunaexpanse.com";
+			mServer = "https://us1.lacunaexpanse.com";
+			//account.server = "https://us1.lacunaexpanse.com";
 			Log.d("Radio", "US1 Checked");
 			break;
 			
 		//PT, set the server choice to PT			
 		case R.id.add_account_pt:
 			Log.d("AddAccount.onCheckedChange", "Setting Server to PT");
-			server = "https://us1.lacunaexpanse.com";
-			account.server = "https://pt.lacunaexpanse.com";
+			mServer = "https://pt.lacunaexpanse.com";
+			//account.server = "https://pt.lacunaexpanse.com";
 			Log.d("Radio", "PT Checked");
 			break;				
 		}	
