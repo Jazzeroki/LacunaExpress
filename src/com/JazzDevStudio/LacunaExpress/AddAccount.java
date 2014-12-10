@@ -80,13 +80,6 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
         
         //Clearing up the onCreate by adding this method, initializes variables
         Initialize();
-        Intent i = getIntent();
-        if(i.hasExtra("username")){
-        	Log.d("AddAccount.onCreate", "Intent is type Modify");
-        }
-        else{
-        	Log.d("AddAccount.onCreate", "Intent is type addAccount");
-        }
     }
 
     /*
@@ -97,6 +90,14 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
      */
     //To Initialize Variables
     private void Initialize() {
+    	//A check to see which type of Intent launched this activity
+        Intent i = getIntent();
+        if(i.hasExtra("username")){
+        	Log.d("AddAccount.onCreate", "Intent is type Modify");
+        }
+        else{
+        	Log.d("AddAccount.onCreate", "Intent is type addAccount");
+        }
 
     	//Server String set to nothing upon initialization
     	server ="https://us1.lacunaexpanse.com";
@@ -200,11 +201,16 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 
 	//This handles the radio buttons
 	public void onCheckedChanged(RadioGroup rg, int checkedId) {
+		Log.d("AddAccount.onCheckedChange", "Checking the values of the server radio buttons");
+		Log.d("AddAccount.onCheckedChange", "checkedID "+ checkedId);
+		Log.d("AddAccount.onCheckedChange", "R.id.addaccountUS1 "+R.id.add_account_us1);
+		Log.d("AddAccount.onCheckedChange", "R.id.addaccountUS1 "+R.id.add_account_pt);
 
 		switch(checkedId){
 		
 		//US1, set the server choice to US1
 		case R.id.add_account_us1:
+			Log.d("AddAccount.onCheckedChange", "Setting Server to US1");
 			server = "https://us1.lacunaexpanse.com";
 			account.server = "https://us1.lacunaexpanse.com";
 			Log.d("Radio", "US1 Checked");
@@ -212,6 +218,7 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 			
 		//PT, set the server choice to PT			
 		case R.id.add_account_pt:
+			Log.d("AddAccount.onCheckedChange", "Setting Server to PT");
 			server = "https://us1.lacunaexpanse.com";
 			account.server = "https://pt.lacunaexpanse.com";
 			Log.d("Radio", "PT Checked");
