@@ -7,7 +7,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
+import AccountMan.AccountInfo;
+import AccountMan.AccountMan;
+import MISCClasses.sessionRefresh;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -87,8 +91,14 @@ public class MainActivity extends Activity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
+            //This block is setup to refresh all sessions on loading.  Pauses main while the accounts are refreshed. 
             try {
-                Thread.sleep(3000);
+            	ArrayList<AccountInfo> a = AccountMan.GetAccounts();
+            	if(a.size()>0){
+            		sessionRefresh r = new sessionRefresh();
+            		r.execute("i");
+            		Thread.sleep((1500 * a.size()));
+            	}
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -96,7 +106,7 @@ public class MainActivity extends Activity {
             //After creating the load file code need to setup if fill not found
             //start add account, otherwise if 1 account open account, if multiple accounts
             //open account selection            
-            if (AccountMan.AccountMan.CheckForFile()) {
+            if (AccountMan.CheckForFile()) {
                 Intent intent = new Intent(getActivity(), SelectAccount.class);
                 startActivity(intent);
                 return rootView;

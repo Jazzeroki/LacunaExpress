@@ -39,7 +39,7 @@ public class AsyncServer extends AsyncTask<ServerRequest, Void, String> {
 
     }
 	
-    private String ServerRequest(String gameServer, String methodURL, String JsonRequest) {
+    public String ServerRequest(String gameServer, String methodURL, String JsonRequest) {
         //String output = "";
         try {
             try { //putting thread to sleep for just over a second to throttle client because of the limit of 60 calls per minute

@@ -79,10 +79,12 @@ public class AccountMan {
     }
     //troubleshooting method that removes all but the first account
     public static ArrayList<AccountInfo> PurgeDuplicateAccounts(ArrayList<AccountInfo> arrayToPurge){
-    	AccountInfo account = arrayToPurge.get(0);
-    	arrayToPurge.clear();
-    	arrayToPurge.add(account);
-    	Save(arrayToPurge);
+    	if(arrayToPurge.size()>1){
+    		AccountInfo account = arrayToPurge.get(0);
+    		arrayToPurge.clear();
+    		arrayToPurge.add(account);
+    		Save(arrayToPurge);
+    	}
     	return arrayToPurge;
     }
     
@@ -143,7 +145,7 @@ public class AccountMan {
         }
     }
     //An overloaded save method to make saving accounts easier
-    private static void Save(ArrayList<AccountInfo> accounts){
+    public static void Save(ArrayList<AccountInfo> accounts){
     	Accounts a = new Accounts();
     	a.accounts = accounts;
     	Save(a);
