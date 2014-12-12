@@ -170,7 +170,19 @@ public class SelectAccount extends Activity implements OnClickListener {
 			} catch (Exception e){
 				e.printStackTrace();
 			}
-			break;			
+			break;	
+		case R.id.select_account_mail:
+			try {
+			
+	            Intent openActivity = new Intent(this, SelectMessageActivity.class);
+	            openActivity.putExtra("displayString", selectedAccount);
+                startActivity(openActivity);
+                finish();
+				
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+			break;	
 			
 		}
 	}
