@@ -26,6 +26,7 @@ public class SelectAccount extends Activity implements OnClickListener {
 	ArrayList<AccountInfo> accounts;
 	Button modifyAccount, addAccount;
 	Spinner account_list;
+	String selectedAccount;
 	
 	private static final int RESULT_SETTINGS = 1;
 	
@@ -39,9 +40,16 @@ public class SelectAccount extends Activity implements OnClickListener {
         
         Initialize();
         ReadInAccounts();
-        for(AccountInfo i: accounts){
+        if(accounts.size() == 1){
+        	selectedAccount = accounts.get(0).displayString;
+        	Log.d("Select Account", selectedAccount);
+        	user_accounts.add(selectedAccount);
+        }
+        else{
+        	for(AccountInfo i: accounts){
         	Log.d("Select Account", i.displayString);
         	user_accounts.add(i.displayString);
+        	}
         }
         
         //This is for the spinner
@@ -140,9 +148,10 @@ public class SelectAccount extends Activity implements OnClickListener {
 			try {
 				//Starting to add intent code to launch addAccount as a modified account
 				Intent openActivity = new Intent(this, SelectAccount.class);
-				openActivity.putExtra("username", "");
-				openActivity.putExtra("server", "");
-				openActivity.putExtra("defaultAccount", "");
+				openActivity.putExtra("displayString", selectedAccount);
+				//openActivity.putExtra("username", "");
+				//openActivity.putExtra("server", "");
+				//openActivity.putExtra("defaultAccount", "");
                 startActivity(openActivity);
                 finish();
 			} catch (Exception e){
