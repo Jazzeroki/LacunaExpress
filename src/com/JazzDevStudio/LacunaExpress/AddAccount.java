@@ -3,6 +3,7 @@ package com.JazzDevStudio.LacunaExpress;
 import AccountMan.AccountInfo;
 import JavaLEWrapper.Empire;
 import LEWrapperResponse.Response;
+import MISCClasses.L;
 import Server.AsyncServer;
 import Server.ServerRequest;
 import Server.serverFinishedListener;
@@ -160,6 +161,7 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 			account.password = etpassword.getText().toString();
 			account.server = mServer;
 			account.defaultAccount = cbdfAccount.isChecked();
+			
 			Log.d("username", account.userName);
 			Log.d("password", account.password);
 			Log.d("server", account.server);
@@ -177,17 +179,26 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 	            Log.d("Login", "Login Success");
 	            //AsyncServer clears all listeners after the requests have been recieved.
 	            
+	            //Account has been added
+	            L.makeToastShort(this, "Account Added Successfully");
+	            
 	            Intent openActivity = new Intent(this, SelectAccount.class);
                 startActivity(openActivity);
 	        }
 	        else{
 	        	Log.d("Blank Info", "account fields are blank?");
-	        	if(account.userName.isEmpty())
+	        	if(account.userName.isEmpty()){
 	        		serverReply.setText((CharSequence) "No username Entered", EditText.BufferType.NORMAL);
-	        	if(account.password.isEmpty())
+	        		L.makeToast(this, "No username Entered");
+	        	}
+	        	if(account.password.isEmpty()){
 	        		serverReply.setText((CharSequence) "No Password Entered", EditText.BufferType.NORMAL);
-	        	if(account.server.isEmpty())
-	        		serverReply.setText((CharSequence) "server is blank", EditText.BufferType.NORMAL);
+	        		L.makeToast(this, "No Password Entered");
+	        	}
+	        	if(account.server.isEmpty()){
+	        		serverReply.setText((CharSequence) "Server is Blank", EditText.BufferType.NORMAL);
+	        		L.makeToast(this, "Server is Blank");
+	        	}
 	        	//serverReply.setText((CharSequence) "A button was clicked", EditText.BufferType.NORMAL);
 	        }
 			

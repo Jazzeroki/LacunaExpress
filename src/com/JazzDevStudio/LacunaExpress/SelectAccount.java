@@ -25,8 +25,7 @@ import android.widget.Spinner;
 public class SelectAccount extends Activity implements OnClickListener {
 	ArrayList<AccountInfo> accounts;
 	Button modifyAccount, addAccount;
-	//Spinner account_list;
-	ListView account_list;
+	Spinner account_list;
 	
 	private static final int RESULT_SETTINGS = 1;
 	
@@ -45,17 +44,10 @@ public class SelectAccount extends Activity implements OnClickListener {
         	user_accounts.add(i.userName);
         }
         
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, user_accounts);
-        account_list.setAdapter(arrayAdapter);
-
-    	
-        
-        
-        
         //This is for the spinner
-	        //ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, user_accounts);
-	        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	        //account_list.setAdapter(adapter);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, user_accounts);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        account_list.setAdapter(adapter);
         
         
     }
@@ -79,8 +71,7 @@ public class SelectAccount extends Activity implements OnClickListener {
     	modifyAccount.setOnClickListener(this);
     	addAccount.setOnClickListener(this);
 		
-    	//account_list = (Spinner) findViewById(R.id.select_account_spinner);
-    	account_list = (ListView) findViewById(R.id.select_account_list_view);
+    	account_list = (Spinner) findViewById(R.id.select_account_spinner);
 	}
  
  
