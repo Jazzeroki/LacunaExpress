@@ -40,8 +40,8 @@ public class SelectAccount extends Activity implements OnClickListener {
         Initialize();
         ReadInAccounts();
         for(AccountInfo i: accounts){
-        	Log.d("Select Account", i.userName);
-        	user_accounts.add(i.userName);
+        	Log.d("Select Account", i.displayString);
+        	user_accounts.add(i.displayString);
         }
         
         //This is for the spinner

@@ -11,6 +11,13 @@ public class AccountInfo{
         this.sessionDate = sessionDate;
         this.defaultAccount = defaultAccount;
     }
-    public String userName, password, aPIKey, server, sessionID, sessionDate;
+    public String userName, password, aPIKey, server, sessionID, sessionDate, displayString;
     public Boolean defaultAccount;
+    public void CreateDisplayString(){
+    	this.displayString = userName+" (";
+    	if(server.equals("https://us1.lacunaexpanse.com"))
+    		this.displayString +="US1)";
+    	if(server.equals("https://pt.lacunaexpanse.com"))
+    		this.displayString +="PT)";
+    }
 }

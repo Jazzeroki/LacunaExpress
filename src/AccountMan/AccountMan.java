@@ -30,6 +30,14 @@ public class AccountMan {
         }
         return null;
     }
+    public static AccountInfo GetAccount(String displayString){
+        Accounts a = Load();
+        for(AccountInfo i: a.accounts){
+            if(i.displayString.equals(displayString))
+                return i;
+        }
+        return null;
+    }
     public static void AddAccount(AccountInfo acnt){
     	Log.d("AccountInfo username", acnt.userName);
     	Log.d("AccountInfo username", acnt.password);
@@ -37,6 +45,7 @@ public class AccountMan {
     	Log.d("AccountInfo username", acnt.defaultAccount.toString());
     	
     	Log.d("AcountMan", "Starting Add Account");
+    	acnt.CreateDisplayString();
         Accounts accounts = new Accounts();
         Log.d("AccountMan", "Checking for file");
         if(CheckForFile()){
@@ -103,6 +112,20 @@ public class AccountMan {
         }
         Save(accounts);
     }
+    public static void DeleteAccount(String displayString){
+        Accounts accounts = Load();
+        if(accounts.accounts.size() >1){
+        	int indexToRemove = -1;
+        	for(AccountInfo i: accounts.accounts)
+            if(i.displayString.equals(displayString) ){
+            	indexToRemove = accounts.accounts.indexOf(i);
+                break;
+            }
+        	if(indexToRemove >= 0)
+        		accounts.accounts.remove(indexToRemove);
+        }
+        Save(accounts);
+    }
     //This method assumes you've already checked for the existance of an account file
     public static void ModifyAccount(String username, String password, String server, String aPIKey, String sessionID, String sessionDate, Boolean defaultAccount){
         AccountInfo a = new AccountInfo(username, password, server, aPIKey, sessionID, sessionDate, defaultAccount);
@@ -119,6 +142,7 @@ public class AccountMan {
                 break;
             }
         }
+        a.CreateDisplayString();
         accounts.accounts.add(a);
         Save(accounts);
     }
@@ -147,6 +171,10 @@ public class AccountMan {
     //An overloaded save method to make saving accounts easier
     public static void Save(ArrayList<AccountInfo> accounts){
     	Accounts a = new Accounts();
+    	for(AccountInfo i: accounts){
+    		accounts.get(accounts.indexOf(i)).CreateDisplayString();
+    	}
+    		
     	a.accounts = accounts;
     	Save(a);
     }
@@ -176,6 +204,7 @@ public class AccountMan {
         }
         return accounts.accounts;
     }
+    
     private static Accounts Load(){
     	
         Accounts accounts=new Accounts();
