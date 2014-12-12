@@ -70,7 +70,8 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
             
             Log.d("Select Acount", "Launching Select Account");
             Intent intent = new Intent(this, SelectAccount.class);
-            startActivity(intent);          
+            startActivity(intent);  
+            finish();
         } 
     }
 

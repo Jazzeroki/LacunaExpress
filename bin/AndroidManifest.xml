@@ -22,9 +22,9 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         
-        <!-- This is the main Activity -->
+        <!-- This is the Splash Screen -->
         <activity
-            android:name=".MainActivity"
+            android:name=".Splash"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,6 +39,12 @@
     	    android:label="@string/app_name" >
         </activity>
     	
+    	<!-- This is the Main Activity -->
+    	<activity 
+    	    android:name="com.JazzDevStudio.LacunaExpress.MainActivity"
+    	    android:label="@string/app_name" >
+        </activity>
+            	
     	<!-- This is the Add Select Account Activity for selecting the login account-->
     	<activity 
     	    android:name="com.JazzDevStudio.LacunaExpress.SelectAccount"

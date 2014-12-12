@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import AccountMan.AccountInfo;
 import AccountMan.AccountMan;
+import MISCClasses.L;
 import MISCClasses.sessionRefresh;
 import android.app.Activity;
 import android.app.Fragment;
@@ -110,6 +111,7 @@ public class MainActivity extends Activity {
                 Intent intent = new Intent(getActivity(), SelectAccount.class);
                 startActivity(intent);
                 return rootView;
+                
             }
             
             else {

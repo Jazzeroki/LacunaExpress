@@ -144,6 +144,7 @@ public class SelectAccount extends Activity implements OnClickListener {
 				openActivity.putExtra("server", "");
 				openActivity.putExtra("defaultAccount", "");
                 startActivity(openActivity);
+                finish();
 			} catch (Exception e){
 				e.printStackTrace();
 			}
@@ -155,6 +156,7 @@ public class SelectAccount extends Activity implements OnClickListener {
 			
 	            Intent openActivity1 = new Intent(this, AddAccount.class);
                 startActivity(openActivity1);
+                finish();
 				
 			} catch (Exception e){
 				e.printStackTrace();
