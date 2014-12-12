@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+	<RelativeLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical" >
+
+	    <EditText
+	        android:id="@+id/account_mail_read_message"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_above="@+id/account_mail_read_reply"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentRight="true"
+	        android:layout_below="@+id/textView4"
+	        android:ems="10"
+	        android:inputType="textMultiLine" />
+
+	    <TextView
+	        android:id="@+id/textView2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_above="@+id/textview12"
+	        android:layout_alignRight="@+id/textView3"
+	        android:text="From"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	    <TextView
+	        android:id="@+id/account_mail_read_from"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignLeft="@+id/textView1"
+	        android:layout_alignParentRight="true"
+	        android:layout_below="@+id/textview12"
+	        android:layout_marginTop="20dp"
+	        android:layout_weight="1.0"
+	        android:gravity="right"
+	        android:text="ERASE THIS, &apos;From Field&apos;"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	    <TextView
+	        android:id="@+id/textView3"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/textView1"
+	        android:layout_marginTop="20dp"
+	        android:text="Subject: "
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	    <TextView
+	        android:id="@+id/account_mail_read_to"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignLeft="@+id/account_mail_read_from"
+	        android:layout_alignParentRight="true"
+	        android:layout_below="@+id/account_mail_read_from"
+	        android:layout_marginTop="20dp"
+	        android:gravity="right"
+	        android:layout_weight="1.0"
+	        android:text="ERASE THIS, &apos;To Field&apos;"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	    <TextView
+	        android:id="@+id/textview12"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:layout_alignRight="@+id/textView4"
+	        android:text="Read Mail"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	    <TextView
+	        android:id="@+id/account_mail_read_subject"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBaseline="@+id/textView3"
+	        android:layout_alignBottom="@+id/textView3"
+	        android:layout_alignLeft="@+id/account_mail_read_to"
+	        android:layout_alignParentRight="true"
+	        android:gravity="right"
+	        android:layout_weight="1.0"
+	        android:text="ERASE THIS &apos;Subject Field&apos;"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	    <TextView
+	        android:id="@+id/textView1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBaseline="@+id/account_mail_read_to"
+	        android:layout_alignBottom="@+id/account_mail_read_to"
+	        android:layout_alignRight="@+id/textView3"
+	        android:text="To: "
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	    <TextView
+	        android:id="@+id/textView5"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBaseline="@+id/account_mail_read_from"
+	        android:layout_alignBottom="@+id/account_mail_read_from"
+	        android:layout_alignRight="@+id/textView1"
+	        android:text="From: "
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	    <TextView
+	        android:id="@+id/textView4"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/account_mail_read_subject"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="20dp"
+	        android:text="Message:"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	    <Button
+	        android:id="@+id/account_mail_read_reply"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_alignParentLeft="true"
+	        android:layout_toLeftOf="@+id/textView4"
+	        android:text="Reply" />
+
+	    <Button
+	        android:id="@+id/account_mail_read_delete"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_alignParentRight="true"
+	        android:layout_toRightOf="@+id/textView4"
+	        android:text="Delete" />
+	
+	</RelativeLayout>
+</LinearLayout>

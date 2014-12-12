@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+	<RelativeLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical" >
+
+	    <TextView
+	        android:id="@+id/activity_mail_compose"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:layout_centerHorizontal="true"
+	        android:text="Compose"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	    <EditText
+	        android:id="@+id/editText2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_alignTop="@+id/textView3"
+	        android:layout_toRightOf="@+id/textView3"
+	        android:ems="10" />
+
+	    <EditText
+	        android:id="@+id/activity_mail_message"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_above="@+id/activity_mail_send"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentRight="true"
+	        android:layout_below="@+id/textView4"
+	        android:ems="10"
+	        android:inputType="textMultiLine" />
+
+	    <TextView
+	        android:id="@+id/textView3"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/activity_mail_to"
+	        android:layout_marginTop="18dp"
+	        android:text="Subject"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	    <TextView
+	        android:id="@+id/textView4"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignRight="@+id/activity_mail_compose"
+	        android:layout_below="@+id/editText2"
+	        android:text="Message:"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	    <EditText
+	        android:id="@+id/activity_mail_to"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignLeft="@+id/editText2"
+	        android:layout_alignParentRight="true"
+	        android:layout_below="@+id/activity_mail_compose"
+	        android:ems="10" />
+
+	    <TextView
+	        android:id="@+id/textView1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignRight="@+id/textView3"
+	        android:layout_alignTop="@+id/activity_mail_to"
+	        android:text="To:"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	    <Button
+	        android:id="@+id/activity_mail_send"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_alignParentRight="true"
+	        android:text="Send" />
+	
+	</RelativeLayout>
+</LinearLayout>

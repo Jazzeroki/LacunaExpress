@@ -37,8 +37,10 @@
             android:tag="front"
             style="@style/MyListFrontContent">
 
+        <!-- This image view can be used to write the first letter of the sender's name, IE, S, J, L -->
         <ImageView
                 style="@style/MyListImage"
+                android:src="@drawable/ic_launcher"
                 android:id="@+id/example_image"/>
 
         <TextView
