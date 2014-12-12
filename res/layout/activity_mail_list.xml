@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:id="@+id/back"
+            android:tag="back"
+            style="@style/MyListBackContent"
+            >
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/swipe_button1"
+                style="@style/MyListButtonAction"
+                android:text="Button 1"/>
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/swipe_button2"
+                style="@style/MyListButtonAction"
+                android:text="Button 2"/>
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/swipe_button3"
+                style="@style/MyListButtonAction"
+                android:text="Button 3"/>
+
+    </LinearLayout>
+     <RelativeLayout
+            android:orientation="vertical"
+            android:id="@+id/front"
+            android:tag="front"
+            style="@style/MyListFrontContent">
+
+        <ImageView
+                style="@style/MyListImage"
+                android:id="@+id/example_image"/>
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/example_image"
+                style="@style/MyListTitle"
+                android:id="@+id/example_itemname"/>
+
+
+    </RelativeLayout>
+
+</FrameLayout>

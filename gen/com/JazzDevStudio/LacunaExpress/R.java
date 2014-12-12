@@ -185,11 +185,16 @@ public final class R {
         public static final int activity_vertical_margin=0x7f070001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int background_back=0x7f020000;
+        public static final int background_front=0x7f020001;
+        public static final int choice_selected=0x7f020002;
+        public static final int choice_unselected=0x7f020003;
+        public static final int ic_launcher=0x7f020004;
     }
     public static final class id {
-        public static final int action_settings=0x7f0b001b;
-        public static final int action_stuff=0x7f0b001c;
+        public static final int action_settings=0x7f0b0023;
+        public static final int action_stuff=0x7f0b0024;
+        public static final int activity_mail_temp_list=0x7f0b0015;
         public static final int add_account_add_account=0x7f0b000c;
         public static final int add_account_default=0x7f0b000a;
         public static final int add_account_password=0x7f0b0005;
@@ -197,20 +202,27 @@ public final class R {
         public static final int add_account_server_choices=0x7f0b0007;
         public static final int add_account_us1=0x7f0b0008;
         public static final int add_account_username=0x7f0b0003;
-        public static final int container=0x7f0b000e;
-        public static final int lacuna_image=0x7f0b0019;
-        public static final int menu_settings=0x7f0b001d;
-        public static final int modify_account_default=0x7f0b0014;
-        public static final int modify_account_modify_account=0x7f0b0015;
-        public static final int modify_account_password=0x7f0b0010;
-        public static final int modify_account_pt=0x7f0b0013;
-        public static final int modify_account_server_choices=0x7f0b0011;
-        public static final int modify_account_us1=0x7f0b0012;
-        public static final int modify_account_username=0x7f0b000f;
-        public static final int select_account_add=0x7f0b0017;
-        public static final int select_account_list_view=0x7f0b0016;
-        public static final int select_account_modify=0x7f0b0018;
-        public static final int splash_screen_text=0x7f0b001a;
+        public static final int back=0x7f0b000e;
+        public static final int container=0x7f0b0016;
+        public static final int example_image=0x7f0b0013;
+        public static final int example_itemname=0x7f0b0014;
+        public static final int front=0x7f0b0012;
+        public static final int lacuna_image=0x7f0b0021;
+        public static final int menu_settings=0x7f0b0025;
+        public static final int modify_account_default=0x7f0b001c;
+        public static final int modify_account_modify_account=0x7f0b001d;
+        public static final int modify_account_password=0x7f0b0018;
+        public static final int modify_account_pt=0x7f0b001b;
+        public static final int modify_account_server_choices=0x7f0b0019;
+        public static final int modify_account_us1=0x7f0b001a;
+        public static final int modify_account_username=0x7f0b0017;
+        public static final int select_account_add=0x7f0b001f;
+        public static final int select_account_list_view=0x7f0b001e;
+        public static final int select_account_modify=0x7f0b0020;
+        public static final int splash_screen_text=0x7f0b0022;
+        public static final int swipe_button1=0x7f0b000f;
+        public static final int swipe_button2=0x7f0b0010;
+        public static final int swipe_button3=0x7f0b0011;
         public static final int textView1=0x7f0b0002;
         public static final int textView2=0x7f0b0001;
         public static final int textView3=0x7f0b0004;
@@ -221,10 +233,12 @@ public final class R {
     }
     public static final class layout {
         public static final int activity_add_account=0x7f030000;
-        public static final int activity_main=0x7f030001;
-        public static final int activity_modify_account=0x7f030002;
-        public static final int activity_select_account=0x7f030003;
-        public static final int fragment_main=0x7f030004;
+        public static final int activity_mail_list=0x7f030001;
+        public static final int activity_mail_temp=0x7f030002;
+        public static final int activity_main=0x7f030003;
+        public static final int activity_modify_account=0x7f030004;
+        public static final int activity_select_account=0x7f030005;
+        public static final int fragment_main=0x7f030006;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
@@ -263,6 +277,13 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f090001;
+        /**  EXTRA 
+         */
+        public static final int MyListBackContent=0x7f090002;
+        public static final int MyListButtonAction=0x7f090004;
+        public static final int MyListFrontContent=0x7f090003;
+        public static final int MyListImage=0x7f090005;
+        public static final int MyListTitle=0x7f090006;
     }
     public static final class xml {
         public static final int settings=0x7f040000;

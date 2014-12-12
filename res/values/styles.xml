@@ -16,5 +16,43 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
+    
+    <!-- EXTRA -->
+     <style name="MyListBackContent">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:background">@drawable/background_back</item>
+        <item name="android:gravity">right</item>
+    </style>
+
+    <style name="MyListFrontContent">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:background">@drawable/background_front</item>
+        <item name="android:padding">8dp</item>
+    </style>
+    
+      <style name="MyListButtonAction">
+        <item name="android:layout_margin">5dp</item>
+          <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">30dp</item>
+     
+    </style>
+    
+      
+      <style name="MyListImage">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:scaleGravity">fill</item>
+        <item name="android:layout_marginRight">8dp</item>
+    </style>
+
+    <style name="MyListTitle">
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>    
 
 </resources>
