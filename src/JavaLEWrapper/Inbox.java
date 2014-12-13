@@ -9,31 +9,16 @@ public class Inbox extends LESuperClass {
     public static String ViewInbox(String sessionID, String tag ){
         return "{\"jsonrpc\":2,\"id\":1,\"method\":\"view_inbox\",\"params\":[\""+sessionID+"\",{\"tags\":[\""+tag+"\"],\"page_number\":1}]}";
     }
+    
     public static String ViewInbox(String sessionID, String tag, int pageNumber ){
         return "{\"jsonrpc\":2,\"id\":1,\"method\":\"view_inbox\",\"params\":[\""+sessionID+"\",{\"tags\":[\""+tag+"\"],\"page_number\":"+pageNumber+"}]}";
     }
-    String ReadMessage(int RequestID, String sessionID, String MessageID){
+    
+    public String ReadMessage(int RequestID, String sessionID, String MessageID){
     	return Request("read_message", sessionID, String.valueOf(RequestID), MessageID);
-        /*StartOfObject(RequestID, "read_message");
-        String i = "nothing";
-        try {
-            writer.value(sessionID);
-            writer.value(MessageID);
-            writer.endArray();
-            writer.endObject();
-            writer.close();
-            i = gson.toJson(writer);
-            System.out.println(i);
-            i = CleanJsonObject(i);
-
-        } catch (IOException e) {
-            System.out.println("Exception in read_message");
-            i = "request build failed";
-            e.printStackTrace();
-        }
-        return i; */
     }
-    String SendMessage(int requestID, String sessionID, ArrayList<String> recipients, String subject, String body){
+    
+    public static String SendMessage(int requestID, String sessionID, ArrayList<String> recipients, String subject, String body){
     	String r ="";
     	if(recipients.size()>1){
     		for(int z=0;z <recipients.size(); z++){
@@ -46,27 +31,25 @@ public class Inbox extends LESuperClass {
     	else 
     		r = recipients.get(0);
     	String i = "{\"id\":"+requestID+",\"method\":\"send_message\",\"jsonrpc\":\"2.0\",\"params\":[\""+sessionID+"\",\""+r+"\",\""+subject+"\","+body+"\"\n\n Sent from Lacuna Express \n\nFind it in Google Playstore\",null]}";
-        
-    	/*StartOfObject(1, "send_message");
-        String i = "0";
-        try{
-            writer.value(sessionID);
-            writer.value(recipients);
-            writer.value(subject);
-            writer.value(body);
-            writer.endArray();
-            writer.endObject();
-            writer.close();
-            i = gson.toJson(writer);
-            i = CleanJsonObject(i);
-        }catch(IOException e){
-            System.out.println("ioexception");
-        }catch(NullPointerException e){
-            System.out.println("null pointer exception");
-        }finally{
-        } */
         return i;
     }
+    
+    public String TrashMessages(int requestID, String sessionID, ArrayList<String> messageIds){
+    	String r ="";
+    	if(messageIds.size()>1){
+    		for(int z=0;z <messageIds.size(); z++){
+    			if(z < (messageIds.size()-1))
+    				r += messageIds.get(z)+",";
+    			else
+    				r+=messageIds.get(z);
+    		}
+    	}
+    	else 
+    		r = messageIds.get(0);
+    	return Request("read_message", sessionID, String.valueOf(requestID), r);
+    	
+    }
+    public static enum MessageTags{Tutorial, Correspondence, Medal, Intelligence, Alert, Attack, Colonization, Complaint, Excavator, Mission, Parliament, Probe, Spies, Trade, Fissure};
     /*enum MessageTags{  //will be leaving this as an option to use in the future, but currently just passing a string directly to the methods instead
 		Tutorial, Correspondence, Medal, Intelligence, Alert, Attack, Colonization, Complaint, Excavator, Mission, Parliament, Probe, Spies, Trade, Fissure;
 	} */
