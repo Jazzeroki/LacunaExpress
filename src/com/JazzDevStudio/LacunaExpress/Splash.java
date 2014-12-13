@@ -36,6 +36,7 @@ MediaPlayer ourIntroSong;
 					
 					//Testing this instead of a popup window
 					Intent openMain = new Intent(Splash.this, MainActivity.class);
+					//Intent openMain = new Intent(Splash.this, com.JazzDevStudio.LacunaExpress.ListViewRemoval.ListViewRemovalAnimation.class); //Testing something
 					startActivity(openMain);
 				}
 			}

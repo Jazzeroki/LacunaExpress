@@ -46,11 +46,13 @@ public class BackgroundContainer extends FrameLayout {
         init();
     }
 
+    //9 Patch image that is designed for simplicity
     private void init() {
         mShadowedBackground =
                 getContext().getResources().getDrawable(R.drawable.shadowed_background);
     }
 
+    //This shows a background while the swipe is occurring. 
     public void showBackground(int top, int bottom) {
         setWillNotDraw(false);
         mOpenAreaTop = top;
@@ -64,7 +66,7 @@ public class BackgroundContainer extends FrameLayout {
         mShowing = false;
     }
     
-    @Override
+    //Override the onDraw 
     protected void onDraw(Canvas canvas) {
         if (mShowing) {
             	if (mUpdateBounds) {

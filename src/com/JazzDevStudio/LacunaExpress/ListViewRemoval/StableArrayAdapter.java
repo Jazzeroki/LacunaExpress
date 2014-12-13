@@ -44,12 +44,12 @@ public class StableArrayAdapter extends ArrayAdapter<String> {
         return mIdMap.get(item);
     }
 
-    @Override
+    //Dependent upon the arrayAdapter having stable IDs via Unique IDs
     public boolean hasStableIds() {
         return true;
     }
 
-    @Override
+    //Need to know the view as where things are going when moved
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
         if (view != convertView) {

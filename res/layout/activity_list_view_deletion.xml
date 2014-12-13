@@ -20,7 +20,7 @@
     tools:context=".ListViewAnimations" >
 
     <view
-        class="com.example.android.listviewremovalanimation.BackgroundContainer"
+        class="com.JazzDevStudio.LacunaExpress.ListViewRemoval.BackgroundContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/listViewBackground">
@@ -31,7 +31,7 @@
             android:dividerHeight="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
+		<!-- The code above prevents dividers (android:divider) -->
     </view>
 
 </LinearLayout>

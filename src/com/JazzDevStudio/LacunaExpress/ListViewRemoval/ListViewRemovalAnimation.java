@@ -36,6 +36,7 @@ import android.widget.ListView;
  *
  * Watch the associated video for this demo on the DevBytes channel of developer.android.com
  * or on YouTube at https://www.youtube.com/watch?v=NewCSg2JKLk.
+ * Velocity tracking would be better overall, but this code works too
  */
 public class ListViewRemovalAnimation extends Activity {
 
@@ -81,6 +82,8 @@ public class ListViewRemovalAnimation extends Activity {
                         getScaledTouchSlop();
             }
             switch (event.getAction()) {
+            
+            //Motion down: the user has pressed the screen down
             case MotionEvent.ACTION_DOWN:
                 if (mItemPressed) {
                     // Multi-item swipes not handled
@@ -89,29 +92,40 @@ public class ListViewRemovalAnimation extends Activity {
                 mItemPressed = true;
                 mDownX = event.getX();
                 break;
+                
+            //Canceled the move event 
             case MotionEvent.ACTION_CANCEL:
                 v.setAlpha(1);
                 v.setTranslationX(0);
                 mItemPressed = false;
                 break;
+                
+            //When the item has been moved
             case MotionEvent.ACTION_MOVE:
                 {
+                	//First get their initial position
                     float x = event.getX() + v.getTranslationX();
                     float deltaX = x - mDownX;
                     float deltaXAbs = Math.abs(deltaX);
                     if (!mSwiping) {
+                    	//If they are swiping one direction or another, this code handles it
                         if (deltaXAbs > mSwipeSlop) {
                             mSwiping = true;
-                            mListView.requestDisallowInterceptTouchEvent(true);
+                            //This line below prevents the listView from scrolling while the user is swiping in a direction
+                            mListView.requestDisallowInterceptTouchEvent(true);  
+                            //Detail about what will be shown behind the item as it is shown away
                             mBackgroundContainer.showBackground(v.getTop(), v.getHeight());
                         }
                     }
+                    //If it is swiping, go back and forth depending on how much they move their finger
                     if (mSwiping) {
                         v.setTranslationX((x - mDownX));
-                        v.setAlpha(1 - deltaXAbs / v.getWidth());
+                        v.setAlpha(1 - deltaXAbs / v.getWidth()); //Inverse of wherever they started.
                     }
                 }
                 break;
+            
+            //When the user releases their finger
             case MotionEvent.ACTION_UP:
                 {
                     // User let go - figure out whether to animate the view out, or back into place
@@ -130,7 +144,7 @@ public class ListViewRemovalAnimation extends Activity {
                             endAlpha = 0;
                             remove = true;
                         } else {
-                            // Not far enough - animate it back
+                            // Not far enough - animate it back, IE hit it by mistake
                             fractionCovered = 1 - (deltaXAbs / v.getWidth());
                             endX = 0;
                             endAlpha = 1;
@@ -142,11 +156,13 @@ public class ListViewRemovalAnimation extends Activity {
                         // velocity (via the VelocityTracker class) to send the item off or
                         // back at an appropriate speed.
                         long duration = (int) ((1 - fractionCovered) * SWIPE_DURATION);
+                        //This is similar to line 115 except it prevents the list view from working while the animation is happening
                         mListView.setEnabled(false);
                         v.animate().setDuration(duration).
-                                alpha(endAlpha).translationX(endX).
+                                alpha(endAlpha).translationX(endX). //Uses a view property animator (Android 3.1). Animate it to the endx (all the way off or on the screen)
+                                //If we have to write for API 14 instead of 16, we can replace withEndAction with listener on the viewProperty animator
                                 withEndAction(new Runnable() {
-                                    @Override
+                                    //This animates the removal once the swipe has occurred. 
                                     public void run() {
                                         // Restore animated values
                                         v.setAlpha(1);
@@ -180,38 +196,47 @@ public class ListViewRemovalAnimation extends Activity {
      */
     private void animateRemoval(final ListView listview, View viewToRemove) {
         int firstVisiblePosition = listview.getFirstVisiblePosition();
+        //For all children currently in the listview, track where items are and store that data in a hashmap
         for (int i = 0; i < listview.getChildCount(); ++i) {
             View child = listview.getChildAt(i);
             if (child != viewToRemove) {
                 int position = firstVisiblePosition + i;
                 long itemId = mAdapter.getItemId(position);
-                mItemIdTopMap.put(itemId, child.getTop());
+                mItemIdTopMap.put(itemId, child.getTop()); 
             }
         }
-        // Delete the item from the adapter
+        // Delete the item from the adapter (Runs onNotifyDataSetChange to remove it from the list)
         int position = mListView.getPositionForView(viewToRemove);
         mAdapter.remove(mAdapter.getItem(position));
 
+        //
         final ViewTreeObserver observer = listview.getViewTreeObserver();
         observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+        	//This is called BEFORE draws happen
             public boolean onPreDraw() {
+            	//Remove the listener after the 1 frame
                 observer.removeOnPreDrawListener(this);
                 boolean firstAnimation = true;
                 int firstVisiblePosition = listview.getFirstVisiblePosition();
+                //Cycle through all current children of the list frame
                 for (int i = 0; i < listview.getChildCount(); ++i) {
                     final View child = listview.getChildAt(i);
                     int position = firstVisiblePosition + i;
                     long itemId = mAdapter.getItemId(position);
                     Integer startTop = mItemIdTopMap.get(itemId);
+                    //Where is the child now, get the top position
                     int top = child.getTop();
-                    if (startTop != null) {
-                        if (startTop != top) {
+                    if (startTop != null) { //This means the view used to be somewhere else in the container
+                        //If the child was somewhere else in the container, run an animation to move it
+                    	if (startTop != top) {
+                    		//Set a Y Value and animate to it
                             int delta = startTop - top;
                             child.setTranslationY(delta);
                             child.animate().setDuration(MOVE_DURATION).translationY(0);
+                            //If this is the first time it's been run, restore values
                             if (firstAnimation) {
                                 child.animate().withEndAction(new Runnable() {
-                                    public void run() {
+                                	public void run() {
                                         mBackgroundContainer.hideBackground();
                                         mSwiping = false;
                                         mListView.setEnabled(true);
@@ -227,7 +252,7 @@ public class ListViewRemovalAnimation extends Activity {
                         int childHeight = child.getHeight() + listview.getDividerHeight();
                         startTop = top + (i > 0 ? childHeight : -childHeight);
                         int delta = startTop - top;
-                        child.setTranslationY(delta);
+                        child.setTranslationY(delta); //Again, set Y value to where it is going
                         child.animate().setDuration(MOVE_DURATION).translationY(0);
                         if (firstAnimation) {
                             child.animate().withEndAction(new Runnable() {
@@ -241,6 +266,7 @@ public class ListViewRemovalAnimation extends Activity {
                         }
                     }
                 }
+                //When finished, clear the item IDs associated with positions
                 mItemIdTopMap.clear();
                 return true;
             }
