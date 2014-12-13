@@ -191,21 +191,23 @@ public final class R {
         public static final int choice_unselected=0x7f020003;
         public static final int ic_launcher=0x7f020004;
         public static final int lacuna_expanse_icon=0x7f020005;
+        public static final int shadowed_background=0x7f020006;
+        public static final int tv_background_with_divider=0x7f020007;
     }
     public static final class id {
-        public static final int account_mail_read_delete=0x7f0c0020;
-        public static final int account_mail_read_from=0x7f0c001d;
-        public static final int account_mail_read_message=0x7f0c001a;
-        public static final int account_mail_read_reply=0x7f0c001b;
-        public static final int account_mail_read_subject=0x7f0c001f;
-        public static final int account_mail_read_to=0x7f0c001e;
-        public static final int action_settings=0x7f0c0032;
-        public static final int action_stuff=0x7f0c0033;
-        public static final int activity_mail_compose=0x7f0c000e;
-        public static final int activity_mail_message=0x7f0c0010;
-        public static final int activity_mail_send=0x7f0c0011;
-        public static final int activity_mail_temp_list=0x7f0c0021;
-        public static final int activity_mail_to=0x7f0c0012;
+        public static final int account_mail_read_delete=0x7f0c0022;
+        public static final int account_mail_read_from=0x7f0c001f;
+        public static final int account_mail_read_message=0x7f0c001c;
+        public static final int account_mail_read_reply=0x7f0c001d;
+        public static final int account_mail_read_subject=0x7f0c0021;
+        public static final int account_mail_read_to=0x7f0c0020;
+        public static final int action_settings=0x7f0c0034;
+        public static final int action_stuff=0x7f0c0035;
+        public static final int activity_mail_compose=0x7f0c0010;
+        public static final int activity_mail_message=0x7f0c0012;
+        public static final int activity_mail_send=0x7f0c0013;
+        public static final int activity_mail_temp_list=0x7f0c0023;
+        public static final int activity_mail_to=0x7f0c0014;
         public static final int add_account_add_account=0x7f0c000c;
         public static final int add_account_default=0x7f0c000a;
         public static final int add_account_password=0x7f0c0005;
@@ -213,31 +215,33 @@ public final class R {
         public static final int add_account_server_choices=0x7f0c0007;
         public static final int add_account_us1=0x7f0c0008;
         public static final int add_account_username=0x7f0c0003;
-        public static final int back=0x7f0c0013;
-        public static final int container=0x7f0c0022;
-        public static final int editText2=0x7f0c000f;
-        public static final int example_image=0x7f0c0018;
-        public static final int example_itemname=0x7f0c0019;
-        public static final int front=0x7f0c0017;
-        public static final int imageView1=0x7f0c0031;
-        public static final int lacuna_image=0x7f0c002f;
-        public static final int menu_settings=0x7f0c0034;
-        public static final int modify_account_default=0x7f0c0028;
-        public static final int modify_account_modify_account=0x7f0c0029;
-        public static final int modify_account_password=0x7f0c0024;
-        public static final int modify_account_pt=0x7f0c0027;
-        public static final int modify_account_server_choices=0x7f0c0025;
-        public static final int modify_account_us1=0x7f0c0026;
-        public static final int modify_account_username=0x7f0c0023;
-        public static final int relativeLayout1=0x7f0c002a;
-        public static final int select_account_add=0x7f0c002c;
-        public static final int select_account_mail=0x7f0c002e;
-        public static final int select_account_modify=0x7f0c002d;
-        public static final int select_account_spinner=0x7f0c002b;
-        public static final int splash_screen_text=0x7f0c0030;
-        public static final int swipe_button1=0x7f0c0014;
-        public static final int swipe_button2=0x7f0c0015;
-        public static final int swipe_button3=0x7f0c0016;
+        public static final int back=0x7f0c0015;
+        public static final int container=0x7f0c0024;
+        public static final int editText2=0x7f0c0011;
+        public static final int example_image=0x7f0c001a;
+        public static final int example_itemname=0x7f0c001b;
+        public static final int front=0x7f0c0019;
+        public static final int imageView1=0x7f0c0033;
+        public static final int lacuna_image=0x7f0c0031;
+        public static final int listViewBackground=0x7f0c000e;
+        public static final int listview=0x7f0c000f;
+        public static final int menu_settings=0x7f0c0036;
+        public static final int modify_account_default=0x7f0c002a;
+        public static final int modify_account_modify_account=0x7f0c002b;
+        public static final int modify_account_password=0x7f0c0026;
+        public static final int modify_account_pt=0x7f0c0029;
+        public static final int modify_account_server_choices=0x7f0c0027;
+        public static final int modify_account_us1=0x7f0c0028;
+        public static final int modify_account_username=0x7f0c0025;
+        public static final int relativeLayout1=0x7f0c002c;
+        public static final int select_account_add=0x7f0c002e;
+        public static final int select_account_mail=0x7f0c0030;
+        public static final int select_account_modify=0x7f0c002f;
+        public static final int select_account_spinner=0x7f0c002d;
+        public static final int splash_screen_text=0x7f0c0032;
+        public static final int swipe_button1=0x7f0c0016;
+        public static final int swipe_button2=0x7f0c0017;
+        public static final int swipe_button3=0x7f0c0018;
         public static final int textView1=0x7f0c0002;
         public static final int textView2=0x7f0c0001;
         public static final int textView3=0x7f0c0004;
@@ -245,20 +249,22 @@ public final class R {
         public static final int textView5=0x7f0c000b;
         public static final int textViewServerReply=0x7f0c000d;
         public static final int text_view=0x7f0c0000;
-        public static final int textview12=0x7f0c001c;
+        public static final int textview12=0x7f0c001e;
     }
     public static final class layout {
         public static final int activity_add_account=0x7f030000;
-        public static final int activity_mail_compose=0x7f030001;
-        public static final int activity_mail_list=0x7f030002;
-        public static final int activity_mail_read=0x7f030003;
-        public static final int activity_mail_temp=0x7f030004;
-        public static final int activity_main=0x7f030005;
-        public static final int activity_modify_account=0x7f030006;
-        public static final int activity_select_account=0x7f030007;
-        public static final int fragment_main=0x7f030008;
-        public static final int splash=0x7f030009;
-        public static final int test=0x7f03000a;
+        public static final int activity_list_view_deletion=0x7f030001;
+        public static final int activity_mail_compose=0x7f030002;
+        public static final int activity_mail_list=0x7f030003;
+        public static final int activity_mail_read=0x7f030004;
+        public static final int activity_mail_temp=0x7f030005;
+        public static final int activity_main=0x7f030006;
+        public static final int activity_modify_account=0x7f030007;
+        public static final int activity_select_account=0x7f030008;
+        public static final int fragment_main=0x7f030009;
+        public static final int opaque_text_view=0x7f03000a;
+        public static final int splash=0x7f03000b;
+        public static final int test=0x7f03000c;
     }
     public static final class menu {
         public static final int main=0x7f0b0000;
@@ -272,7 +278,9 @@ public final class R {
     public static final class string {
         public static final int action_settings=0x7f090002;
         public static final int app_name=0x7f090000;
+        public static final int delete_selected=0x7f090004;
         public static final int hello_world=0x7f090001;
+        public static final int use_positions=0x7f090003;
     }
     public static final class style {
         /** 
@@ -308,6 +316,7 @@ public final class R {
         public static final int MyListFrontContent=0x7f0a0003;
         public static final int MyListImage=0x7f0a0005;
         public static final int MyListTitle=0x7f0a0006;
+        public static final int WithoutBackground=0x7f0a0007;
     }
     public static final class xml {
         public static final int settings=0x7f040000;
