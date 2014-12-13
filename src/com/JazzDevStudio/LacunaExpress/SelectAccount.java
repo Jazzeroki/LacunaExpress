@@ -48,8 +48,8 @@ public class SelectAccount extends Activity implements OnClickListener {
         }
         else{
         	for(AccountInfo i: accounts){
-        	Log.d("Select Account", i.displayString); //
-        	user_accounts.add(i.displayString);
+        		Log.d("Select Account", i.displayString); //
+        		user_accounts.add(i.displayString);
         	}
         }
         
@@ -179,13 +179,17 @@ public class SelectAccount extends Activity implements OnClickListener {
 				e.printStackTrace();
 			}
 			break;	
+			
+		//Open the mail activity
 		case R.id.select_account_mail:
 			
 			try {
 				Log.d("SelectAccount.onClick", "Mail button was clicked, launching mail activity");
+				getDataFromSpinner();
 	            Intent openActivity = new Intent(this, SelectMessageActivity.class);
 	            openActivity.putExtra("displayString", selectedAccount);
                 startActivity(openActivity);
+                Log.d("Account Passed was: ", selectedAccount);
                 finish();
 				
 			} catch (Exception e){
@@ -194,6 +198,16 @@ public class SelectAccount extends Activity implements OnClickListener {
 			break;	
 			
 		}
+	}
+
+	//This pulls the string from the spinner of the object that was selected
+	private void getDataFromSpinner() {
+		
+		String aSelectedAccount = account_list.getSelectedItem().toString();
+		if (aSelectedAccount != ""){
+			selectedAccount = aSelectedAccount;
+		}
+		
 	}
 
 	
