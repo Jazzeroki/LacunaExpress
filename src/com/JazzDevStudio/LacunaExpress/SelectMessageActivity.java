@@ -1,6 +1,13 @@
 package com.JazzDevStudio.LacunaExpress;
 
-
+import java.util.ArrayList;
+import com.google.gson.Gson;
+import AccountMan.AccountInfo;
+import JavaLEWrapper.Empire;
+import JavaLEWrapper.Inbox;
+import LEWrapperResponse.Response;
+import Server.AsyncServer;
+import Server.ServerRequest;
 import Server.serverFinishedListener;
 import android.app.Activity;
 import android.content.Intent;
@@ -10,10 +17,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import LEWrapperResponse.Response.Messages;
 
 
 public class SelectMessageActivity extends Activity implements serverFinishedListener, OnClickListener {
-	String selectedAccount;
+	AccountInfo selectedAccount;
+	ArrayList <Messages> messages = new ArrayList<Messages>();
+	//String sessionID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +33,17 @@ public class SelectMessageActivity extends Activity implements serverFinishedLis
         Intent i = getIntent();
         if(i.hasExtra("dispalyString")){
         	Log.d("SelectMessageActivity.onCreate", i.getStringExtra("displayString"));
-        	selectedAccount = i.getStringExtra("displayString");
+        	String a = i.getStringExtra("displayString");
+        	selectedAccount = AccountMan.AccountMan.GetAccount(a);
+        	//Inbox inbox = new Inbox();
+        	String request = Inbox.ViewInbox(selectedAccount.sessionID, Inbox.MessageTags.Correspondence.toString());
+        	
+        	Log.d("SelecteMessage.Oncreate Request to server", request);
+            ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
+            AsyncServer s = new AsyncServer();
+            s.addListener(this);
+            s.execute(sRequest);
+        	
         }
         else{
         	Log.d("AddAccount.onCreate", "Intent is type addAccount");
@@ -63,7 +83,18 @@ public class SelectMessageActivity extends Activity implements serverFinishedLis
 
 	@Override
 	public void onResponseRecieved(String reply) {
-		// TODO Auto-generated method stub
-		
+    	Log.d("SelectMessage.onResponse Recieved", reply);
+    	
+        if(!reply.equals("error")) {
+        	Log.d("Deserializing Response", "Creating Response Object");
+            
+        	//Getting new messages, clearing list first.
+            Response r = new Gson().fromJson(reply, Response.class);
+            messages.clear();
+            messages = r.result.messages;
+
+            //Don't think I want to call finish here because not wanting to end activity.
+            //finish();
+        }
 	}
 }
