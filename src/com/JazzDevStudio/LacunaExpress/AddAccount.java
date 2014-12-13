@@ -94,7 +94,7 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
     private void Initialize() {
     	//A check to see which type of Intent launched this activity
         Intent i = getIntent();
-        if(i.hasExtra("username")){
+        if(i.hasExtra("displayString")){
         	Log.d("AddAccount.onCreate", "Intent is type Modify");
         }
         else{

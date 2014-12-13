@@ -3,7 +3,9 @@ package com.JazzDevStudio.LacunaExpress;
 
 import Server.serverFinishedListener;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,11 +13,21 @@ import android.view.View.OnClickListener;
 
 
 public class SelectMessageActivity extends Activity implements serverFinishedListener, OnClickListener {
-
+	String selectedAccount;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mail_temp);
+        
+        //checking for intent Extra
+        Intent i = getIntent();
+        if(i.hasExtra("dispalyString")){
+        	Log.d("SelectMessageActivity.onCreate", i.getStringExtra("displayString"));
+        	selectedAccount = i.getStringExtra("displayString");
+        }
+        else{
+        	Log.d("AddAccount.onCreate", "Intent is type addAccount");
+        }
     }
 
 

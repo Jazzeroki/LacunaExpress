@@ -139,7 +139,11 @@ public class SelectAccount extends Activity implements OnClickListener {
     }    
 	@Override
 	public void onClick(View v) {
-		
+		Log.d("SelectAccount.onclick", "Tracking which handler is being called");
+		Log.d("SelectAccount.onclick", String.valueOf(v.getId()));
+		Log.d("SelectAccount.onclick", String.valueOf(R.id.select_account_modify));
+		Log.d("SelectAccount.onclick", String.valueOf(R.id.select_account_add));
+		Log.d("SelectAccount.onclick", String.valueOf(R.id.select_account_mail));
 		switch (v.getId()){
 		
 		
@@ -173,7 +177,7 @@ public class SelectAccount extends Activity implements OnClickListener {
 			break;	
 		case R.id.select_account_mail:
 			try {
-			
+				Log.d("SelectAccount.onClick", "Mail button was clicked, launching mail activity");
 	            Intent openActivity = new Intent(this, SelectMessageActivity.class);
 	            openActivity.putExtra("displayString", selectedAccount);
                 startActivity(openActivity);
