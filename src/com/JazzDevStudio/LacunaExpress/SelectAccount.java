@@ -6,6 +6,7 @@ import com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.Adapter;
 
 import AccountMan.AccountInfo;
 import AccountMan.AccountMan;
+import MISCClasses.L;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,7 +25,7 @@ import android.widget.Spinner;
  
 public class SelectAccount extends Activity implements OnClickListener {
 	ArrayList<AccountInfo> accounts;
-	Button modifyAccount, addAccount;
+	Button modifyAccount, addAccount, bMail;
 	Spinner account_list;
 	String selectedAccount;
 	
@@ -47,7 +48,7 @@ public class SelectAccount extends Activity implements OnClickListener {
         }
         else{
         	for(AccountInfo i: accounts){
-        	Log.d("Select Account", i.displayString);
+        	Log.d("Select Account", i.displayString); //
         	user_accounts.add(i.displayString);
         	}
         }
@@ -75,9 +76,11 @@ public class SelectAccount extends Activity implements OnClickListener {
  
     	modifyAccount = (Button) findViewById(R.id.select_account_modify);
     	addAccount = (Button) findViewById(R.id.select_account_add);
+    	bMail = (Button) findViewById(R.id.select_account_mail);
     	
     	modifyAccount.setOnClickListener(this);
     	addAccount.setOnClickListener(this);
+    	bMail.setOnClickListener(this);
 		
     	account_list = (Spinner) findViewById(R.id.select_account_spinner);
 	}
@@ -139,6 +142,7 @@ public class SelectAccount extends Activity implements OnClickListener {
     }    
 	@Override
 	public void onClick(View v) {
+		
 		Log.d("SelectAccount.onclick", "Tracking which handler is being called");
 		Log.d("SelectAccount.onclick", String.valueOf(v.getId()));
 		Log.d("SelectAccount.onclick", String.valueOf(R.id.select_account_modify));
@@ -176,6 +180,7 @@ public class SelectAccount extends Activity implements OnClickListener {
 			}
 			break;	
 		case R.id.select_account_mail:
+			
 			try {
 				Log.d("SelectAccount.onClick", "Mail button was clicked, launching mail activity");
 	            Intent openActivity = new Intent(this, SelectMessageActivity.class);

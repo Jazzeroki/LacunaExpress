@@ -75,13 +75,18 @@
     	    android:label="@string/app_name" >
         </activity>    	
     		
-    	<!-- This is the Accounts Activity -->
+    	<!-- This is the User Settings Activity -->
     	<activity 
     	    android:name="com.JazzDevStudio.LacunaExpress.UserSettingActivity"
     	    android:label="@string/app_name" >
         </activity>        	
     	
-
+    	<!-- This is the Select Message Activity -->
+    	<activity 
+    	    android:name="com.JazzDevStudio.LacunaExpress.SelectMessageActivity"
+    	    android:label="@string/app_name" >
+        </activity>        	
+        
     <!-- End Application -->
     </application>
     
