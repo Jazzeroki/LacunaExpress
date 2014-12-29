@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <!--THIS IS UNUSED FOR NOW, IT WILL BE THE MAIN MAIL ACTIVITY ONCE COMPLETED-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/activity_mail_select_layout"
+    android:background="@drawable/blue_glass">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="Mail" />
+
+        <Button
+            android:id="@+id/activity_mail_temp_compose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="Compose" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/textView1"
+            android:text="Choose Your Account:" />
+
+        <Spinner
+            android:id="@+id/activity_mail_temp_account_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/textView2" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/activity_mail_temp_account_spinner"
+            android:text="Choose Message Types to View: " />
+
+        <Spinner
+            android:id="@+id/activity_mail_temp_message_tag_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/textView3" />
+
+    </RelativeLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:tools="http://schemas.android.com/tools"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  tools:context=".ListViewAnimations">
+
+        <view
+            class="com.JazzDevStudio.LacunaExpress.ListViewRemoval.BackgroundContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/listViewBackground">
+
+            <ListView
+                android:id="@+id/activity_mail_list"
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                android:drawableLeft="@drawable/ic_launcher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <!-- The code above prevents dividers (android:divider) -->
+        </view>
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

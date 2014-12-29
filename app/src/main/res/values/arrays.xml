@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="syncFrequency">
+        <item name="choice_0">Blue Glass</item>
+        <item name="choice_1">Oil Painting</item>
+        <item name="choice_2">Stained Glass</item>
+        <item name="choice_3">Checker Boxes</item>
+        <item name="choice_4">Light Silver</item>
+        <item name="choice_5">Simple Grey</item>
+        <item name="choice_6">Simple Apricot</item>
+        <item name="choice_7">Simple Teal</item>
+        <item name="choice_8">Winter Holiday</item>
+        <item name="choice_9">Lacuna Style</item>
+    </string-array>
+    
+    <string-array name="syncFrequencyValues">
+        <item name="choice_0">blue_glass</item>
+        <item name="choice_1">blue_oil_painting</item>
+        <item name="choice_2">stained_glass_blue</item>
+        <item name="choice_3">light_blue_boxes</item>
+        <item name="choice_4">light_silver_background</item>
+        <item name="choice_5">simple_grey</item>
+        <item name="choice_6">simple_apricot</item>
+        <item name="choice_7">simple_teal</item>
+        <item name="choice_8">xmas</item>
+        <item name="choice_9">lacuna_logo</item>
+    </string-array>
+     
+</resources>

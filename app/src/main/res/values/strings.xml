@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Lacuna Express</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="use_positions">Use Positions</string>
+    <string name="delete_selected">Delete Selected</string>	
+
+</resources>

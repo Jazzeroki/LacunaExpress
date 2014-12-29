@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+ 
+    <PreferenceCategory android:title="Info" >
+        <EditTextPreference
+                android:title="Your Username"
+                android:summary="Lacuna USER ID"
+                android:key="pref_username"/>
+    </PreferenceCategory>
+     
+    <PreferenceCategory android:title="User Interface" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_splash_screen_music"
+            android:summary="Play music during Splash Screen?"
+            android:title="Splash Screen Sound" >
+        </CheckBoxPreference>
+ 
+        <ListPreference
+            android:key="pref_background_choice"
+            android:entries="@array/syncFrequency"
+            android:summary="Background design choices"
+            android:entryValues="@array/syncFrequencyValues"
+            android:title="Backgrounds" />
+    </PreferenceCategory>
+ 
+</PreferenceScreen>

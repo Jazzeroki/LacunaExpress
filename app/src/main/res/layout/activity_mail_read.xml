@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/activity_mail_read_layout"
+    android:background="@drawable/blue_glass">
+    
+	<RelativeLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical" >
+
+        <TextView
+	        android:id="@+id/textView2"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_above="@+id/textview12"
+	        android:layout_alignRight="@+id/textView3"
+	        android:text="From"
+            android:background="@drawable/background_front"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	    <TextView
+	        android:id="@+id/account_mail_read_from"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+	        android:gravity="right"
+	        android:text="Loading..."
+            android:background="@drawable/background_front"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_above="@+id/textView1"
+            android:layout_alignEnd="@+id/account_mail_read_delete"
+            android:layout_toEndOf="@+id/textView3"
+            android:layout_alignStart="@+id/textView4"/>
+
+	    <TextView
+	        android:id="@+id/textView3"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+	        android:text="Subject: "
+            android:background="@drawable/background_front"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/textView1"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/textView4"/>
+
+	    <TextView
+	        android:id="@+id/account_mail_read_to"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+            android:gravity="right"
+	        android:layout_weight="1.0"
+	        android:text="Loading..."
+            android:background="@drawable/background_front"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_above="@+id/textView3"
+            android:layout_alignEnd="@+id/account_mail_read_from"
+            android:layout_toEndOf="@+id/textView3"
+            android:layout_alignStart="@+id/textView4"/>
+
+	    <TextView
+	        android:id="@+id/textview12"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+            android:text="Read Mail"
+            android:gravity="center"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/account_mail_read_archive"/>
+
+	    <TextView
+	        android:id="@+id/account_mail_read_subject"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+            android:gravity="right"
+	        android:layout_weight="1.0"
+	        android:text="Loading..."
+            android:background="@drawable/background_front"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_alignTop="@+id/textView3"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/textView3"
+            android:layout_alignStart="@+id/account_mail_read_to"/>
+
+	    <TextView
+	        android:id="@+id/textView1"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+            android:text="To: "
+            android:background="@drawable/background_front"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/textView5"
+            android:layout_toStartOf="@+id/account_mail_read_to"/>
+
+	    <TextView
+	        android:id="@+id/textView5"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+            android:text="From: "
+            android:background="@drawable/background_front"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/editText"
+            android:layout_toStartOf="@+id/account_mail_read_from"/>
+
+	    <TextView
+	        android:id="@+id/textView4"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+            android:text="Message:"
+            android:gravity="center"
+            android:background="@drawable/background_front"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/textView3"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"/>
+
+	    <Button
+	        android:id="@+id/account_mail_read_reply"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_alignParentLeft="true"
+	        android:layout_toLeftOf="@+id/textView4"
+	        android:text="Reply" />
+
+	    <Button
+	        android:id="@+id/account_mail_read_delete"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentBottom="true"
+	        android:layout_alignParentRight="true"
+	        android:layout_toRightOf="@+id/textView4"
+	        android:text="Delete" />
+
+	    <Button
+	        android:id="@+id/account_mail_read_archive"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+            android:text="Archive"
+            android:layout_below="@+id/account_mail_read_message"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText"
+            android:text="Date:"
+            android:background="@drawable/background_front"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/textview12"
+            android:layout_toStartOf="@+id/account_mail_read_date"/>
+
+        <TextView
+            android:id="@+id/account_mail_read_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_weight="1.0"
+            android:text="Loading..."
+            android:background="@drawable/background_front"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_above="@+id/textView5"
+            android:layout_alignEnd="@+id/account_mail_read_from"
+            android:layout_alignStart="@+id/textView4"/>
+
+
+
+        <!--Scrollview so the user can slide the message down -->
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollView"
+            android:layout_below="@+id/textView4"
+            android:layout_above="@+id/account_mail_read_reply"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/background_front">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/account_mail_read_message"
+                android:layout_alignParentStart="true"
+                android:layout_above="@+id/account_mail_read_reply"
+                android:layout_alignParentEnd="true"
+                android:scrollbars = "vertical"/>
+
+        </ScrollView>
+
+    </RelativeLayout>
+</LinearLayout>
