@@ -581,9 +581,10 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 
 				//Links the position to the spot within the arraylist
 				String value = master_message_list.get(position);
-
+                Log.e("SelectMessage.callTheOnClick", "Selected value "+value);
                 //Finds the selected Message ID, and starts the read activity
                 for(Messages m: messages_array){
+                    //if(value.contains(m.body_preview)&&value.contains(m.from)&&value.contains(m.date)){
                     if(value.contains(m.body_preview)&&value.contains(m.from)){
 
                         selectedMessageId = String.valueOf(m.id);
