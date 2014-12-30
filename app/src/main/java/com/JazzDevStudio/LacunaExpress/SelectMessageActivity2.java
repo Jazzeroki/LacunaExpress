@@ -585,6 +585,7 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 				int temp = messages_array.get(i).id;
 
 				String id_to_pass = Integer.toString(temp);
+                Log.d("SelectMessage.onTheClick", "MessageID"+id_to_pass);
 
 				Intent openActivity = new Intent (this, ReadMessageActivity.class);
 				openActivity.putExtra("message_id_passed", id_to_pass);

@@ -81,9 +81,11 @@ public class ReadMessageActivity extends Activity implements serverFinishedListe
 	    if (extras != null) {
 
 		    messageID = extras.getString("message_id_passed");
+            Log.d("messageidpassed",extras.getString("message_id_passed") );
 		    account = AccountMan.GetAccount(extras.getString("displayString"));
-		    Inbox inbox = new Inbox();
-		    String request = inbox.ReadMessage(account.sessionID, messageID);
+		    //Inbox inbox = new Inbox();
+		    String request = Inbox.ReadMessage(account.sessionID, messageID);
+            Log.d("request", request);
 		    Log.d("ReadMessageActivity.onCreate", "MessageID "+messageID);
 		    ServerRequest sRequest = new ServerRequest(account.server, Inbox.url, request);
 		    AsyncServer s = new AsyncServer();
