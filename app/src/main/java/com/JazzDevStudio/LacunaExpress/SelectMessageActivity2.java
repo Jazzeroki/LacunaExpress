@@ -161,6 +161,7 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 
 			selectedAccount = AccountMan.GetAccount(a);
 			//Inbox inbox = new Inbox();
+            Log.d("SelectMessage.onCreate", "Calling View Inbox");
 			String request = Inbox.ViewInbox(selectedAccount.sessionID);
 
 			Log.d("SelecteMessage.Oncreate Request to server", request);
@@ -259,7 +260,7 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 			if (tag_chosen == "All"){
 				//Check the account via the spinner chosen
 				selectedAccount = AccountMan.GetAccount(word_in_spinner);
-
+                Log.d("SelectMessage.onItemSelected", "Tag All Calling View Inbox");
 				String request = Inbox.ViewInbox(selectedAccount.sessionID);
 				Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);
 				Log.d("SelectMessage.OnSelectedItem Request to server", request);
@@ -271,7 +272,7 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 			} else {
 				//Check the account via the spinner chosen
 				selectedAccount = AccountMan.GetAccount(word_in_spinner);
-
+                Log.d("SelectMessage.onItemSelected", "Tag Word in spinner Calling View Inbox");
 				String request = Inbox.ViewInbox(selectedAccount.sessionID, tag_chosen);
 				Log.d("SelectMessage.OnSelectedItem Request to server", request);
 				Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);
@@ -291,6 +292,7 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 			Log.d("SelectMessage.onItemSelected assigning Tag", "word in spinner "+ word_in_spinner);
 
 			if (tag_chosen == "All"){
+                Log.d("SelectMessage.onItemSelected", "Second Spinner Tag All Calling View Inbox");
 				String request = Inbox.ViewInbox(selectedAccount.sessionID);
 				Log.d("SelectMessage.OnSelectedItem Request to server", request);
 				Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);
@@ -300,6 +302,7 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 				s.execute(sRequest);
 				Log.d("LOOK HERE", "REQUEST SENT 292");
 			} else {
+                Log.d("SelectMessage.onItemSelected", "Second Spinner word in spinner All Calling View Inbox");
 				String request = Inbox.ViewInbox(selectedAccount.sessionID, tag_chosen);
 				Log.d("SelectMessage.OnSelectedItem Request to server", request);
 				Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);

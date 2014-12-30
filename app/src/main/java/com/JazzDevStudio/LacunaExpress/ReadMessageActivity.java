@@ -25,8 +25,6 @@ import com.JazzDevStudio.LacunaExpress.Server.ServerRequest;
 import com.JazzDevStudio.LacunaExpress.Server.serverFinishedListener;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-
 
 public class ReadMessageActivity extends Activity implements serverFinishedListener, OnClickListener {
     //declaring variables to be used in activity
@@ -86,7 +84,7 @@ public class ReadMessageActivity extends Activity implements serverFinishedListe
 		    account = AccountMan.GetAccount(extras.getString("displayString"));
 		    Inbox inbox = new Inbox();
 		    String request = inbox.ReadMessage(account.sessionID, messageID);
-		    Log.d("ReadMessageActivity.onCreate", request);
+		    Log.d("ReadMessageActivity.onCreate", "MessageID "+messageID);
 		    ServerRequest sRequest = new ServerRequest(account.server, Inbox.url, request);
 		    AsyncServer s = new AsyncServer();
 		    s.addListener(this);
