@@ -1,12 +1,5 @@
 package com.JazzDevStudio.LacunaExpress;
 
-import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
-import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
-import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Inbox;
-import com.JazzDevStudio.LacunaExpress.Server.AsyncServer;
-import com.JazzDevStudio.LacunaExpress.Server.ServerRequest;
-import com.JazzDevStudio.LacunaExpress.Server.serverFinishedListener;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +13,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+
+import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
+import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
+import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Inbox;
+import com.JazzDevStudio.LacunaExpress.Server.AsyncServer;
+import com.JazzDevStudio.LacunaExpress.Server.ServerRequest;
+import com.JazzDevStudio.LacunaExpress.Server.serverFinishedListener;
 
 
 public class ComposeMessageActivity extends Activity implements OnClickListener, serverFinishedListener {
@@ -70,8 +70,8 @@ public class ComposeMessageActivity extends Activity implements OnClickListener,
                     mail_to.setText((CharSequence)extras.get("from"));
                     Log.d("ComposeMessage.Initialize", extras.getString("subject"));
                     subject.setText((CharSequence)("RE:"+extras.get("subject")));
-                    //mail_message.setText((CharSequence) ("\n\n ------------------------------\n" + extras.get("body")));
-                    mail_message.setText((CharSequence) ( extras.get("body")));
+                    mail_message.setText((CharSequence) ("\n\n ------------------------------\n" + extras.get("body")));
+                    //mail_message.setText((CharSequence) ( extras.get("body")));
                 }
             }
         }
