@@ -9,11 +9,12 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
     //A few objects that are needed by all LE Wrapper classes for creating json
     protected static Gson gson = new Gson();
     protected static StringWriter w = new StringWriter();
-    protected static JsonWriter writer = new JsonWriter(w);
+    //protected static JsonWriter writer = new JsonWriter(w);
 
     protected static String Request(String method, String sessionID, String id){
         String b = "0";
         try{
+            JsonWriter writer = new JsonWriter(w);
             writer.beginObject();
             writer.name("jsonrpc").value(2);
             writer.name("id").value(1);
@@ -23,7 +24,7 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
             writer.value(id);
             writer.endArray();
             writer.endObject();
-            writer.close();
+            //writer.close();
             b = gson.toJson(writer);
             //writer.flush();
             b = CleanJsonObject(b);
@@ -38,6 +39,7 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
     protected static String Request(String method, String sessionID, String id, String one){
         String b = "0";
         try{
+            JsonWriter writer = new JsonWriter(w);
             writer.beginObject();
             writer.name("jsonrpc").value(2);
             writer.name("id").value(1);
@@ -48,7 +50,7 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
             writer.value(one);
             writer.endArray();
             writer.endObject();
-            writer.close();
+            //writer.close();
             b = gson.toJson(writer);
             //writer.flush();
             b = CleanJsonObject(b);
@@ -63,6 +65,7 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
     protected static String Request(String method, String sessionID, String id, String one, String two){
         String b = "0";
         try{
+            JsonWriter writer = new JsonWriter(w);
             writer.beginObject();
             writer.name("jsonrpc").value(2);
             writer.name("id").value(1);
@@ -74,7 +77,7 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
             writer.value(two);
             writer.endArray();
             writer.endObject();
-            writer.close();
+            //writer.close();
             b = gson.toJson(writer);
             //writer.flush();
             b = CleanJsonObject(b);
@@ -90,6 +93,7 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
     protected static String BasicRequest(String method, String sessionID, String id){
         String b = "0";
         try{
+            JsonWriter writer = new JsonWriter(w);
             writer.beginObject();
             writer.name("jsonrpc").value(2);
             writer.name("id").value(1);
@@ -99,7 +103,7 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
             writer.value(id);
             writer.endArray();
             writer.endObject();
-            writer.close();
+            //writer.close();
             b = gson.toJson(writer);
             //writer.flush();
             b = CleanJsonObject(b);
@@ -114,6 +118,7 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
     protected static String ThreePartRequest(String method, String sessionID, String id, String one){
         String b = "0";
         try{
+            JsonWriter writer = new JsonWriter(w);
             writer.beginObject();
             writer.name("jsonrpc").value(2);
             writer.name("id").value(1);
@@ -124,7 +129,7 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
             writer.value(one);
             writer.endArray();
             writer.endObject();
-            writer.close();
+            //writer.close();
             b = gson.toJson(writer);
             //writer.flush();
             b = CleanJsonObject(b);
@@ -139,6 +144,7 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
     protected static String FourPartRequest(String method, String sessionID, String id, String one, String two){
         String b = "0";
         try{
+            JsonWriter writer = new JsonWriter(w);
             writer.beginObject();
             writer.name("jsonrpc").value(2);
             writer.name("id").value(1);
@@ -150,7 +156,7 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
             writer.value(two);
             writer.endArray();
             writer.endObject();
-            writer.close();
+            //writer.close();
             b = gson.toJson(writer);
             //writer.flush();
             b = CleanJsonObject(b);
@@ -167,6 +173,7 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
         //System.out.println("starting writer");
         //JsonWriter writer = new JsonWriter();
         try{
+            JsonWriter writer = new JsonWriter(w);
             //writer = new JsonWriter(null);
             writer.beginObject();
             writer.name("jsonrpc").value(2);
@@ -185,6 +192,7 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
     protected static String SessionAndBuildingIDRequests(String sessionID, String buildingID){
         String b = "nothing";
         try {
+            JsonWriter writer = new JsonWriter(w);
             writer.value(sessionID);
             writer.value(buildingID);
             writer.endArray();

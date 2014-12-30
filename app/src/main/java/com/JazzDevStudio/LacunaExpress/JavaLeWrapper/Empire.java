@@ -6,6 +6,7 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
 
 
 import com.google.gson.Gson;
+import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 
@@ -22,6 +23,7 @@ public class Empire extends LESuperClass{
         StartOfObject(1, "fetch_captcha");
         String i = "0";
         try{
+            JsonWriter writer = new JsonWriter(w);
             writer.value(SessionID);
             //writer.value(BodyID);
             writer.endArray();

@@ -18,7 +18,7 @@ public class Inbox extends LESuperClass {
         return "{\"jsonrpc\":2,\"id\":1,\"method\":\"view_inbox\",\"params\":[\""+sessionID+"\",{\"tags\":[\""+tag+"\"],\"page_number\":"+pageNumber+"}]}";
     }
     
-    public String ReadMessage(String sessionID, String MessageID){
+    public static String ReadMessage(String sessionID, String MessageID){
     	return Request("read_message", sessionID, MessageID);
     }
     
