@@ -25,6 +25,7 @@ import com.JazzDevStudio.LacunaExpress.Server.ServerRequest;
 import com.JazzDevStudio.LacunaExpress.Server.serverFinishedListener;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 
 
 public class ReadMessageActivity extends Activity implements serverFinishedListener, OnClickListener {
@@ -53,51 +54,45 @@ public class ReadMessageActivity extends Activity implements serverFinishedListe
 
     }
     
-    public void Initialize(){
+    public void Initialize() {
 
 	    //Buttons
 	    btReply = (Button) findViewById(R.id.account_mail_read_reply);
-    	btDelete = (Button) findViewById(R.id.account_mail_read_delete);
-    	btArchive = (Button) findViewById(R.id.account_mail_read_archive);
+	    btDelete = (Button) findViewById(R.id.account_mail_read_delete);
+	    btArchive = (Button) findViewById(R.id.account_mail_read_archive);
 
 	    //TextViews
-    	tvFrom =  (TextView) findViewById(R.id.account_mail_read_from);
-    	tvTo =  (TextView) findViewById(R.id.account_mail_read_to);
-    	tvSubject =  (TextView) findViewById(R.id.account_mail_read_subject);
-    	tvMessage =  (TextView) findViewById(R.id.account_mail_read_message);
-	    tvDate =  (TextView) findViewById(R.id.account_mail_read_date);
+	    tvFrom = (TextView) findViewById(R.id.account_mail_read_from);
+	    tvTo = (TextView) findViewById(R.id.account_mail_read_to);
+	    tvSubject = (TextView) findViewById(R.id.account_mail_read_subject);
+	    tvMessage = (TextView) findViewById(R.id.account_mail_read_message);
+	    tvDate = (TextView) findViewById(R.id.account_mail_read_date);
 
 	    //Set the buttons to a listener
-    	btReply.setOnClickListener(this);
-    	btDelete.setOnClickListener(this);
+	    btReply.setOnClickListener(this);
+	    btDelete.setOnClickListener(this);
 	    btArchive.setOnClickListener(this);
 
-        //Makes the message scrollable
-        tvMessage.setMovementMethod(new ScrollingMovementMethod());
-    	// You can be pretty confident that the intent will not be null here.
-    	intent = getIntent();
+	    //Makes the message scrollable
+	    tvMessage.setMovementMethod(new ScrollingMovementMethod());
+	    // You can be pretty confident that the intent will not be null here.
+	    intent = getIntent();
 
-    	// Get the extras and fetching message to display
-    	extras = intent.getExtras();
-    	if (extras != null) {
+	    // Get the extras and fetching message to display
+	    extras = intent.getExtras();
+	    if (extras != null) {
 
-    	    if (extras.containsKey("displayString")&&extras.containsKey("messageID")) {
-                Log.d("ReadMessageActivity.onCreate", "contains Keys, prepping and launching request to server");
-    	    	account = AccountMan.GetAccount(extras.getString("displayString"));
-    	    	messageID = extras.getString("messageID");
-    	    	Inbox inbox = new Inbox();
-    	    	String request = inbox.ReadMessage(account.sessionID, messageID);
-                Log.d("ReadMessageActivity.onCreate", request);
-    	    	ServerRequest sRequest = new ServerRequest(account.server, Inbox.url, request);
-    	    	AsyncServer s = new AsyncServer();
-	            s.addListener(this);
-	            s.execute(sRequest);
-    	    }
-    	}
-        else{
-            Log.e("ReadMessage.initialize", "no extras attached, no message can be shown");
-            finish();
-        }
+		    messageID = extras.getString("message_id_passed");
+		    account = AccountMan.GetAccount(extras.getString("displayString"));
+		    Inbox inbox = new Inbox();
+		    String request = inbox.ReadMessage(account.sessionID, messageID);
+		    Log.d("ReadMessageActivity.onCreate", request);
+		    ServerRequest sRequest = new ServerRequest(account.server, Inbox.url, request);
+		    AsyncServer s = new AsyncServer();
+		    s.addListener(this);
+		    s.execute(sRequest);
+
+	    }
     }
 
 

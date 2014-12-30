@@ -579,34 +579,14 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 				//Gets the position of the clicked icon within the lis
 				int position = firstVisiblePosition + i;
 
-				//Links the position to the spot within the arraylist
-				String value = master_message_list.get(position);
-                Log.e("SelectMessage.callTheOnClick", "Selected value "+value);
-                //Finds the selected Message ID, and starts the read activity
-                for(Messages m: messages_array){
-                    //if(value.contains(m.body_preview)&&value.contains(m.from)&&value.contains(m.date)){
-                    if(value.contains(m.body_preview)&&value.contains(m.from)){
+				int temp = messages_array.get(i).id;
 
-                        selectedMessageId = String.valueOf(m.id);
-                        Log.e("SelectMessage.callTheOnClick", "Selected messageid"+selectedMessageId);
-                        Log.e("SelectMessage.callTheOnClick", "Selected Account display string" +selectedAccount.displayString);
-                        Intent openActivity = new Intent (this, ReadMessageActivity.class);
-                        openActivity.putExtra("messageID", selectedMessageId);
-                        openActivity.putExtra("displayString", selectedAccount.displayString);
-                        startActivity(openActivity);
-                    }
-                }
+				String id_to_pass = Integer.toString(temp);
 
-                //sils block to launch Compose Message
-                /*Log.d("SelecteMessage.callTheOnClick", value);
-				Intent openActivity = new Intent (this, ComposeMessageActivity.class);
-				openActivity.putExtra("message_info", value);
-				openActivity.putExtra("selected_message", selectedMessage);
-				openActivity.putExtra("username", selectedAccount.userName);
-				openActivity.putExtra("server", selectedAccount.server);
-				openActivity.putExtra("defaultAccount", selectedAccount.defaultAccount);
-				openActivity.putExtra("sessionID", selectedAccount.sessionID);
-				startActivity(openActivity); */
+				Intent openActivity = new Intent (this, ReadMessageActivity.class);
+				openActivity.putExtra("message_id_passed", id_to_pass);
+				openActivity.putExtra("displayString", selectedAccount.displayString);
+				startActivity(openActivity);
 			}
 		}
 	}
