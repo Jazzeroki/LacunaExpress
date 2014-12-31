@@ -32,7 +32,7 @@ public class AccountMan {
     
     public static void DeleteFile(){
         //File dir = getFilesDir();
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/", "acnt.jazz");
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/", "accnt.jazz");
         boolean deleted = file.delete();
     }
     public static AccountInfo GetDefaultAccount(){
@@ -170,8 +170,8 @@ public class AccountMan {
 	    Log.d("AccountMan.Save", "Serializing File");
         String i = gson.toJson(accounts, Accounts.class);
         Log.d("AccountMan.Save", i);
-        //File file = new File("/data/data/folder/files/", "acnt.jazz");
-	    File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/", "acnt.jazz");
+        //File file = new File("/data/data/folder/files/", "accnt.jazz");
+	    File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/", "accnt.jazz");
 
 			    try {
 		    file.createNewFile();
@@ -185,7 +185,7 @@ public class AccountMan {
         file.setWritable(true);
         try {
         	Log.d("AccountMan.Save", "Writing to file");
-            //PrintWriter writer = new PrintWriter("acnt.jazz");
+            //PrintWriter writer = new PrintWriter("accnt.jazz");
             PrintWriter writer = new PrintWriter(file);
             //System.out.println("saving");
             writer.write(i);
@@ -220,9 +220,9 @@ public class AccountMan {
         BufferedReader br;
         String i = "";
         try{
-	        br = new BufferedReader(new FileReader(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+"acnt.jazz"));
-	        //br = new BufferedReader(new FileReader("/data/data/com.JazzDevStudio.LacunaExpress/files/acnt.jazz"));
-	        Log.d("PATH", Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+"acnt.jazz");
+	        br = new BufferedReader(new FileReader(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+"accnt.jazz"));
+	        //br = new BufferedReader(new FileReader("/data/data/com.JazzDevStudio.LacunaExpress/files/accnt.jazz"));
+	        Log.d("PATH", Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+"accnt.jazz");
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
  
@@ -235,10 +235,10 @@ public class AccountMan {
             accounts = gson.fromJson(i, Accounts.class);
         }catch (FileNotFoundException e){
             // CreateAccount();
-	        Log.d("PATH", Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+"acnt.jazz");
+	        Log.d("PATH", Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+"accnt.jazz");
 	        Log.d("ERROR", "LINE 234");
         }catch(IOException e){
-	        Log.d("PATH", Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+"acnt.jazz");
+	        Log.d("PATH", Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+"accnt.jazz");
 	        Log.d("ERROR", "LINE 237");
         }
         return accounts.accounts;
@@ -254,7 +254,7 @@ public class AccountMan {
         String i = "";
         try{
 
-            br = new BufferedReader(new FileReader(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+"acnt.jazz"));
+            br = new BufferedReader(new FileReader(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+"accnt.jazz"));
             StringBuilder sb = new StringBuilder();
             String line = br.readLine();
             while (line != null) {
@@ -290,9 +290,9 @@ public class AccountMan {
     }
     public static boolean CheckForFile(){
     	Log.d("AccountMan.CheckForFile", "Checking if File Exists");
-    	Boolean b = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/", "acnt.jazz").isFile();
-    	Log.d("AccountMan.CheckForFile", b.toString());
-        //return new File("acnt.jazz").isFile();
+    	Boolean b = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/", "accnt.jazz").isFile();
+    	Log.d("AccountMan.CheckForFile ", b.toString());
+        //return new File("accnt.jazz").isFile();
     	return b;
     }
 }

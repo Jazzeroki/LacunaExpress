@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:id="@+id/activity_select_account_layout"
+    android:background="@drawable/blue_glass">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="Account Selection" />
+    </RelativeLayout>
+
+    <Spinner
+        android:id="@+id/select_account_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/relativeLayout1"
+        android:gravity="center" />
+
+    <Button
+        android:id="@+id/select_account_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/select_account_modify"
+        android:layout_weight="1"
+        android:text="Add Account" />
+
+    <Button
+        android:id="@+id/select_account_modify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_weight="1"
+        android:text="Modify Account" />
+
+    <Button
+        android:id="@+id/select_account_mail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/select_account_spinner"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="52dp"
+        android:text="Mail" />
+
+</RelativeLayout><!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/layout/activity_select_account.xml -->

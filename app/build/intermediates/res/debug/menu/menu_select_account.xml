@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <item
+        android:id="@+id/action_stuff"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="STUFF GOES HERE"/>    
+
+</menu>
+<!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/menu/menu_select_account.xml -->
