@@ -9,10 +9,14 @@ import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.LinearLayout;
+
+import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
+import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
+import com.JazzDevStudio.LacunaExpress.MISCClasses.IsMyActivityRunning;
+import com.JazzDevStudio.LacunaExpress.MISCClasses.sessionRefresh;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -21,12 +25,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-
-import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
-import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
-import com.JazzDevStudio.LacunaExpress.MISCClasses.IsMyActivityRunning;
-import com.JazzDevStudio.LacunaExpress.MISCClasses.L;
-import com.JazzDevStudio.LacunaExpress.MISCClasses.sessionRefresh;
 
 public class Splash extends Activity {
 
@@ -74,35 +72,35 @@ public class Splash extends Activity {
 		Thread timer = new Thread() {
 			public void run() {
 				try {
-					ArrayList<AccountInfo> a = AccountMan.GetAccounts();
-					int x = a.size();
-					if (x <= 0) {
-						sleep(3100);
-					} else if (x == 1) {
-						sleep(1600);
-					} else if (x >= 2) {
-						sleep(100);
-					}
-
-					try {
-
-						if (a.size() > 0) {
-							sessionRefresh r = new sessionRefresh();
-							r.execute("i");
-							Thread.sleep((1500 * a.size()));
-						}
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-
 					//After creating the load file code need to setup if fill not found
 					//start add account, otherwise if 1 account open account, if multiple accounts
 					//open account selection
 					if (AccountMan.CheckForFile()) {
+                        ArrayList<AccountInfo> a = AccountMan.GetAccounts();
+                        int x = a.size();
+                        if (x <= 0) {
+                            sleep(3100);
+                        } else if (x == 1) {
+                            sleep(1600);
+                        } else if (x >= 2) {
+                            sleep(100);
+                        }
+
+                        try {
+
+                            if (a.size() > 0) {
+                                sessionRefresh r = new sessionRefresh();
+                                r.execute("i");
+                                Thread.sleep((1500 * a.size()));
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
 						Intent intent = new Intent(Splash.this, SelectAccount.class);
 						startActivity(intent);
 						finish();
 					} else {
+						sleep(3100);
 						Intent intent = new Intent(Splash.this, AddAccount.class);
 						startActivity(intent);
 						finish();
@@ -136,6 +134,25 @@ public class Splash extends Activity {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
+				} finally {
+					try {
+						sleep(4100);
+						boolean isIt = true;
+						isIt = IsMyActivityRunning.isActivityVisible(); //Should set the boolean to false if the class has been set to pause
+						if (isIt == true){
+							Log.e("SPLASH SCREEN", "Error, things never loaded and force moved to select account");
+							Intent intent = new Intent(Splash.this, SelectAccount.class);
+							startActivity(intent);
+							finish();
+						} else {
+							Log.d("SPLASH SCREEN", "Calling finish() on Splash screen");
+							finish();
+						}
+					}catch (Exception e) {
+						e.printStackTrace();
+
+					}
+
 				}
 			}
 		};
