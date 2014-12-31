@@ -100,6 +100,7 @@ public class Splash extends Activity {
 						startActivity(intent);
 						finish();
 					} else {
+						sleep(3100);
 						Intent intent = new Intent(Splash.this, AddAccount.class);
 						startActivity(intent);
 						finish();
@@ -133,6 +134,25 @@ public class Splash extends Activity {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
+				} finally {
+					try {
+						sleep(4100);
+						boolean isIt = true;
+						isIt = IsMyActivityRunning.isActivityVisible(); //Should set the boolean to false if the class has been set to pause
+						if (isIt == true){
+							Log.e("SPLASH SCREEN", "Error, things never loaded and force moved to select account");
+							Intent intent = new Intent(Splash.this, SelectAccount.class);
+							startActivity(intent);
+							finish();
+						} else {
+							Log.d("SPLASH SCREEN", "Calling finish() on Splash screen");
+							finish();
+						}
+					}catch (Exception e) {
+						e.printStackTrace();
+
+					}
+
 				}
 			}
 		};
