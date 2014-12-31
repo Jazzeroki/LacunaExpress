@@ -93,6 +93,8 @@ public class ComposeMessageActivity extends Activity implements OnClickListener,
                         String request = inbox.SendMessage(1,account.sessionID, mail_to.getText().toString(), subject.getText().toString(), mail_message.getText().toString() );
                         Log.d("ComposeReadMessageActivity.onClick", request);
                         request = request.replace("\n", "\\n");
+                        request = request.replace("<", "");
+                        request = request.replace(">", "");
                         Log.d("ComposeReadMessageActivity.onClick", request);
                         ServerRequest sRequest = new ServerRequest(account.server, Inbox.url, request);
                         AsyncServer s = new AsyncServer();

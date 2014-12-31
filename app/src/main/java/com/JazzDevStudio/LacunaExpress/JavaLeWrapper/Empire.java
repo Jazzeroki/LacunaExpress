@@ -5,6 +5,8 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
  */
 
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonWriter;
 
@@ -36,6 +38,7 @@ public class Empire extends LESuperClass{
         }catch(IOException e){
             System.out.println("ioexception");
         }catch(NullPointerException e){
+            Log.e("Empire.FecthCaptcha", "object null, null pointer exception");
             System.out.println("null pointer exception");
         }finally{
         }
