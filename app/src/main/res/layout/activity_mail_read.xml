@@ -137,13 +137,6 @@
 	        android:layout_toRightOf="@+id/textView4"
 	        android:text="Delete" />
 
-	    <Button
-	        android:id="@+id/account_mail_read_archive"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-            android:text="Archive"
-            android:layout_below="@+id/account_mail_read_message"
-            android:layout_centerHorizontal="true"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -192,6 +185,14 @@
                 android:scrollbars = "vertical"/>
 
         </ScrollView>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Archive"
+            android:id="@+id/account_mail_read_archive"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
 </LinearLayout>
