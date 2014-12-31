@@ -79,12 +79,12 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 	public void onResponseReceived(String reply) {
         //This is the listener to the server event
         //if server request errors it returns error
-    	Log.d("onResponse Recieved", reply);
+    	Log.d("AddAccount.onResponseRecieved", "Response Received");
     	//TextView serverReply = (TextView) findViewById(R.id.textViewServerReply);
         //serverReply.setText((CharSequence)reply, EditText.BufferType.NORMAL);
     	
         if(!reply.equals("error")) {
-        	Log.d("Deserializing Response", "Creating Response Object");
+        	Log.d("AddAccount.onResponseReceived", "Creating Response Object");
             //Context context = getApplicationContext();
             //CharSequence text = reply;
             //int duration = Toast.LENGTH_LONG;
@@ -96,7 +96,7 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
             //Deserializing response and pulling session data out
             
             Response r = new Gson().fromJson(reply, Response.class);
-            Log.d("Getting Session ID","");
+            Log.d("AddAccount.OnResponseReceived","Getting SessionID");
 
             account.sessionID = r.result.session_id;
             account.CreateDisplayString();
@@ -108,13 +108,13 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
             //c.add(Calendar.HOUR, 2);
             account.sessionExpires = c;
             Log.d("AddAccount.onResponseReceived", account.displayString);
-            Log.d("Saving Account", "Creating AccountMan");
+            //Log.d("Saving Account", "Creating AccountMan");
             //AccountMan.AccountMan acm = new AccountMan.AccountMan();
-            Log.d("Saving Account", "AddAccount called to finish save");
+            //Log.d("Saving Account", "AddAccount called to finish save");
             //acm.AddAccount(account);
             com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan.AddAccount(account);
             
-            Log.d("Select Acount", "Launching Select Account");
+            Log.d("AddAccount.onResponseReceived", "Launching Select Account");
             Intent intent = new Intent(this, SelectAccount.class);
             startActivity(intent);
         } 
@@ -230,7 +230,7 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 					account.server = mServer;
 					account.defaultAccount = cbdfAccount.isChecked();
 
-					Log.d("username", account.userName);
+					Log.d("AddAccount.onClick", "username"+account.userName);
 					Log.d("password", account.password);
 					Log.d("server", account.server);
 					Log.d("default account", account.defaultAccount.toString());
@@ -239,7 +239,7 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 					if (!account.userName.isEmpty() && !account.password.isEmpty() && !account.server.isEmpty()) {
 						Empire e = new Empire();
 						String request = e.Login(account.userName, account.password, 1);
-						Log.d("Request to server", request);
+						Log.d("AddAccount.onClick", "Fields not empty requesting sessionID");
 						ServerRequest sRequest = new ServerRequest(mServer, Empire.url, request);
 						AsyncServer s = new AsyncServer();
 						s.addListener(this);
@@ -248,10 +248,10 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 						//AsyncServer clears all listeners after the requests have been recieved.
 
 						//Account has been added
-						L.makeToastShort(this, "Account Added Successfully");
-
-						Intent openActivity = new Intent(this, SelectAccount.class);
-						startActivity(openActivity);
+//						L.makeToastShort(this, "Account Added Successfully");
+//
+						//Intent openActivity = new Intent(this, SelectAccount.class);
+						//startActivity(openActivity);
 
 					} else {
 						Log.d("Blank Info", "account fields are blank?");
