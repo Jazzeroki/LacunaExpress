@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
@@ -34,6 +35,10 @@ public class ComposeMessageActivity extends Activity implements OnClickListener,
 
     public void onResponseReceived(String reply){
         Log.d("ComposeMessage.onResponseReceived", reply);
+        if(!reply.equals("error")) {
+            Toast.makeText(getApplicationContext(), "Message Deleted", Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +106,7 @@ public class ComposeMessageActivity extends Activity implements OnClickListener,
                         s.addListener(this);
                         s.execute(sRequest);
 
-                        finish();
+                        //finish();
 
                     } catch (Exception e){
                         e.printStackTrace();
