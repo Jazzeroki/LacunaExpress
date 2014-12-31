@@ -21,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
 import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Empire;
@@ -33,7 +32,7 @@ import com.JazzDevStudio.LacunaExpress.Server.ServerRequest;
 import com.JazzDevStudio.LacunaExpress.Server.serverFinishedListener;
 import com.google.gson.Gson;
 
-import java.util.Random;
+import java.util.Calendar;
 
 
 //import android.content.Context;
@@ -101,6 +100,13 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 
             account.sessionID = r.result.session_id;
             account.CreateDisplayString();
+            Calendar c = Calendar.getInstance();
+            account.colonies = r.result.status.empire.colonies;
+            account.stations = r.result.status.empire.stations;
+            account.bodiesCombined = r.result.status.empire.planets;
+            account.homePlanetID = r.result.status.empire.home_planet_id;
+            //c.add(Calendar.HOUR, 2);
+            account.sessionExpires = c;
             Log.d("AddAccount.onResponseReceived", account.displayString);
             Log.d("Saving Account", "Creating AccountMan");
             //AccountMan.AccountMan acm = new AccountMan.AccountMan();

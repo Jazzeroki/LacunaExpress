@@ -232,14 +232,25 @@ public class AccountMan {
                 i = sb.toString();
             }
             br.close();
+            Log.d("AccountMan.GetAccounts", "what was in file"+i);
             accounts = gson.fromJson(i, Accounts.class);
         }catch (FileNotFoundException e){
             // CreateAccount();
 	        Log.d("PATH", Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+"acnt.jazz");
 	        Log.d("ERROR", "LINE 234");
+            e.printStackTrace();
+            return null;
         }catch(IOException e){
 	        Log.d("PATH", Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+"acnt.jazz");
 	        Log.d("ERROR", "LINE 237");
+            e.printStackTrace();
+            return null;
+        }
+
+        //having issue with accounts.accounts being null so deleting file because file may be corrupted
+        if(accounts.accounts.size() == 0){
+            //DeleteFile();
+            return null;
         }
         return accounts.accounts;
     }
@@ -250,6 +261,8 @@ public class AccountMan {
         //if(!new File("accounts.jazz").isFile()) //if an account file doesn't exist one is created
         //    CreateAccount();
         //else{
+
+        Boolean sessionsWereRefreshed = false;
         BufferedReader br;
         String i = "";
         try{
@@ -265,27 +278,41 @@ public class AccountMan {
             br.close();
             Log.d("AccountMan.Load", i);
             accounts = gson.fromJson(i, Accounts.class);
-            if(accounts.accounts.get(0).sessionExpires.after(Calendar.getInstance())){
-                Log.d("AccountMan.Load", "Sessions have expired. Refreshing");
-                sessionRefresh r = new sessionRefresh();
-                r.execute("i");
-                try {
-                    Thread.sleep(1000*(accounts.accounts.size()));
-                } catch (InterruptedException e) {
-                    Log.e("AccountMan.Load", "Thread interrupted during sleep");
-                    e.printStackTrace();
+            if(accounts.accounts.size() !=0){
+                for(AccountInfo a: accounts.accounts){
+                    Log.d("Accountman.Load", "sessionExpires ="+a.sessionExpires);
+                    Log.d("Accountman.Load", "Calendar instance"+Calendar.getInstance());
+                    Log.d("Accountman.Load", "SessionExpires instance"+a.sessionExpires);
+                    Log.d("Accountman.Load", "SessionExpires after"+a.sessionExpires.after(Calendar.getInstance()));
+                    if(a.sessionExpires.equals(null)||a.sessionExpires.before(Calendar.getInstance())) {
+                        //if (a.sessionExpires.after(Calendar.getInstance())) {
+                            Log.d("AccountMan.Load", "Sessions have expired. Refreshing");
+                            sessionRefresh r = new sessionRefresh();
+                            r.execute("i");
+                            try {
+                                Thread.sleep(1000 * (accounts.accounts.size()));
+                            } catch (InterruptedException e) {
+                                Log.e("AccountMan.Load", "Thread interrupted during sleep");
+                                e.printStackTrace();
+                            }
+                            sessionsWereRefreshed = true;
+                        //}
+                    }
 
-                    //after refresh is finished this will reload the account file however if session doesn't refresh like due to
-                    //no internet connection this would cause an infinate loop until server check code is implemented
-                    accounts = Load();
                 }
+                Log.d("AccounMan.Load", "Successfully Loaded accounts");
             }
-	        Log.d("AccounMan", "Successfully Loaded");
+            else
+	        Log.e("AccounMan.Load", "No Accounts found");
         }catch (FileNotFoundException e){
-	        Log.d("AccounMan", "IOException");
+	        Log.d("AccounMan.Load", "IOException");
         }catch(IOException e){
-	        Log.d("AccounMan", "IOException");
-        } 
+	        Log.d("AccounMan.Load", "IOException");
+        }
+        Log.d("Accountman.Load", "Sessions were refreshed ="+sessionsWereRefreshed);
+        if(sessionsWereRefreshed){
+            return accounts = Load();
+        }
         return accounts;
     }
     public static boolean CheckForFile(){
