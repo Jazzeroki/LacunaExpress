@@ -39,6 +39,9 @@ public class ComposeMessageActivity extends Activity implements OnClickListener,
             Toast.makeText(getApplicationContext(), "Message Deleted", Toast.LENGTH_LONG).show();
             finish();
         }
+        else{
+            Toast.makeText(getApplicationContext(), "Message Failed to send.  /nCheck to ensure all contacts are valid", Toast.LENGTH_LONG).show();
+        }
     }
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +78,7 @@ public class ComposeMessageActivity extends Activity implements OnClickListener,
                     mail_to.setText((CharSequence)extras.get("from"));
                     Log.d("ComposeMessage.Initialize", extras.getString("subject"));
                     subject.setText((CharSequence)("RE:"+extras.get("subject")));
-                    mail_message.setText((CharSequence) ("\n\n ------------------------------\n" + extras.get("body")));
+                    mail_message.setText((CharSequence) ("\n\n ------------------------------\nSent from Lacuna Express\nLook for it in Google Play" + extras.get("body")));
                     //mail_message.setText((CharSequence) ( extras.get("body")));
                 }
             }

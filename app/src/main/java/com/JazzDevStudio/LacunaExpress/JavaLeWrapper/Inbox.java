@@ -34,12 +34,12 @@ public class Inbox extends LESuperClass {
     	}
     	else 
     		r = recipients.get(0);
-    	String i = "{\"id\":"+requestID+",\"method\":\"send_message\",\"jsonrpc\":\"2.0\",\"params\":[\""+sessionID+"\",\""+r+"\",\""+subject+"\","+body+"\"\n\n Sent from Lacuna Express \n\nFind it in Google Playstore\",null]}";
+    	String i = "{\"id\":"+requestID+",\"method\":\"send_message\",\"jsonrpc\":\"2.0\",\"params\":[\""+sessionID+"\",\""+r+"\",\""+subject+"\","+body+"\",null]}";
         return i;
     }
     public static String SendMessage(int requestID, String sessionID, String recipients, String subject, String body){
 
-        return "{\"id\":"+requestID+",\"method\":\"send_message\",\"jsonrpc\":\"2.0\",\"params\":[\""+sessionID+"\",\""+recipients+"\",\""+subject+"\",\""+body+"\\nSent from Lacuna Express Find it in Google Playstore\",null]}";
+        return "{\"id\":"+requestID+",\"method\":\"send_message\",\"jsonrpc\":\"2.0\",\"params\":[\""+sessionID+"\",\""+recipients+"\",\""+subject+"\",\""+body+"\",null]}";
         //return i;
     }
 
