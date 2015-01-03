@@ -1,6 +1,0 @@
-C:\Users\PatrickSSD2\Studio Workspace 2014-12-15\LacunaExpress\app\build\intermediates\classes\debug
-C:\Users\PatrickSSD2\Studio Workspace 2014-12-15\LacunaExpress\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-56d584d240f17b3af86892f5598617d0eb8457c0.jar
-C:\Users\PatrickSSD2\Studio Workspace 2014-12-15\LacunaExpress\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-4c2ffef547eb9cec53ea71361524b11a72068fc5.jar
-C:\Users\PatrickSSD2\Studio Workspace 2014-12-15\LacunaExpress\app\build\intermediates\pre-dexed\debug\gson-2.3-d982973046d9a61b9d44b3c94f10053ae38d2eca.jar
-C:\Users\PatrickSSD2\Studio Workspace 2014-12-15\LacunaExpress\app\build\intermediates\pre-dexed\debug\classes-b0dc73f458b64d81b1bf3dd4c21618719dd15478.jar
-C:\Users\PatrickSSD2\Studio Workspace 2014-12-15\LacunaExpress\app\build\intermediates\pre-dexed\debug\classes-f56ab1f375854eb58d0b57fb5fb6ffb64fab00b4.jar

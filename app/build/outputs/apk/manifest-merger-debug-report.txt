@@ -79,13 +79,13 @@ ADDED from AndroidManifest.xml:44:6
 		ADDED from AndroidManifest.xml:46:10
 	android:name
 		ADDED from AndroidManifest.xml:45:10
-activity#com.JazzDevStudio.LacunaExpress.AccountMan
+activity#com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan
 ADDED from AndroidManifest.xml:50:6
 	android:label
 		ADDED from AndroidManifest.xml:52:10
 	android:name
 		ADDED from AndroidManifest.xml:51:10
-activity#com.JazzDevStudio.LacunaExpress.AccountInfo
+activity#com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo
 ADDED from AndroidManifest.xml:57:6
 	android:label
 		ADDED from AndroidManifest.xml:59:10
@@ -97,7 +97,7 @@ ADDED from AndroidManifest.xml:64:6
 		ADDED from AndroidManifest.xml:66:10
 	android:name
 		ADDED from AndroidManifest.xml:65:10
-activity#com.JazzDevStudio.LacunaExpress.Accounts
+activity#com.JazzDevStudio.LacunaExpress.AccountMan.Accounts
 ADDED from AndroidManifest.xml:70:6
 	android:label
 		ADDED from AndroidManifest.xml:72:10
@@ -127,3 +127,33 @@ ADDED from AndroidManifest.xml:94:9
 		ADDED from AndroidManifest.xml:96:13
 	android:name
 		ADDED from AndroidManifest.xml:95:13
+receiver#com.JazzDevStudio.LacunaExpress.Widget.MailWidget
+ADDED from AndroidManifest.xml:101:9
+	android:label
+		ADDED from AndroidManifest.xml:103:13
+	android:name
+		ADDED from AndroidManifest.xml:102:13
+intent-filter#android.appwidget.action.APPWIDGET_UPDATE
+ADDED from AndroidManifest.xml:105:13
+action#android.appwidget.action.APPWIDGET_UPDATE
+ADDED from AndroidManifest.xml:106:17
+	android:name
+		ADDED from AndroidManifest.xml:106:25
+meta-data#android.appwidget.provider
+ADDED from AndroidManifest.xml:108:13
+	android:resource
+		ADDED from AndroidManifest.xml:110:17
+	android:name
+		ADDED from AndroidManifest.xml:109:17
+activity#com.JazzDevStudio.LacunaExpress.Widget.WidgetConfig
+ADDED from AndroidManifest.xml:114:9
+	android:label
+		ADDED from AndroidManifest.xml:116:13
+	android:name
+		ADDED from AndroidManifest.xml:115:13
+intent-filter#android.appwidget.action.APPWIDGET_CONFIGURE
+ADDED from AndroidManifest.xml:117:13
+action#android.appwidget.action.APPWIDGET_CONFIGURE
+ADDED from AndroidManifest.xml:118:17
+	android:name
+		ADDED from AndroidManifest.xml:118:25

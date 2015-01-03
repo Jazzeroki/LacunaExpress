@@ -1515,8 +1515,8 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f0b002e;
         public static final int action_mode_bar_stub=0x7f0b002d;
         public static final int action_mode_close_button=0x7f0b0020;
-        public static final int action_settings=0x7f0b007c;
-        public static final int action_stuff=0x7f0b007d;
+        public static final int action_settings=0x7f0b0081;
+        public static final int action_stuff=0x7f0b0082;
         public static final int activity_add_account_layout=0x7f0b003f;
         public static final int activity_chooser_view_content=0x7f0b0021;
         public static final int activity_mail_compose_layout=0x7f0b0052;
@@ -1543,6 +1543,8 @@ containing a value of this type.
         public static final int always=0x7f0b0016;
         public static final int beginning=0x7f0b0013;
         public static final int bt_Delete_File=0x7f0b004f;
+        public static final int button_widget_config=0x7f0b007d;
+        public static final int button_widget_open=0x7f0b007f;
         public static final int checkbox=0x7f0b0029;
         public static final int collapseActionView=0x7f0b0017;
         public static final int decor_content_parent=0x7f0b002f;
@@ -1553,6 +1555,7 @@ containing a value of this type.
         public static final int editText=0x7f0b005f;
         public static final int editText_Subject=0x7f0b0054;
         public static final int edit_query=0x7f0b0033;
+        public static final int edit_text_widget_config=0x7f0b007c;
         public static final int end=0x7f0b0014;
         public static final int expand_activities_button=0x7f0b0022;
         public static final int expanded_menu=0x7f0b0028;
@@ -1567,7 +1570,7 @@ containing a value of this type.
         public static final int listViewBackground=0x7f0b0050;
         public static final int list_item=0x7f0b0025;
         public static final int listview=0x7f0b0051;
-        public static final int menu_settings=0x7f0b007e;
+        public static final int menu_settings=0x7f0b0083;
         public static final int middle=0x7f0b0015;
         public static final int modify_account_default=0x7f0b006f;
         public static final int modify_account_modify_account=0x7f0b0070;
@@ -1615,6 +1618,8 @@ containing a value of this type.
         public static final int textView6=0x7f0b007b;
         public static final int textViewServerReply=0x7f0b004d;
         public static final int text_view=0x7f0b0040;
+        public static final int text_view_config_input=0x7f0b007e;
+        public static final int text_view_widget_update=0x7f0b0080;
         public static final int textview12=0x7f0b0059;
         public static final int title=0x7f0b0027;
         public static final int up=0x7f0b0008;
@@ -1660,6 +1665,8 @@ containing a value of this type.
         public static final int splash=0x7f03001f;
         public static final int support_simple_spinner_dropdown_item=0x7f030020;
         public static final int test=0x7f030021;
+        public static final int widget_mail_config=0x7f030022;
+        public static final int widget_mail_layout=0x7f030023;
     }
     public static final class menu {
         public static final int main=0x7f0f0000;
@@ -1951,6 +1958,7 @@ containing a value of this type.
     }
     public static final class xml {
         public static final int settings=0x7f050000;
+        public static final int widget_refresh=0x7f050001;
     }
     public static final class styleable {
         /** Attributes that can be used with a ActionBar.
