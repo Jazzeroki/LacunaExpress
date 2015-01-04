@@ -311,6 +311,7 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 				s.addListener(this);
 				s.execute(sRequest);
 				Log.d("LOOK HERE", "REQUEST SENT 300");
+				Log.d("LOOK HERE", "REQUEST SENT 300");
 			}
 		}
 	}

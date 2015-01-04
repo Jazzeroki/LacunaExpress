@@ -79,81 +79,63 @@ ADDED from AndroidManifest.xml:44:6
 		ADDED from AndroidManifest.xml:46:10
 	android:name
 		ADDED from AndroidManifest.xml:45:10
-activity#com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan
+activity#com.JazzDevStudio.LacunaExpress.ModifyAccount
 ADDED from AndroidManifest.xml:50:6
 	android:label
 		ADDED from AndroidManifest.xml:52:10
 	android:name
 		ADDED from AndroidManifest.xml:51:10
-activity#com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo
-ADDED from AndroidManifest.xml:57:6
-	android:label
-		ADDED from AndroidManifest.xml:59:10
-	android:name
-		ADDED from AndroidManifest.xml:58:10
-activity#com.JazzDevStudio.LacunaExpress.ModifyAccount
-ADDED from AndroidManifest.xml:64:6
-	android:label
-		ADDED from AndroidManifest.xml:66:10
-	android:name
-		ADDED from AndroidManifest.xml:65:10
-activity#com.JazzDevStudio.LacunaExpress.AccountMan.Accounts
-ADDED from AndroidManifest.xml:70:6
-	android:label
-		ADDED from AndroidManifest.xml:72:10
-	android:name
-		ADDED from AndroidManifest.xml:71:10
 activity#com.JazzDevStudio.LacunaExpress.UserSettingActivity
-ADDED from AndroidManifest.xml:77:6
+ADDED from AndroidManifest.xml:56:6
 	android:label
-		ADDED from AndroidManifest.xml:79:10
+		ADDED from AndroidManifest.xml:58:10
 	android:name
-		ADDED from AndroidManifest.xml:78:10
+		ADDED from AndroidManifest.xml:57:10
 activity#com.JazzDevStudio.LacunaExpress.SelectMessageActivity2
-ADDED from AndroidManifest.xml:83:9
+ADDED from AndroidManifest.xml:62:9
 	android:label
-		ADDED from AndroidManifest.xml:85:13
+		ADDED from AndroidManifest.xml:64:13
 	android:name
-		ADDED from AndroidManifest.xml:84:13
+		ADDED from AndroidManifest.xml:63:13
 activity#com.JazzDevStudio.LacunaExpress.ComposeMessageActivity
-ADDED from AndroidManifest.xml:89:6
+ADDED from AndroidManifest.xml:68:6
 	android:label
-		ADDED from AndroidManifest.xml:91:10
+		ADDED from AndroidManifest.xml:70:10
 	android:name
-		ADDED from AndroidManifest.xml:90:10
+		ADDED from AndroidManifest.xml:69:10
 activity#com.JazzDevStudio.LacunaExpress.ReadMessageActivity
-ADDED from AndroidManifest.xml:94:9
+ADDED from AndroidManifest.xml:73:9
 	android:label
-		ADDED from AndroidManifest.xml:96:13
+		ADDED from AndroidManifest.xml:75:13
 	android:name
-		ADDED from AndroidManifest.xml:95:13
-receiver#com.JazzDevStudio.LacunaExpress.Widget.MailWidget
-ADDED from AndroidManifest.xml:101:9
+		ADDED from AndroidManifest.xml:74:13
+receiver#com.JazzDevStudio.LacunaExpress.Widget.MailWidgetManager
+ADDED from AndroidManifest.xml:80:9
 	android:label
-		ADDED from AndroidManifest.xml:103:13
+		ADDED from AndroidManifest.xml:82:13
 	android:name
-		ADDED from AndroidManifest.xml:102:13
+		ADDED from AndroidManifest.xml:81:13
 intent-filter#android.appwidget.action.APPWIDGET_UPDATE
-ADDED from AndroidManifest.xml:105:13
+ADDED from AndroidManifest.xml:84:13
 action#android.appwidget.action.APPWIDGET_UPDATE
-ADDED from AndroidManifest.xml:106:17
+ADDED from AndroidManifest.xml:85:17
 	android:name
-		ADDED from AndroidManifest.xml:106:25
+		ADDED from AndroidManifest.xml:85:25
 meta-data#android.appwidget.provider
-ADDED from AndroidManifest.xml:108:13
+ADDED from AndroidManifest.xml:87:13
 	android:resource
-		ADDED from AndroidManifest.xml:110:17
+		ADDED from AndroidManifest.xml:89:17
 	android:name
-		ADDED from AndroidManifest.xml:109:17
-activity#com.JazzDevStudio.LacunaExpress.Widget.WidgetConfig
-ADDED from AndroidManifest.xml:114:9
+		ADDED from AndroidManifest.xml:88:17
+activity#com.JazzDevStudio.LacunaExpress.Widget.MailWidgetConfig
+ADDED from AndroidManifest.xml:93:9
 	android:label
-		ADDED from AndroidManifest.xml:116:13
+		ADDED from AndroidManifest.xml:95:13
 	android:name
-		ADDED from AndroidManifest.xml:115:13
+		ADDED from AndroidManifest.xml:94:13
 intent-filter#android.appwidget.action.APPWIDGET_CONFIGURE
-ADDED from AndroidManifest.xml:117:13
+ADDED from AndroidManifest.xml:96:13
 action#android.appwidget.action.APPWIDGET_CONFIGURE
-ADDED from AndroidManifest.xml:118:17
+ADDED from AndroidManifest.xml:97:17
 	android:name
-		ADDED from AndroidManifest.xml:118:25
+		ADDED from AndroidManifest.xml:97:25

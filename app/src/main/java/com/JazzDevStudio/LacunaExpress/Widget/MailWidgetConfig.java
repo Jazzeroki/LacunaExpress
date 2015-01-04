@@ -10,19 +10,41 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.RemoteViews;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 
+import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
+import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Inbox;
 import com.JazzDevStudio.LacunaExpress.R;
+import com.JazzDevStudio.LacunaExpress.Server.AsyncServer;
+import com.JazzDevStudio.LacunaExpress.Server.ServerRequest;
 import com.JazzDevStudio.LacunaExpress.Splash;
 
 /**
- * Created by PatrickSSD2 on 1/3/2015.
+ * Widget --
+ -If Mail is <100 font size = x. if mail is >=100 but <1000, font size = x. If mail is >=1000, font size = x.
+ -Widget to show mail count of chosen account
+ -drop down menu spinner to choose mail account to add. Have it read from accounts. If no accounts or if file does not exist, take to add account activity.
+ -options to choose font color
+ -options to choose background color
+ -options to choose refresh interval
+ -If widget is clicked, open the activity to view mail passing in the respective account information.
+ -Need to have the account info held in the widget itself before passing it into the class.
+ .
  */
-public class MailWidgetConfig extends Activity implements View.OnClickListener {
+public class MailWidgetConfig extends Activity implements View.OnClickListener, OnCheckedChangeListener {
 
-	Button b1;
+	Button create;
+	Spinner widget_mail_config_spinner_account, widget_mail_config_spinner_tag,
+			widget_mail_config_spinner_color, widget_mail_config_spinner_font;
+	
+	RadioGroup widget_mail_config_radiogroup;
 
 	AppWidgetManager awm;
 	Context c;
@@ -46,10 +68,23 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener {
 	}
 
 	private void Initialize() {
-		b1 = (Button) findViewById(R.id.button_widget_config);
-		b1.setOnClickListener(this);
+		create = (Button) findViewById(R.id.widget_mail_config_create);
+		create.setOnClickListener(this);
 
 		c = MailWidgetConfig.this;
+
+		//Spinners
+		widget_mail_config_spinner_account = (Spinner) findViewById(R.id.widget_mail_config_spinner_account);
+		widget_mail_config_spinner_tag = (Spinner) findViewById(R.id.widget_mail_config_spinner_tag);
+		widget_mail_config_spinner_color = (Spinner) findViewById(R.id.widget_mail_config_spinner_color);
+		widget_mail_config_spinner_font = (Spinner) findViewById(R.id.widget_mail_config_spinner_font);
+
+		//Radio Group
+		widget_mail_config_radiogroup = (RadioGroup) findViewById(R.id.widget_mail_config_radiogroup);
+		widget_mail_config_radiogroup.setOnCheckedChangeListener(this);
+
+
+
 
 
 		//An intent is opening this class, therefore, must make one
@@ -73,7 +108,7 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener {
 	}
 
 
-	@Override
+	//Create the widget here
 	public void onClick(View v) {
 		//Set the string = to the info getText
 
@@ -85,13 +120,13 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener {
 		v1.setTextViewText(R.id.text_view_config_input, e);
 
 		//IMPORTANT! This intent opens the class when clicked
-		Intent intento = new Intent(c, Splash.class);
+		Intent intent = new Intent(c, Splash.class);
 
-		//A pending intent. Apparently needed for widgets
-		PendingIntent pendingintento = PendingIntent.getActivity(c, 0, intento, 0);
+		//A pending intent
+		PendingIntent pendingIntent = PendingIntent.getActivity(c, 0, intent, 0);
 
 		//Set the onClickListener for the button
-		v1.setOnClickPendingIntent(R.id.button_widget_open, pendingintento);
+		v1.setOnClickPendingIntent(R.id.button_widget_open, pendingIntent);
 
 
 		//Update the widget with the remote view
@@ -111,6 +146,114 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener {
 
 	}
 
+	//When an item is selected with the spinner
+	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+		//First spinner, account_list
+		if (parent == widget_mail_config_spinner_account){
+			//Get the position within the spinner
+			int position0 = account_list.getSelectedItemPosition();
+			String word_in_spinner = user_accounts.get(position0);
+			Log.d("SelectMessage.onItemSelected assigning selected account", "word in spinner "+ word_in_spinner);
+
+			if (tag_chosen == "All"){
+				//Check the account via the spinner chosen
+				selectedAccount = AccountMan.GetAccount(word_in_spinner);
+				Log.d("SelectMessage.onItemSelected", "Tag All Calling View Inbox");
+				String request = Inbox.ViewInbox(selectedAccount.sessionID);
+				Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);
+				Log.d("SelectMessage.OnSelectedItem Request to server", request);
+				ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
+				AsyncServer s = new AsyncServer();
+				s.addListener(this);
+				s.execute(sRequest);
+				Log.d("LOOK HERE", "REQUEST SENT 266");
+			} else {
+				//Check the account via the spinner chosen
+				selectedAccount = AccountMan.GetAccount(word_in_spinner);
+				Log.d("SelectMessage.onItemSelected", "Tag Word in spinner Calling View Inbox");
+				String request = Inbox.ViewInbox(selectedAccount.sessionID, tag_chosen);
+				Log.d("SelectMessage.OnSelectedItem Request to server", request);
+				Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);
+				ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
+				AsyncServer s = new AsyncServer();
+				s.addListener(this);
+				s.execute(sRequest);
+			}
+		}
+
+		//Second spinner, message_tag
+		if (parent == widget_mail_config_spinner_tag){
+			int position0 = widget_mail_config_spinner_tag.getSelectedItemPosition();
+			String word_in_spinner = messageTags[position0];
+			tag_chosen = word_in_spinner; //Sets the tag for mail to the one chosen via the spinner
+			Log.d("SelectMessage.onItemSelected assigning Tag", "word in spinner "+ word_in_spinner);
+
+			if (tag_chosen == "All"){
+				Log.d("SelectMessage.onItemSelected", "Second Spinner Tag All Calling View Inbox");
+				String request = Inbox.ViewInbox(selectedAccount.sessionID);
+				Log.d("SelectMessage.OnSelectedItem Request to server", request);
+				Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);
+				ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
+				AsyncServer s = new AsyncServer();
+				s.addListener(this);
+				s.execute(sRequest);
+			} else {
+				Log.d("SelectMessage.onItemSelected", "Second Spinner word in spinner All Calling View Inbox");
+				String request = Inbox.ViewInbox(selectedAccount.sessionID, tag_chosen);
+				Log.d("SelectMessage.OnSelectedItem Request to server", request);
+				Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);
+				ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
+				AsyncServer s = new AsyncServer();
+				s.addListener(this);
+				s.execute(sRequest);
+			}
+		}
+
+		//Third spinner, Background Color of widget
+		if (parent == widget_mail_config_spinner_color){
+
+		}
+
+		//Fourth spinner, font color of widget
+		if (parent == widget_mail_config_spinner_font){
+
+		}
+	}
+
+
+	//This handles the radio buttons
+	public void onCheckedChanged(RadioGroup rg, int checkedId) {
+		//Depending on which one is selected. Default is 15 minutes
+		switch(checkedId){
+
+			//5 Minutes Refresh
+			case R.id.widget_mail_config_button5:
+
+				break;
+
+			//10 Minutes Refresh
+			case R.id.widget_mail_config_button10:
+
+				break;
+
+			//15 Minutes Refresh
+			case R.id.widget_mail_config_button15:
+
+				break;
+
+			//30 Minutes Refresh
+			case R.id.widget_mail_config_button30:
+
+				break;
+
+			//60 Minutes Refresh
+			case R.id.widget_mail_config_button60:
+
+				break;
+		}
+	}
+
+	//Set the background image as per shared preferences
 	private void setTheBackground() {
 		String user_choice = prefs.getString("pref_background_choice","blue_glass");
 		Log.d("User Background Choice", user_choice);

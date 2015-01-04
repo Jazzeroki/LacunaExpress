@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Background Color: "
-            android:id="@+id/widgeT_mail_config_background_color"/>
+            android:id="@+id/widget_mail_config_background_color"/>
 
         <Spinner
             android:layout_width="match_parent"
@@ -87,35 +87,35 @@
             android:layout_gravity="center" >
 
             <RadioButton
-                android:id="@+id/widget_mail_config_button1"
+                android:id="@+id/widget_mail_config_button5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="false"
                 android:text="5 Minutes" />
 
             <RadioButton
-                android:id="@+id/widget_mail_config_button2"
+                android:id="@+id/widget_mail_config_button10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="false"
                 android:text="10 Minutes" />
 
             <RadioButton
-                android:id="@+id/widget_mail_config_button3"
+                android:id="@+id/widget_mail_config_button15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:text="15 Minutes" />
 
             <RadioButton
-                android:id="@+id/widget_mail_config_button4"
+                android:id="@+id/widget_mail_config_button30"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="false"
                 android:text="30 Minutes" />
 
             <RadioButton
-                android:id="@+id/widget_mail_config_button5"
+                android:id="@+id/widget_mail_config_button60"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="false"
