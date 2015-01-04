@@ -1,30 +1,41 @@
 package com.JazzDevStudio.LacunaExpress.Widget;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RemoteViews;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 
+import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
+import com.JazzDevStudio.LacunaExpress.AddAccount;
 import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Inbox;
+import com.JazzDevStudio.LacunaExpress.LEWrapperResponse.Response;
+import com.JazzDevStudio.LacunaExpress.MISCClasses.L;
 import com.JazzDevStudio.LacunaExpress.R;
 import com.JazzDevStudio.LacunaExpress.Server.AsyncServer;
 import com.JazzDevStudio.LacunaExpress.Server.ServerRequest;
 import com.JazzDevStudio.LacunaExpress.Splash;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 /**
  * Widget --
@@ -38,20 +49,43 @@ import com.JazzDevStudio.LacunaExpress.Splash;
  -Need to have the account info held in the widget itself before passing it into the class.
  .
  */
-public class MailWidgetConfig extends Activity implements View.OnClickListener, OnCheckedChangeListener {
+public class MailWidgetConfig extends Activity implements View.OnClickListener, OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
+
+	private static final int RESULT_SETTINGS = 1;
+	String color_background_choice, font_color_choice;
 
 	Button create;
 	Spinner widget_mail_config_spinner_account, widget_mail_config_spinner_tag,
 			widget_mail_config_spinner_color, widget_mail_config_spinner_font;
-	
+
 	RadioGroup widget_mail_config_radiogroup;
 
 	AppWidgetManager awm;
 	Context c;
-	int awID;
+	int awID, sync_frequency;
+
+	//For checking internet connection
+	private boolean do_we_have_network_connection;
 
 	//Shared Preferences
 	SharedPreferences prefs;
+
+	//Account info
+	AccountInfo selectedAccount;
+	//For storing all account files
+	ArrayList<AccountInfo> accounts;
+	//ArrayList of display strings for the spinner
+	ArrayList<String> user_accounts = new ArrayList<String>();
+
+	//Utilizing the color.xml file
+	ArrayList<String> color_names = new ArrayList<String>();
+
+	//Messages Info
+	ArrayList<Response.Messages> messages_array = new ArrayList<Response.Messages>();
+	Boolean messagesReceived = false;
+	private String tag_chosen = "Correspondence";
+	static final String[] messageTags = {"All", "Correspondence", "Tutorial", "Medal", "Intelligence", "Alert", "Attack", "Colonization", "Complaint", "Excavator", "Mission", "Parliament", "Probe", "Spies", "Trade", "Fissure"};
+
 
 	//
 	@Override
@@ -63,8 +97,124 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener, 
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		setTheBackground();
 
+		if (do_we_have_network_connection){
+			//Working network connection!
+			//Go ahead as normal
+		} else {
+			//No network connection!
+			//This is the dialog listener
+			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					switch (which) {
+						//If they hit ok, the app will close until they have network connection
+						case DialogInterface.BUTTON_NEGATIVE:
+							try {
+								dialog.dismiss();
+								finish();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+							break;
+					}
+				}
+			};
+			String confirm = "You currently do not have a network connection. Please connect to the internet before creating the widget";
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage(confirm).setNegativeButton("Close", dialogClickListener).show(); //.setPositiveButton("Yes", dialogClickListener)
+		}
 
+		//Internet has now been confirmed, move forward//
 
+		//Check if any accounts exist
+		boolean does_file_exist = false;
+		try {
+			does_file_exist = AccountMan.CheckForFile();
+			if (!does_file_exist){
+				//If no account exists, open the activity to add an account
+				L.makeToast(this, "No Accounts detected, Let's add an account");
+				Intent openActivity = new Intent(this, AddAccount.class);
+				startActivity(openActivity);
+			}
+		} catch (Exception e){
+			e.printStackTrace();
+			//In case there is a corrupted file
+			L.makeToast(this, "No Accounts detected, Let's add an account");
+			Intent openActivity = new Intent(this, AddAccount.class);
+			startActivity(openActivity);
+		}
+
+		//Accounts have been confirmed, move forward//
+
+		//This block populates user_accounts for values to display in the select account spinner
+		ReadInAccounts();
+		if(accounts.size() == 1){
+			selectedAccount = accounts.get(0);
+			Log.d("SelectMessage.Initialize", "only 1 account setting as default"+selectedAccount.displayString);
+			user_accounts.add(selectedAccount.displayString);
+		} else{
+			for(AccountInfo i: accounts){
+				Log.d("SelectMessage.Initialize", "Multiple accounts found, Setting Default account to selected account: "+i.displayString); //
+				user_accounts.add(i.displayString);
+				if(i.defaultAccount)
+					selectedAccount = i;
+			}
+		}
+
+		//Configure all the spinners//
+
+		//Arraylist has been filled with accounts, add them to the accounts spinner
+		ArrayAdapter adapter_accounts = new ArrayAdapter(this, android.R.layout.simple_spinner_item, user_accounts);
+		adapter_accounts.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		widget_mail_config_spinner_account.setAdapter(adapter_accounts);
+
+		//Message Tags spinner
+		ArrayAdapter adapter_message_tag = new ArrayAdapter(this, android.R.layout.simple_spinner_item, messageTags);
+		adapter_message_tag.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		widget_mail_config_spinner_tag.setAdapter(adapter_message_tag);
+
+		//String array of all the color choices
+		Field[] fields = R.color.class.getFields();
+		String color_name_temp;
+		try {
+			for (int i = 0; i < fields.length; i++) {
+				color_name_temp = getResources().getString(fields[i].getInt(null));
+				color_names.add(color_name_temp);
+			}
+		} catch (Exception e){
+			e.printStackTrace();
+			Log.d("MailWidgetConfig", "Color Choices errored out. Check Field[] fields");
+		}
+
+		//Background Color Choice spinner
+		ArrayAdapter adapter_background_color_choice = new ArrayAdapter(this, android.R.layout.simple_spinner_item, color_names);
+		adapter_message_tag.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		widget_mail_config_spinner_color.setAdapter(adapter_background_color_choice);
+
+		//Font color choice spinner
+		ArrayAdapter adapter_font_color_choice = new ArrayAdapter(this, android.R.layout.simple_spinner_item, color_names);
+		adapter_message_tag.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		widget_mail_config_spinner_font.setAdapter(adapter_font_color_choice);
+
+		//Set the default values in each spinner
+		widget_mail_config_spinner_account.setSelection(0);
+		//This may be erroneous code...
+			//This code sets the default spinner to the one passed in by the intent
+			//ArrayAdapter name_adapter_1 = (ArrayAdapter) widget_mail_config_spinner_account.getAdapter(); //cast to an ArrayAdapter
+			//int spinnerPosition = name_adapter_1.getPosition(0);
+			//set the default according to value
+			//widget_mail_config_spinner_account.setSelection(0);
+		widget_mail_config_spinner_tag.setSelection(0);
+		widget_mail_config_spinner_color.setSelection(0);
+		widget_mail_config_spinner_font.setSelection(0);
+
+		//Spinner have been populated//
+
+		//
+		try {
+
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	private void Initialize() {
@@ -73,19 +223,32 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener, 
 
 		c = MailWidgetConfig.this;
 
+		//Strings
+		color_background_choice = "white";
+		font_color_choice = "black";
 		//Spinners
 		widget_mail_config_spinner_account = (Spinner) findViewById(R.id.widget_mail_config_spinner_account);
 		widget_mail_config_spinner_tag = (Spinner) findViewById(R.id.widget_mail_config_spinner_tag);
 		widget_mail_config_spinner_color = (Spinner) findViewById(R.id.widget_mail_config_spinner_color);
 		widget_mail_config_spinner_font = (Spinner) findViewById(R.id.widget_mail_config_spinner_font);
 
+		//Set the spinners to the onItemSelectedListener
+		widget_mail_config_spinner_account.setOnItemSelectedListener(this);
+		widget_mail_config_spinner_tag.setOnItemSelectedListener(this);
+		widget_mail_config_spinner_color.setOnItemSelectedListener(this);
+		widget_mail_config_spinner_font.setOnItemSelectedListener(this);
+
 		//Radio Group
 		widget_mail_config_radiogroup = (RadioGroup) findViewById(R.id.widget_mail_config_radiogroup);
 		widget_mail_config_radiogroup.setOnCheckedChangeListener(this);
 
+		//Default to no network connection
+		do_we_have_network_connection = false;
+		//Check if there is internet connection
+		do_we_have_network_connection = haveNetworkConnection();
 
-
-
+		//Default frequency check if the user chooses nothing
+		sync_frequency = 15;
 
 		//An intent is opening this class, therefore, must make one
 		Intent i = getIntent();
@@ -148,10 +311,10 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener, 
 
 	//When an item is selected with the spinner
 	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-		//First spinner, account_list
+		//First spinner, widget_mail_config_spinner_account
 		if (parent == widget_mail_config_spinner_account){
 			//Get the position within the spinner
-			int position0 = account_list.getSelectedItemPosition();
+			int position0 = widget_mail_config_spinner_account.getSelectedItemPosition();
 			String word_in_spinner = user_accounts.get(position0);
 			Log.d("SelectMessage.onItemSelected assigning selected account", "word in spinner "+ word_in_spinner);
 
@@ -211,14 +374,20 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener, 
 
 		//Third spinner, Background Color of widget
 		if (parent == widget_mail_config_spinner_color){
-
+			int position1 = widget_mail_config_spinner_color.getSelectedItemPosition();
+			String word_in_spinner = color_names.get(position1);
+			color_background_choice = word_in_spinner;
 		}
 
 		//Fourth spinner, font color of widget
 		if (parent == widget_mail_config_spinner_font){
-
+			int position1 = widget_mail_config_spinner_font.getSelectedItemPosition();
+			String word_in_spinner = color_names.get(position1);
+			font_color_choice = word_in_spinner;
 		}
 	}
+
+
 
 
 	//This handles the radio buttons
@@ -228,29 +397,58 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener, 
 
 			//5 Minutes Refresh
 			case R.id.widget_mail_config_button5:
-
+				sync_frequency = 5;
 				break;
 
 			//10 Minutes Refresh
 			case R.id.widget_mail_config_button10:
-
+				sync_frequency = 10;
 				break;
 
 			//15 Minutes Refresh
 			case R.id.widget_mail_config_button15:
-
+				sync_frequency = 15;
 				break;
 
 			//30 Minutes Refresh
 			case R.id.widget_mail_config_button30:
-
+				sync_frequency = 30;
 				break;
 
 			//60 Minutes Refresh
 			case R.id.widget_mail_config_button60:
-
+				sync_frequency = 60;
 				break;
 		}
+	}
+
+	//Unused atm
+	public void onNothingSelected(AdapterView<?> parent) {
+	}
+
+	//Checks if there is network connection. Returns boolean
+	private boolean haveNetworkConnection() {
+		boolean haveConnectedWifi = false;
+		boolean haveConnectedMobile = false;
+
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+		for (NetworkInfo ni : netInfo) {
+			if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+				if (ni.isConnected())
+					haveConnectedWifi = true;
+			if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+				if (ni.isConnected())
+					haveConnectedMobile = true;
+		}
+		return haveConnectedWifi || haveConnectedMobile;
+	}
+
+	//Reads in the accounts from the existing objects
+	private void ReadInAccounts() {
+		Log.d("SelectAccountActivity.ReadInAccounts", "checking for file" + AccountMan.CheckForFile());
+		accounts = AccountMan.GetAccounts();
+		Log.d("SelectAccountActivity.ReadInAccounts", String.valueOf(accounts.size()));
 	}
 
 	//Set the background image as per shared preferences
@@ -281,6 +479,5 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener, 
 		} else {
 		}
 	}
-
 
 }

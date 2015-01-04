@@ -28,8 +28,6 @@ import java.util.ArrayList;
 
 public class Splash extends Activity {
 
-	//For checking internet connection
-	protected NetworkInfo networkInfo;
 	//For the intro music / song playing in the background
 	MediaPlayer ourIntroSong;
 

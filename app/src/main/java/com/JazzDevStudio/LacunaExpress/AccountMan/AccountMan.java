@@ -315,6 +315,8 @@ public class AccountMan {
         }
         return accounts;
     }
+
+	//Checks if there is a file (If they have never added an account, no file will exist)
     public static boolean CheckForFile(){
     	Log.d("AccountMan.CheckForFile", "Checking if File Exists");
     	Boolean b = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/", "accnt.jazz").isFile();
@@ -322,4 +324,6 @@ public class AccountMan {
         //return new File("accnt.jazz").isFile();
     	return b;
     }
+
+
 }
