@@ -341,6 +341,7 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 			messages_array.clear();
 			messages_array = r.result.messages;
 
+
 			counter++;
 			loadMessagesIntoArray();
 			Log.d("Testing yo", "Has been called");

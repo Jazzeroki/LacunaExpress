@@ -30,9 +30,11 @@ import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Inbox;
 import com.JazzDevStudio.LacunaExpress.LEWrapperResponse.Response;
 import com.JazzDevStudio.LacunaExpress.MISCClasses.L;
 import com.JazzDevStudio.LacunaExpress.R;
+import com.JazzDevStudio.LacunaExpress.SelectMessageActivity2;
 import com.JazzDevStudio.LacunaExpress.Server.AsyncServer;
 import com.JazzDevStudio.LacunaExpress.Server.ServerRequest;
-import com.JazzDevStudio.LacunaExpress.Splash;
+import com.JazzDevStudio.LacunaExpress.Server.serverFinishedListener;
+import com.google.gson.Gson;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -49,10 +51,13 @@ import java.util.ArrayList;
  -Need to have the account info held in the widget itself before passing it into the class.
  .
  */
-public class MailWidgetConfig extends Activity implements View.OnClickListener, OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
+public class MailWidgetConfig extends Activity implements serverFinishedListener, View.OnClickListener, OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
 
 	private static final int RESULT_SETTINGS = 1;
 	String color_background_choice, font_color_choice;
+
+	//Total number of messages
+	int message_count_int;
 
 	Button create;
 	Spinner widget_mail_config_spinner_account, widget_mail_config_spinner_tag,
@@ -252,10 +257,8 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener, 
 
 		//An intent is opening this class, therefore, must make one
 		Intent i = getIntent();
-
 		//Create a bundle since info is being passed around (Which app launched this activity)
 		Bundle extras = i.getExtras();
-
 		//As long as the extras had something, setup the app widget id
 		if (extras != null){
 			//Get an ID and pass it in. IE, a way to checking which widget activated this class
@@ -265,8 +268,6 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener, 
 			//In case something gets a-broken!
 			finish();
 		}
-
-		//
 		awm = AppWidgetManager.getInstance(c);
 	}
 
@@ -278,19 +279,30 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener, 
 		//Setup a remoteview referring to the context (Param1) and relating to the widget (Param2)
 		RemoteViews v1 = new RemoteViews(c.getPackageName(), R.layout.widget_mail_layout);
 
-		String e = "TESTING";
-		//Setting the remote view (remote meaning on the homescreen widget) to the text_view
-		v1.setTextViewText(R.id.text_view_config_input, e);
+		//Set the username
+		v1.setTextViewText(R.id.widget_mail_username, selectedAccount.userName);
+		//Set the message count
+		String message_count_string = Integer.toString(message_count_int);
+		v1.setTextViewText(R.id.widget_mail_message_count, message_count_string);
+		//Set the Tag choice
+		v1.setTextViewText(R.id.widget_mail_tag_choice, tag_chosen);
+
+		//Set the background color of the widget
+		v1.setInt(R.id.widget_mail_layout, "setBackgroundColor", android.graphics.Color.parseColor(color_background_choice));
+		//Set the font color of the widget text
+		v1.setInt(R.id.widget_mail_username, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
+		v1.setInt(R.id.widget_mail_message_count, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
+		v1.setInt(R.id.widget_mail_tag_choice, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
+
 
 		//IMPORTANT! This intent opens the class when clicked
-		Intent intent = new Intent(c, Splash.class);
+		Intent intent = new Intent(c, SelectMessageActivity2.class);
 
-		//A pending intent
+		//A pending intent to launch upon clicking
 		PendingIntent pendingIntent = PendingIntent.getActivity(c, 0, intent, 0);
 
-		//Set the onClickListener for the button
-		v1.setOnClickPendingIntent(R.id.button_widget_open, pendingIntent);
-
+		//Set the onClickListener the TEXTVIEW. If the click the textview, it opens up the SelectMessageActivity2
+		v1.setOnClickPendingIntent(R.id.widget_mail_message_count, pendingIntent);
 
 		//Update the widget with the remote view
 		awm.updateAppWidget(awID, v1);
@@ -306,7 +318,6 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener, 
 
 		//We want this to finish when the button is clicked
 		finish();
-
 	}
 
 	//When an item is selected with the spinner
@@ -329,7 +340,6 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener, 
 				AsyncServer s = new AsyncServer();
 				s.addListener(this);
 				s.execute(sRequest);
-				Log.d("LOOK HERE", "REQUEST SENT 266");
 			} else {
 				//Check the account via the spinner chosen
 				selectedAccount = AccountMan.GetAccount(word_in_spinner);
@@ -386,9 +396,6 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener, 
 			font_color_choice = word_in_spinner;
 		}
 	}
-
-
-
 
 	//This handles the radio buttons
 	public void onCheckedChanged(RadioGroup rg, int checkedId) {
@@ -455,7 +462,7 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener, 
 	private void setTheBackground() {
 		String user_choice = prefs.getString("pref_background_choice","blue_glass");
 		Log.d("User Background Choice", user_choice);
-		LinearLayout layout = (LinearLayout) findViewById(R.id.activity_add_account_layout);
+		LinearLayout layout = (LinearLayout) findViewById(R.id.widget_mail_config_layout);
 		if (user_choice.equalsIgnoreCase("blue_glass")){
 			layout.setBackground(getResources().getDrawable(R.drawable.blue_glass));
 		} else if (user_choice.equalsIgnoreCase("blue_oil_painting")){
@@ -480,4 +487,20 @@ public class MailWidgetConfig extends Activity implements View.OnClickListener, 
 		}
 	}
 
+	@Override
+	public void onResponseReceived(String reply) {
+		if(!reply.equals("error")) {
+			Log.d("Deserializing Response", "Creating Response Object");
+			messagesReceived = true;
+			//Getting new messages, clearing list first.
+			Response r = new Gson().fromJson(reply, Response.class);
+			messages_array.clear();
+			messages_array = r.result.messages;
+
+			message_count_int = r.result.status.empire.has_new_messages;
+
+		} else {
+			Log.d("Error with Reply", "Error in onResponseReceived()");
+		}
+	}
 }

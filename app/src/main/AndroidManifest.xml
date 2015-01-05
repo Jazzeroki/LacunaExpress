@@ -76,7 +76,7 @@
         </activity>
 
 
-        <!-- This manages the widget  -->
+        <!-- This manages the widget updates  -->
         <receiver
             android:name="com.JazzDevStudio.LacunaExpress.Widget.MailWidgetManager"
             android:label="Lacuna Express Mail Widget"

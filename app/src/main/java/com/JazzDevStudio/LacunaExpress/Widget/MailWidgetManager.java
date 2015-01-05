@@ -54,7 +54,7 @@ public class MailWidgetManager extends AppWidgetProvider {
 			RemoteViews v = new RemoteViews(context.getPackageName(), R.layout.widget_mail_layout);
 
 			//This updates the text view with the random string every 30 minutes
-			v.setTextViewText(R.id.text_view_widget_update, rand);
+			//v.setTextViewText(R.id.text_view_widget_update, rand);
 
 			//Calls the method to update the widget. Affects this specific view
 			appWidgetManager.updateAppWidget(app_widget_ID, v);
