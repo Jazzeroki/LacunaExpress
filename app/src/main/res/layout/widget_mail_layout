@@ -11,22 +11,27 @@
         android:id="@+id/widget_mail_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="sil"/>
+        android:text="sil"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"/>
 
     <TextView
         android:layout_width="64dp"
         android:layout_height="41dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="247"
-        android:id="@+id/widget_mail_message_count"/>
+        android:gravity="center"
+        android:id="@+id/widget_mail_message_count"
+        android:layout_gravity="center_horizontal"/>
 
     <TextView
         android:layout_width="106dp"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Label: Correspondance"
         android:id="@+id/widget_mail_tag_choice"
-        android:layout_gravity="left"/>
+        android:layout_gravity="center_horizontal"/>
 
 
 

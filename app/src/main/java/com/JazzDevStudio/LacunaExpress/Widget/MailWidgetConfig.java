@@ -8,20 +8,26 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RemoteViews;
 import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
@@ -49,7 +55,7 @@ import java.util.ArrayList;
  -options to choose refresh interval
  -If widget is clicked, open the activity to view mail passing in the respective account information.
  -Need to have the account info held in the widget itself before passing it into the class.
- .
+ -Update
  */
 public class MailWidgetConfig extends Activity implements serverFinishedListener, View.OnClickListener, OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
 
@@ -57,8 +63,13 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 	String color_background_choice, font_color_choice;
 
 	//Total number of messages
+	String message_count_string;
 	int message_count_int;
 
+	//Do they want notifications?
+	boolean notifications_option;
+
+	Switch widget_mail_config_notification_switch;
 	Button create;
 	Spinner widget_mail_config_spinner_account, widget_mail_config_spinner_tag,
 			widget_mail_config_spinner_color, widget_mail_config_spinner_font;
@@ -82,13 +93,16 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 	//ArrayList of display strings for the spinner
 	ArrayList<String> user_accounts = new ArrayList<String>();
 
+	//For color choices in string format
+	ArrayList<String> color_names_strings = new ArrayList<String>();
+
 	//Utilizing the color.xml file
 	ArrayList<String> color_names = new ArrayList<String>();
 
 	//Messages Info
 	ArrayList<Response.Messages> messages_array = new ArrayList<Response.Messages>();
 	Boolean messagesReceived = false;
-	private String tag_chosen = "Correspondence";
+	private String tag_chosen = "All";
 	static final String[] messageTags = {"All", "Correspondence", "Tutorial", "Medal", "Intelligence", "Alert", "Attack", "Colonization", "Complaint", "Excavator", "Mission", "Parliament", "Probe", "Spies", "Trade", "Fissure"};
 
 
@@ -180,6 +194,7 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		//String array of all the color choices
 		Field[] fields = R.color.class.getFields();
 		String color_name_temp;
+
 		try {
 			for (int i = 0; i < fields.length; i++) {
 				color_name_temp = getResources().getString(fields[i].getInt(null));
@@ -190,27 +205,40 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 			Log.d("MailWidgetConfig", "Color Choices errored out. Check Field[] fields");
 		}
 
+
+		//String array of all the color choices
+		String[] color_names_temp = getResources().getStringArray(R.array.color_choices_names);
+		try {
+			for (int i = 0; i < color_names_temp.length; i++) {
+				color_name_temp = color_names_temp[i];
+				color_names_strings.add(color_name_temp);
+			}
+		} catch (Exception e){
+			e.printStackTrace();
+			Log.d("MailWidgetConfig", "Color Choices errored out. Check Field[] fields");
+		}
+
+		/*
 		//Background Color Choice spinner
-		ArrayAdapter adapter_background_color_choice = new ArrayAdapter(this, android.R.layout.simple_spinner_item, color_names);
+		ArrayAdapter adapter_background_color_choice = new ArrayAdapter(this, android.R.layout.simple_spinner_item, color_names_strings);
 		adapter_message_tag.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		widget_mail_config_spinner_color.setAdapter(adapter_background_color_choice);
+		*/
+		widget_mail_config_spinner_color.setAdapter(new MyAdapter(this, R.layout.custom_spinner, color_names_strings));
 
+		/*
 		//Font color choice spinner
-		ArrayAdapter adapter_font_color_choice = new ArrayAdapter(this, android.R.layout.simple_spinner_item, color_names);
+		ArrayAdapter adapter_font_color_choice = new ArrayAdapter(this, android.R.layout.simple_spinner_item, color_names_strings);
 		adapter_message_tag.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		widget_mail_config_spinner_font.setAdapter(adapter_font_color_choice);
+		*/
+		widget_mail_config_spinner_font.setAdapter(new MyAdapter(this, R.layout.custom_spinner, color_names_strings));
 
 		//Set the default values in each spinner
 		widget_mail_config_spinner_account.setSelection(0);
-		//This may be erroneous code...
-			//This code sets the default spinner to the one passed in by the intent
-			//ArrayAdapter name_adapter_1 = (ArrayAdapter) widget_mail_config_spinner_account.getAdapter(); //cast to an ArrayAdapter
-			//int spinnerPosition = name_adapter_1.getPosition(0);
-			//set the default according to value
-			//widget_mail_config_spinner_account.setSelection(0);
 		widget_mail_config_spinner_tag.setSelection(0);
-		widget_mail_config_spinner_color.setSelection(0);
-		widget_mail_config_spinner_font.setSelection(0);
+		widget_mail_config_spinner_color.setSelection(0); //White Background
+		widget_mail_config_spinner_font.setSelection(1); //Black Font
 
 		//Spinner have been populated//
 
@@ -227,6 +255,9 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		create.setOnClickListener(this);
 
 		c = MailWidgetConfig.this;
+
+		//Set it to false by default
+		notifications_option = false;
 
 		//Strings
 		color_background_choice = "white";
@@ -255,6 +286,19 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		//Default frequency check if the user chooses nothing
 		sync_frequency = 15;
 
+		//Switch to decide if the users want notifications in their notification bar
+		widget_mail_config_notification_switch = (Switch) findViewById(R.id.widget_mail_config_notification_switch);
+		widget_mail_config_notification_switch.setChecked(false);
+		widget_mail_config_notification_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(isChecked){
+					notifications_option = true;
+				}else{
+					notifications_option = false;
+				}
+			}
+		});
+
 		//An intent is opening this class, therefore, must make one
 		Intent i = getIntent();
 		//Create a bundle since info is being passed around (Which app launched this activity)
@@ -282,37 +326,62 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		//Set the username
 		v1.setTextViewText(R.id.widget_mail_username, selectedAccount.userName);
 		//Set the message count
-		String message_count_string = Integer.toString(message_count_int);
-		v1.setTextViewText(R.id.widget_mail_message_count, message_count_string);
+
+		if (tag_chosen.equalsIgnoreCase("All")){
+			message_count_string = Integer.toString(message_count_int);
+			v1.setTextViewText(R.id.widget_mail_message_count, message_count_string);
+		} else {
+			v1.setTextViewText(R.id.widget_mail_message_count, message_count_string);
+		}
+
+
+
+
 		//Set the Tag choice
-		v1.setTextViewText(R.id.widget_mail_tag_choice, tag_chosen);
+		String tag_chosen_v1 = "Tag Chosen:\n" + tag_chosen;
+		v1.setTextViewText(R.id.widget_mail_tag_choice, tag_chosen_v1);
+
+		Log.d("Background choice is: ", color_background_choice);
+		Log.d("Font color is: ", font_color_choice);
 
 		//Set the background color of the widget
 		v1.setInt(R.id.widget_mail_layout, "setBackgroundColor", android.graphics.Color.parseColor(color_background_choice));
+
 		//Set the font color of the widget text
 		v1.setInt(R.id.widget_mail_username, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
 		v1.setInt(R.id.widget_mail_message_count, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
 		v1.setInt(R.id.widget_mail_tag_choice, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
 
+		//Decrease the font size on this tag as it is the longest word and goes off the screen
+		if (tag_chosen.equalsIgnoreCase("Correspondence")){
+			v1.setFloat(R.id.widget_mail_tag_choice, "setTextSize", 10);
+		}
 
-		//IMPORTANT! This intent opens the class when clicked
+		//Check the number of messages and adjust the font size of the number of messages displayed. Prevents out of bounds on screen
+		int total_num_messages = Integer.parseInt(message_count_string);
+		Log.d("Num messages", message_count_string);
+		if (total_num_messages < 10){
+			v1.setFloat(R.id.widget_mail_message_count, "setTextSize", 32);
+		} else if (total_num_messages >=10 && total_num_messages <100){
+			v1.setFloat(R.id.widget_mail_message_count, "setTextSize", 28);
+		} else if (total_num_messages >= 100 && total_num_messages <999){
+			v1.setFloat(R.id.widget_mail_message_count, "setTextSize", 24);
+		} else {
+			v1.setFloat(R.id.widget_mail_message_count, "setTextSize", 20);
+		}
+
+		//IMPORTANT! The following code opens the class when clicked
 		Intent intent = new Intent(c, SelectMessageActivity2.class);
-
 		//A pending intent to launch upon clicking
 		PendingIntent pendingIntent = PendingIntent.getActivity(c, 0, intent, 0);
-
 		//Set the onClickListener the TEXTVIEW. If the click the textview, it opens up the SelectMessageActivity2
 		v1.setOnClickPendingIntent(R.id.widget_mail_message_count, pendingIntent);
-
 		//Update the widget with the remote view
 		awm.updateAppWidget(awID, v1);
-
 		//Lastly, need to set a result
 		Intent result = new Intent();
-
 		//Updating the ID that is being called
 		result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, awID);
-
 		//Confirm the result works then set it
 		setResult(RESULT_OK, result);
 
@@ -329,7 +398,7 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 			String word_in_spinner = user_accounts.get(position0);
 			Log.d("SelectMessage.onItemSelected assigning selected account", "word in spinner "+ word_in_spinner);
 
-			if (tag_chosen == "All"){
+			if (tag_chosen.equalsIgnoreCase("All")){
 				//Check the account via the spinner chosen
 				selectedAccount = AccountMan.GetAccount(word_in_spinner);
 				Log.d("SelectMessage.onItemSelected", "Tag All Calling View Inbox");
@@ -361,7 +430,7 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 			tag_chosen = word_in_spinner; //Sets the tag for mail to the one chosen via the spinner
 			Log.d("SelectMessage.onItemSelected assigning Tag", "word in spinner "+ word_in_spinner);
 
-			if (tag_chosen == "All"){
+			if (tag_chosen.equalsIgnoreCase("All")){
 				Log.d("SelectMessage.onItemSelected", "Second Spinner Tag All Calling View Inbox");
 				String request = Inbox.ViewInbox(selectedAccount.sessionID);
 				Log.d("SelectMessage.OnSelectedItem Request to server", request);
@@ -385,14 +454,14 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		//Third spinner, Background Color of widget
 		if (parent == widget_mail_config_spinner_color){
 			int position1 = widget_mail_config_spinner_color.getSelectedItemPosition();
-			String word_in_spinner = color_names.get(position1);
+			String word_in_spinner = color_names_strings.get(position1);
 			color_background_choice = word_in_spinner;
 		}
 
 		//Fourth spinner, font color of widget
 		if (parent == widget_mail_config_spinner_font){
 			int position1 = widget_mail_config_spinner_font.getSelectedItemPosition();
-			String word_in_spinner = color_names.get(position1);
+			String word_in_spinner = color_names_strings.get(position1);
 			font_color_choice = word_in_spinner;
 		}
 	}
@@ -487,7 +556,37 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		}
 	}
 
-	@Override
+	//Spinner Adapter
+	public class MyAdapter extends ArrayAdapter<String> {
+		//(Really useful code, link is here: http://mrbool.com/how-to-customize-spinner-in-android/28286)
+		public MyAdapter(Context ctx, int txtViewResourceId, ArrayList<String> aList) {
+			super(ctx, txtViewResourceId, aList);
+		}
+
+		@Override
+		public View getDropDownView(int position, View cnvtView, ViewGroup prnt) {
+			return getCustomView(position, cnvtView, prnt);
+		}
+
+		@Override
+		public View getView(int pos, View cnvtView, ViewGroup prnt) {
+			return getCustomView(pos, cnvtView, prnt);
+		}
+
+		public View getCustomView(int position, View convertView, ViewGroup parent) {
+			LayoutInflater inflater = getLayoutInflater();
+			View mySpinner = inflater.inflate(R.layout.custom_spinner, parent, false);
+
+			TextView main_text = (TextView) mySpinner.findViewById(R.id.spinner_text_view);
+			String word_in_spinner_temp = color_names_strings.get(position);
+			main_text.setText(word_in_spinner_temp);
+			//Set the font color here to match the word
+			main_text.setTextColor(Color.parseColor(word_in_spinner_temp));
+			return mySpinner;
+		}
+	}
+
+	//When a response is received from the server
 	public void onResponseReceived(String reply) {
 		if(!reply.equals("error")) {
 			Log.d("Deserializing Response", "Creating Response Object");
@@ -498,6 +597,8 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 			messages_array = r.result.messages;
 
 			message_count_int = r.result.status.empire.has_new_messages;
+
+			message_count_string = r.result.message_count;
 
 		} else {
 			Log.d("Error with Reply", "Error in onResponseReceived()");

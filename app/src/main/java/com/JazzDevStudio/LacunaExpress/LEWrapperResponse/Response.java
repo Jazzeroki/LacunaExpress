@@ -25,6 +25,7 @@ public class Response {
         public ArrayList<Messages> messages;
         //Messages messages[];//used when previewing multiple messages
         public Messages message; //used when reading a single message
+	    public String message_count;
         public ArrayList<Stars> stars;
         public ArrayList<Orbiting> orbiting;
         public ArrayList<Incoming> incoming;
@@ -147,5 +148,7 @@ public class Response {
         public String [] tags, recipients;
         public int has_read, has_replied, has_archived, has_trashed, id, from_id, to_id;
     }
+
+
 
 }

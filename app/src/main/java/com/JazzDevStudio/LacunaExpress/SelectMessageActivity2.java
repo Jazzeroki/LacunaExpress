@@ -58,6 +58,8 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 	ArrayList <Messages> messages_array = new ArrayList<Messages>();
 	MailFormat mf;
 
+
+
 	private static final int RESULT_SETTINGS = 1;
 
 	//For debugging
@@ -329,9 +331,18 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 		Log.d("SelectAccountActivity.ReadInAccounts", String.valueOf(accounts.size()));
 	}
 
+	//For displaying really long Strings (IE JSON Requests)
+	public static void longInfo(String str) {
+		if(str.length() > 4000) {
+			Log.i("Lengthy String", str.substring(0, 4000));
+			longInfo(str.substring(4000));
+		} else
+			Log.i("Lengthy String", str);
+	}
+
 	@Override
 	public void onResponseReceived(String reply) {
-		Log.d("SelectMessage.onResponse Recieved", reply);
+		longInfo(reply);
 
 		if(!reply.equals("error")) {
 			Log.d("Deserializing Response", "Creating Response Object");
@@ -340,7 +351,6 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 			Response r = new Gson().fromJson(reply, Response.class);
 			messages_array.clear();
 			messages_array = r.result.messages;
-
 
 			counter++;
 			loadMessagesIntoArray();

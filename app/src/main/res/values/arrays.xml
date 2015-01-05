@@ -26,5 +26,24 @@
         <item name="choice_8">xmas</item>
         <item name="choice_9">lacuna_logo</item>
     </string-array>
-     
+
+    <string-array name="color_choices_names">
+        <item name="white">white</item>
+        <item name="black">black</item>
+        <item name="yellow">yellow</item>
+        <item name="fuchsia">fuchsia</item>
+        <item name="red">red</item>
+        <item name="silver">silver</item>
+        <item name="gray">gray</item>
+        <item name="olive">olive</item>
+        <item name="purple">purple</item>
+        <item name="maroon">maroon</item>
+        <item name="aqua">aqua</item>
+        <item name="lime">lime</item>
+        <item name="teal">teal</item>
+        <item name="green">green</item>
+        <item name="blue">blue</item>
+        <item name="navy">navy</item>
+    </string-array>
+
 </resources>
