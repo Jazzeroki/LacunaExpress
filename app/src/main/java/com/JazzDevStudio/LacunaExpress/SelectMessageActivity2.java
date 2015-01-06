@@ -133,6 +133,7 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 			for(AccountInfo i: accounts){
 				Log.d("SelectMessage.Initialize", "Multiple accounts found, Setting Default account to selected account: "+i.displayString); //
 				user_accounts.add(i.displayString);
+				Log.d("DISPLAY STRING IS:", i.displayString);
                 if(i.defaultAccount)
                     selectedAccount = i;
 			}

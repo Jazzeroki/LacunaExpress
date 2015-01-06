@@ -62,6 +62,8 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 	private static final int RESULT_SETTINGS = 1;
 	String color_background_choice, font_color_choice;
 
+	String chosen_accout_string;
+
 	//Total number of messages
 	String message_count_string;
 	int message_count_int;
@@ -324,7 +326,7 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		RemoteViews v1 = new RemoteViews(c.getPackageName(), R.layout.widget_mail_layout);
 
 		//Set the username
-		v1.setTextViewText(R.id.widget_mail_username, selectedAccount.userName);
+		v1.setTextViewText(R.id.widget_mail_username, chosen_accout_string);
 		//Set the message count
 
 		if (tag_chosen.equalsIgnoreCase("All")){
@@ -333,9 +335,6 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		} else {
 			v1.setTextViewText(R.id.widget_mail_message_count, message_count_string);
 		}
-
-
-
 
 		//Set the Tag choice
 		String tag_chosen_v1 = "Tag Chosen:\n" + tag_chosen;
@@ -382,6 +381,11 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		Intent result = new Intent();
 		//Updating the ID that is being called
 		result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, awID);
+		//Add the sync frequency into the intent
+		result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_OPTIONS, sync_frequency);
+		result.putExtra("Sync_Frequency_mail_widget", sync_frequency);
+		result.putExtra("Username_mail_widget", chosen_accout_string);
+		result.putExtra("Tag_mail_widget", tag_chosen);
 		//Confirm the result works then set it
 		setResult(RESULT_OK, result);
 
@@ -395,12 +399,12 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		if (parent == widget_mail_config_spinner_account){
 			//Get the position within the spinner
 			int position0 = widget_mail_config_spinner_account.getSelectedItemPosition();
-			String word_in_spinner = user_accounts.get(position0);
-			Log.d("SelectMessage.onItemSelected assigning selected account", "word in spinner "+ word_in_spinner);
+			chosen_accout_string = user_accounts.get(position0);
+			Log.d("SelectMessage.onItemSelected assigning selected account", "word in spinner "+ chosen_accout_string);
 
 			if (tag_chosen.equalsIgnoreCase("All")){
 				//Check the account via the spinner chosen
-				selectedAccount = AccountMan.GetAccount(word_in_spinner);
+				selectedAccount = AccountMan.GetAccount(chosen_accout_string);
 				Log.d("SelectMessage.onItemSelected", "Tag All Calling View Inbox");
 				String request = Inbox.ViewInbox(selectedAccount.sessionID);
 				Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);
@@ -411,7 +415,7 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 				s.execute(sRequest);
 			} else {
 				//Check the account via the spinner chosen
-				selectedAccount = AccountMan.GetAccount(word_in_spinner);
+				selectedAccount = AccountMan.GetAccount(chosen_accout_string);
 				Log.d("SelectMessage.onItemSelected", "Tag Word in spinner Calling View Inbox");
 				String request = Inbox.ViewInbox(selectedAccount.sessionID, tag_chosen);
 				Log.d("SelectMessage.OnSelectedItem Request to server", request);
@@ -434,7 +438,7 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 				Log.d("SelectMessage.onItemSelected", "Second Spinner Tag All Calling View Inbox");
 				String request = Inbox.ViewInbox(selectedAccount.sessionID);
 				Log.d("SelectMessage.OnSelectedItem Request to server", request);
-				Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);
+				Log.d("Select Message Activity, SelectedAccount", chosen_accout_string);
 				ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
 				AsyncServer s = new AsyncServer();
 				s.addListener(this);
@@ -443,7 +447,7 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 				Log.d("SelectMessage.onItemSelected", "Second Spinner word in spinner All Calling View Inbox");
 				String request = Inbox.ViewInbox(selectedAccount.sessionID, tag_chosen);
 				Log.d("SelectMessage.OnSelectedItem Request to server", request);
-				Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);
+				Log.d("Select Message Activity, SelectedAccount", chosen_accout_string);
 				ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
 				AsyncServer s = new AsyncServer();
 				s.addListener(this);
