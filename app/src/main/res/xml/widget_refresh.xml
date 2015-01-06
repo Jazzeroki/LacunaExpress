@@ -6,8 +6,8 @@
     android:minResizeHeight="40dp"
     android:minHeight="40dp"
     android:minResizeWidth="40dp"
-    android:updatePeriodMillis="1800000"
+
     android:resizeMode="horizontal|vertical">
     <!-- 1,800,000 milliseconds is a 1/2 hour -->
-
+    <!-- android:updatePeriodMillis="1800000" -->
 </appwidget-provider>

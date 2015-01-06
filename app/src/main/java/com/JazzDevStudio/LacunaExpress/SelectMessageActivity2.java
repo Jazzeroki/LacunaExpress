@@ -260,7 +260,7 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 			String word_in_spinner = user_accounts.get(position0);
             Log.d("SelectMessage.onItemSelected assigning selected account", "word in spinner "+ word_in_spinner);
 
-			if (tag_chosen == "All"){
+			if (tag_chosen.equalsIgnoreCase("All")){
 				//Check the account via the spinner chosen
 				selectedAccount = AccountMan.GetAccount(word_in_spinner);
                 Log.d("SelectMessage.onItemSelected", "Tag All Calling View Inbox");
@@ -271,7 +271,6 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 				AsyncServer s = new AsyncServer();
 				s.addListener(this);
 				s.execute(sRequest);
-				Log.d("LOOK HERE", "REQUEST SENT 266");
 			} else {
 				//Check the account via the spinner chosen
 				selectedAccount = AccountMan.GetAccount(word_in_spinner);
@@ -283,7 +282,6 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 				AsyncServer s = new AsyncServer();
 				s.addListener(this);
 				s.execute(sRequest);
-				Log.d("LOOK HERE", "REQUEST SENT 274");
 			}
 		}
 
@@ -355,7 +353,6 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 
 			counter++;
 			loadMessagesIntoArray();
-			Log.d("Testing yo", "Has been called");
 			Log.d("The Counter is at:", Integer.toString(counter));
 
 			mAdapter = new StableArrayAdapter(this,R.layout.opaque_text_view, master_message_list, mTouchListener, from_data);

@@ -61,7 +61,17 @@ public class L extends Activity{
 				 //
 			 } 
 		}, (1000*seconds));
-	}	
-	
+	}
+
+	//For displaying really long Strings (IE JSON Requests)
+	public static void longInfo(String str) {
+		if(str.length() > 4000) {
+			Log.d("Lengthy String", str.substring(0, 4000));
+			longInfo(str.substring(4000));
+		} else
+			Log.d("Lengthy String", str);
+	}
+
+
 	//
 }

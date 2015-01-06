@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -17,9 +16,8 @@ import static android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID;
  * This will configure the widget that is placed on the user's homescreen.
  */
 public class MailWidgetManager extends AppWidgetProvider {
-	String sync_frequency = "15"; //Default value
-	String username;
-	String tag = "All";
+
+
 
 	//When the app is deleted, this will run, pop up window indicating it has been tossed
 	public void onDeleted(Context context, int[] appWidgetIds) {
@@ -37,14 +35,19 @@ public class MailWidgetManager extends AppWidgetProvider {
 	public void onReceive(Context context, Intent intent) {
 		super.onReceive(context, intent);
 
-		Bundle getData = intent.getExtras();
+		/*
+		Bundle getData =intent.getExtras();
 		String received_Sync_Frequency_mail_widget = getData.getString("Sync_Frequency_mail_widget");
 		String received_Username_mail_widget = getData.getString("Username_mail_widget");
 		String received_Tag_mail_widget = getData.getString("Tag_mail_widget");
 		sync_frequency = received_Sync_Frequency_mail_widget;
 		username = received_Username_mail_widget;
 		tag = received_Tag_mail_widget;
-		//
+
+		//Log.d("Checking in MailWidgetManager Passing Vars", sync_frequency);
+		//Log.d("Checking in MailWidgetManager Passing Vars", username);
+		//Log.d("Checking in MailWidgetManager Passing Vars", tag);
+		*/
 
 	}
 
@@ -56,6 +59,8 @@ public class MailWidgetManager extends AppWidgetProvider {
 		 */
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
+
+
 		//Checks the number of widgets implemented
 		final int N = appWidgetIds.length;
 		//Loops through all of the widgets one by one
@@ -65,10 +70,9 @@ public class MailWidgetManager extends AppWidgetProvider {
 
 			Intent intent = new Intent(context, MailWidgetUpdateService.class);
 			intent.putExtra(EXTRA_APPWIDGET_ID, app_widget_ID);
-			intent.putExtra("Sync_Frequency_mail_widget", sync_frequency);
-			intent.putExtra("Username_mail_widget", username);
-			intent.putExtra("Tag_mail_widget", tag);
-			//context.startService(intent);/////////////////////////
+
+			context.startService(intent);
+			//context.getApplicationContext().bindService(intent, )
 
 			//TESTING FOR NOW
 

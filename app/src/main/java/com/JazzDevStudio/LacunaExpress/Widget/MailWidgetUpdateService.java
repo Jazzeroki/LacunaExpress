@@ -7,27 +7,41 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
+import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Inbox;
 import com.JazzDevStudio.LacunaExpress.LEWrapperResponse.Response;
+import com.JazzDevStudio.LacunaExpress.MISCClasses.SharedPrefs;
 import com.JazzDevStudio.LacunaExpress.R;
 import com.JazzDevStudio.LacunaExpress.SelectMessageActivity2;
+import com.JazzDevStudio.LacunaExpress.Server.AsyncServer;
+import com.JazzDevStudio.LacunaExpress.Server.ServerRequest;
+import com.JazzDevStudio.LacunaExpress.Server.serverFinishedListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import static android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID;
 import static android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID;
+import static com.JazzDevStudio.LacunaExpress.MISCClasses.L.longInfo;
 
 /**
  * Useful information on this class setup @: http://programmerbruce.blogspot.com/2011/04/simple-complete-app-widget-part-1.html
  */
 //This class manages the service for the Mail widget updating
-public class MailWidgetUpdateService extends IntentService {
+public class MailWidgetUpdateService extends IntentService implements serverFinishedListener {
+
+	//Shared Preferences Stuff
+	public static final String PREFS_NAME = "LacunaExpress";
+	SharedPrefs sp = new SharedPrefs();
+	SharedPreferences settings;
+	SharedPreferences.Editor editor;
 
 	//Package Name
 	private static final String PACKAGE_NAME = MailWidgetUpdateService.class.getPackage().getName();
@@ -36,6 +50,10 @@ public class MailWidgetUpdateService extends IntentService {
 
 	//App widget manager
 	AppWidgetManager awm;
+
+	//For pinging the server
+	String message_count_string;
+	int message_count_int;
 
 	//Account / Message info
 	AccountInfo selectedAccount;
@@ -59,28 +77,27 @@ public class MailWidgetUpdateService extends IntentService {
 
 	protected void onHandleIntent(Intent intent) {
 		awm = AppWidgetManager.getInstance(this);
-
 		int incomingAppWidgetId = intent.getIntExtra(EXTRA_APPWIDGET_ID, INVALID_APPWIDGET_ID);
 
-		String received_Sync_Frequency_mail_widget = intent.getStringExtra("Sync_Frequency_mail_widget");
-		String received_Username_mail_widget = intent.getStringExtra("Username_mail_widget");
-		String received_Tag_mail_widget = intent.getStringExtra("Tag_mail_widget");
-		Log.d(TAG, "Sync Frequency is at:"+received_Sync_Frequency_mail_widget);
-		Log.d(TAG, "Username is "+received_Sync_Frequency_mail_widget);
-		Log.d(TAG, "Tag chosen is:"+received_Sync_Frequency_mail_widget);
+		//Shared preferences
+		settings = getSharedPreferences(PREFS_NAME, 0);
+		editor = settings.edit();
+
+		//GET all values from shared preferences
+		String str = Integer.toString(incomingAppWidgetId);
+		String sync_freq = sp.getString(settings, str + "::" + "sync_frequency", "15");
+		Log.d("Shared Preferences Pulled: Sync Freq", sync_freq);
 
 		if (incomingAppWidgetId != INVALID_APPWIDGET_ID) {
 			//Update one widget if == 1s
-			updateOneAppWidget(awm, incomingAppWidgetId,
-					received_Sync_Frequency_mail_widget, received_Username_mail_widget, received_Tag_mail_widget);
+			updateOneAppWidget(awm, incomingAppWidgetId);
 		} else {
 			//Update all widgets if >1
-			updateAllAppWidgets(awm, received_Sync_Frequency_mail_widget,
-					received_Username_mail_widget, received_Tag_mail_widget);
+			updateAllAppWidgets(awm);
 		}
 
 		//Schedules the next update
-		scheduleNextUpdate(received_Sync_Frequency_mail_widget);
+		scheduleNextUpdate(sync_freq);
 	}
 
 	/**
@@ -118,19 +135,14 @@ public class MailWidgetUpdateService extends IntentService {
 	 * For each widget on the user's home screen, updates its display
 	 * with all the information and registers click handling for its buttons.
 	 */
-	private void updateAllAppWidgets(AppWidgetManager appWidgetManager,
-	                                 String sync_freq, String username, String tag) {
+	private void updateAllAppWidgets(AppWidgetManager appWidgetManager) {
 		ComponentName appWidgetProvider = new ComponentName(this, MailWidgetManager.class);
 		int[] appWidgetIds = appWidgetManager.getAppWidgetIds(appWidgetProvider);
 		int N = appWidgetIds.length;
 		for (int i = 0; i < N; i++)
 		{
 			int appWidgetId = appWidgetIds[i];
-			String sync_frequency = sync_freq;
-			String aUsername = username;
-			String aTag = tag;
-			Log.d(TAG, "Sync Frequency is at:"+sync_frequency);
-			updateOneAppWidget(appWidgetManager, appWidgetId, sync_frequency, aUsername, aTag);
+			updateOneAppWidget(appWidgetManager, appWidgetId);
 		}
 	}
 
@@ -138,8 +150,29 @@ public class MailWidgetUpdateService extends IntentService {
 	 * Updates the individual widgets passed in via the for loop
 	 * and registers click handling for its buttons.
 	 */
-	private void updateOneAppWidget(AppWidgetManager appWidgetManager, int app_widget_ID, String sync_freq,
-	                                String username, String tag) {
+	private void updateOneAppWidget(AppWidgetManager appWidgetManager, int app_widget_ID) {
+
+		//Shared preferences
+		settings = getSharedPreferences(PREFS_NAME, 0);
+		editor = settings.edit();
+
+		String str = Integer.toString(app_widget_ID);
+		String user_name = sp.getString(settings, str + "::" + "chosen_accout_string", "Silmarilos (US1)");
+		message_count_string = sp.getString(settings, str + "::" + "message_count_string", "1000000"); //String defined in global
+		String tag_chosen = sp.getString(settings, str + "::" + "tag_chosen", "All");
+		String color_background_choice = sp.getString(settings, str + "::" + "color_background_choice", "White");
+		String font_color_choice = sp.getString(settings, str + "::" + "font_color_choice", "Black");
+
+		//Int converted from message_count_string
+		message_count_int = Integer.parseInt(message_count_string);
+
+		//Check values in logs
+		Log.d("Shared Preferences Pulled: user_name", user_name);
+		Log.d("Shared Preferences Pulled: message_count_string", message_count_string);
+		Log.d("Shared Preferences Pulled: tag_chosen", tag_chosen);
+		Log.d("Shared Preferences Pulled: color_background_choice", color_background_choice);
+		Log.d("Shared Preferences Pulled: font_color_choice", font_color_choice);
+
 		//Setup and send server request code
 		//This block populates user_accounts for values to display in the select account spinner
 		ReadInAccounts();
@@ -155,6 +188,32 @@ public class MailWidgetUpdateService extends IntentService {
 					selectedAccount = i;
 			}
 		}
+		//This will read the username like Silmarilos (US1) or TMT (PT)
+
+		if (tag_chosen.equalsIgnoreCase("All")){
+			//Check the account via the spinner chosen
+			selectedAccount = AccountMan.GetAccount(user_name);
+			Log.d("SelectMessage.onItemSelected", "Tag All Calling View Inbox");
+			//
+			String request = Inbox.ViewInbox(selectedAccount.sessionID);
+			Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);
+			Log.d("SelectMessage.OnSelectedItem Request to server", request);
+			ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
+			AsyncServer s = new AsyncServer();
+			s.addListener(this);
+			s.execute(sRequest);
+		} else {
+			//Check the account via the spinner chosen
+			selectedAccount = AccountMan.GetAccount(user_name);
+			Log.d("SelectMessage.onItemSelected", "Tag Word in spinner Calling View Inbox");
+			String request = Inbox.ViewInbox(selectedAccount.sessionID, tag_chosen);
+			Log.d("SelectMessage.OnSelectedItem Request to server", request);
+			Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);
+			ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
+			AsyncServer s = new AsyncServer();
+			s.addListener(this);
+			s.execute(sRequest);
+		}
 
 		//Setup a remoteview referring to the context (Param1) and relating to the widget (Param2)
 		RemoteViews v1 = new RemoteViews(PACKAGE_NAME, R.layout.widget_mail_layout);
@@ -163,37 +222,31 @@ public class MailWidgetUpdateService extends IntentService {
 		v1.setTextViewText(R.id.widget_mail_username, selectedAccount.userName);
 		//Set the message count
 
-		if (tag.equalsIgnoreCase("All")){
-			//message_count_string = Integer.toString(message_count_int);///////////////////
-			//v1.setTextViewText(R.id.widget_mail_message_count, message_count_string);////////////////
+		if (tag_chosen.equalsIgnoreCase("All")){
+			message_count_string = Integer.toString(message_count_int);
+			v1.setTextViewText(R.id.widget_mail_message_count, message_count_string);
 		} else {
-			//v1.setTextViewText(R.id.widget_mail_message_count, message_count_string);///////////////////
+			v1.setTextViewText(R.id.widget_mail_message_count, message_count_string);
 		}
 
 		//Set the Tag choice
-		String tag_chosen_v1 = "Tag Chosen:\n" + tag;
+		String tag_chosen_v1 = "Tag Chosen:\n" + tag_chosen;
 		v1.setTextViewText(R.id.widget_mail_tag_choice, tag_chosen_v1);
 
-		//Log.d("Background choice is: ", color_background_choice);///////////////////
-		//Log.d("Font color is: ", font_color_choice);///////////////////
-
 		//Set the background color of the widget
-		//v1.setInt(R.id.widget_mail_layout, "setBackgroundColor", android.graphics.Color.parseColor(color_background_choice));///////////////////
+		v1.setInt(R.id.widget_mail_layout, "setBackgroundColor", android.graphics.Color.parseColor(color_background_choice));
 
 		//Set the font color of the widget text
-		//v1.setInt(R.id.widget_mail_username, "setTextColor", android.graphics.Color.parseColor(font_color_choice));///////////////////
-		//v1.setInt(R.id.widget_mail_message_count, "setTextColor", android.graphics.Color.parseColor(font_color_choice));///////////////////
-		//v1.setInt(R.id.widget_mail_tag_choice, "setTextColor", android.graphics.Color.parseColor(font_color_choice));///////////////////
+		v1.setInt(R.id.widget_mail_username, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
+		v1.setInt(R.id.widget_mail_message_count, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
+		v1.setInt(R.id.widget_mail_tag_choice, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
 
-		//Decrease the font size on this tag as it is the longest word and goes off the screen
-		if (tag.equalsIgnoreCase("Correspondence")){
-			v1.setFloat(R.id.widget_mail_tag_choice, "setTextSize", 10);
-		}
+		v1.setFloat(R.id.widget_mail_tag_choice, "setTextSize", 10);
 
 		//Check the number of messages and adjust the font size of the number of messages displayed. Prevents out of bounds on screen
-		//int total_num_messages = Integer.parseInt(message_count_string);///////////////////
-		//Log.d("Num messages", message_count_string);///////////////////
-		int total_num_messages = 0;////////////////////////////////////////////////////////////////////////////
+		int total_num_messages = Integer.parseInt(message_count_string);
+		Log.d("Num messages", message_count_string);
+
 		if (total_num_messages < 10){
 			v1.setFloat(R.id.widget_mail_message_count, "setTextSize", 32);
 		} else if (total_num_messages >=10 && total_num_messages <100){
@@ -222,7 +275,42 @@ public class MailWidgetUpdateService extends IntentService {
 		Log.d("SelectAccountActivity.ReadInAccounts", String.valueOf(accounts.size()));
 	}
 
+	//Parse the code
+	public void onResponseReceived(String reply) {
+		longInfo(reply); //Print out the data
+
+		if(!reply.equals("error")) {
+			Log.d("Deserializing Response", "Creating Response Object");
+			messagesReceived = true;
+			//Getting new messages, clearing list first.
+			Response r = new Gson().fromJson(reply, Response.class);
+			messages_array.clear();
+			messages_array = r.result.messages;
+
+			Log.d("295", "Hit");
+			message_count_int = r.result.status.empire.has_new_messages;
+			message_count_string = r.result.message_count;
+
+		} else {
+			Log.d("Error with Reply", "Error in onResponseReceived()");
+		}
+	}
+
+
 	//NOT USED ATM
+
+			/*
+			//For displaying really long Strings (IE JSON Requests)
+			public static void longInfo(String str) {
+				if(str.length() > 4000) {
+					Log.i("Lengthy String", str.substring(0, 4000));
+					longInfo(str.substring(4000));
+				} else
+					Log.i("Lengthy String", str);
+			}
+			 */
+
+
 			/*
 			/**
 			 * Configures "Save Code" button clicks to pass the current

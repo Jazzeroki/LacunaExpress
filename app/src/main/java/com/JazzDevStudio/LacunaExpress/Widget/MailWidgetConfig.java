@@ -35,6 +35,7 @@ import com.JazzDevStudio.LacunaExpress.AddAccount;
 import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Inbox;
 import com.JazzDevStudio.LacunaExpress.LEWrapperResponse.Response;
 import com.JazzDevStudio.LacunaExpress.MISCClasses.L;
+import com.JazzDevStudio.LacunaExpress.MISCClasses.SharedPrefs;
 import com.JazzDevStudio.LacunaExpress.R;
 import com.JazzDevStudio.LacunaExpress.SelectMessageActivity2;
 import com.JazzDevStudio.LacunaExpress.Server.AsyncServer;
@@ -58,6 +59,12 @@ import java.util.ArrayList;
  -Update
  */
 public class MailWidgetConfig extends Activity implements serverFinishedListener, View.OnClickListener, OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
+
+	//Shared Preferences Stuff
+	public static final String PREFS_NAME = "LacunaExpress";
+	SharedPrefs sp = new SharedPrefs();
+	SharedPreferences settings;
+	SharedPreferences.Editor editor;
 
 	private static final int RESULT_SETTINGS = 1;
 	String color_background_choice, font_color_choice;
@@ -258,6 +265,10 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 
 		c = MailWidgetConfig.this;
 
+		//Shared preferences
+		settings = getSharedPreferences(PREFS_NAME, 0);
+		editor = settings.edit();
+
 		//Set it to false by default
 		notifications_option = false;
 
@@ -320,7 +331,8 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 
 	//Create the widget here
 	public void onClick(View v) {
-		//Set the string = to the info getText
+
+
 
 		//Setup a remoteview referring to the context (Param1) and relating to the widget (Param2)
 		RemoteViews v1 = new RemoteViews(c.getPackageName(), R.layout.widget_mail_layout);
@@ -351,10 +363,14 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		v1.setInt(R.id.widget_mail_message_count, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
 		v1.setInt(R.id.widget_mail_tag_choice, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
 
-		//Decrease the font size on this tag as it is the longest word and goes off the screen
-		if (tag_chosen.equalsIgnoreCase("Correspondence")){
-			v1.setFloat(R.id.widget_mail_tag_choice, "setTextSize", 10);
-		}
+		v1.setFloat(R.id.widget_mail_tag_choice, "setTextSize", 10);
+		/*
+			//TESTING
+			//Decrease the font size on this tag as it is the longest word and goes off the screen
+			if (tag_chosen.equalsIgnoreCase("Correspondence")){
+				v1.setFloat(R.id.widget_mail_tag_choice, "setTextSize", 10);
+			}
+		*/
 
 		//Check the number of messages and adjust the font size of the number of messages displayed. Prevents out of bounds on screen
 		int total_num_messages = Integer.parseInt(message_count_string);
@@ -386,6 +402,17 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		result.putExtra("Sync_Frequency_mail_widget", sync_frequency);
 		result.putExtra("Username_mail_widget", chosen_accout_string);
 		result.putExtra("Tag_mail_widget", tag_chosen);
+
+		//THIS IS TEMPORARY - Shared Preferences
+		String str = Integer.toString(awID);
+		sp.putString(editor, str + "::" + "sync_frequency", Integer.toString(sync_frequency)); //Sync Frequency in minutes
+		sp.putString(editor, str + "::" + "chosen_accout_string", chosen_accout_string); //Username
+		sp.putString(editor, str + "::" + "message_count_string", message_count_string); //Message count
+		sp.putString(editor, str + "::" + "tag_chosen", tag_chosen); //Tag Chosen
+		sp.putString(editor, str + "::" + "color_background_choice", color_background_choice); //Background Color
+		sp.putString(editor, str + "::" + "font_color_choice", font_color_choice); //Font color
+		editor.commit();
+
 		//Confirm the result works then set it
 		setResult(RESULT_OK, result);
 
