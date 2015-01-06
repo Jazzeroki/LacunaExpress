@@ -18,7 +18,7 @@
     android:id="@+id/image_text_vew_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/tv_background_with_divider"
+
     android:textAppearance="?android:attr/textAppearanceListItemSmall"
     android:gravity="center_vertical"
     android:drawableLeft="@drawable/ic_launcher"

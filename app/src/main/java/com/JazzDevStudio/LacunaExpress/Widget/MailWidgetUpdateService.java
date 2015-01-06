@@ -120,11 +120,13 @@ public class MailWidgetUpdateService extends IntentService implements serverFini
 		//Great AlarmManager Tutorial - http://www.programcreek.com/java-api-examples/index.php?api=android.app.AlarmManager
 		int sync_interval_int = Integer.parseInt(sync_interval);
 		// The update frequency should be user configurable.
+		Log.d("TIME TO LOOK: Current:", Long.toString(System.currentTimeMillis()));
 		final Calendar c=Calendar.getInstance();
 		c.setTimeInMillis(System.currentTimeMillis());
 		c.set(Calendar.SECOND,0);
 		c.set(Calendar.MILLISECOND,0);
 		c.add(Calendar.MINUTE,sync_interval_int); //Add X minutes where X is the sync interval
+		Log.d("TIME TO LOOK: Update", Long.toString(c.getTimeInMillis()));
 
 		//Manages the sync interval
 		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -157,7 +159,7 @@ public class MailWidgetUpdateService extends IntentService implements serverFini
 		editor = settings.edit();
 
 		String str = Integer.toString(app_widget_ID);
-		String user_name = sp.getString(settings, str + "::" + "chosen_accout_string", "Silmarilos (US1)");
+		String user_name = sp.getString(settings, str + "::" + "chosen_accout_string", "Silmarilos  (US1)");
 		message_count_string = sp.getString(settings, str + "::" + "message_count_string", "1000000"); //String defined in global
 		String tag_chosen = sp.getString(settings, str + "::" + "tag_chosen", "All");
 		String color_background_choice = sp.getString(settings, str + "::" + "color_background_choice", "White");
@@ -175,8 +177,10 @@ public class MailWidgetUpdateService extends IntentService implements serverFini
 
 		//Setup and send server request code
 		//This block populates user_accounts for values to display in the select account spinner
-		ReadInAccounts();
+		ReadInAccounts(user_name);
+
 		if(accounts.size() == 1){
+			//selectedAccount = accounts.get(0);
 			selectedAccount = accounts.get(0);
 			Log.d("SelectMessage.Initialize", "only 1 account setting as default"+selectedAccount.displayString);
 			user_accounts.add(selectedAccount.displayString);
@@ -269,10 +273,11 @@ public class MailWidgetUpdateService extends IntentService implements serverFini
 	}
 
 	//Reads in the accounts from the existing objects
-	private void ReadInAccounts() {
-		Log.d("SelectAccountActivity.ReadInAccounts", "checking for file" + AccountMan.CheckForFile());
-		accounts = AccountMan.GetAccounts();
-		Log.d("SelectAccountActivity.ReadInAccounts", String.valueOf(accounts.size()));
+	private void ReadInAccounts(String username1) {
+		Log.d("MailWidgetUpdateService.ReadInAccounts", "checking for file" + AccountMan.CheckForFile());
+		accounts = AccountMan.GetAccounts();///////////////////////////
+		//selectedAccount = AccountMan.GetAccount(username1);
+		Log.d("MailWidgetUpdateService.ReadInAccounts", String.valueOf(accounts.size()));
 	}
 
 	//Parse the code

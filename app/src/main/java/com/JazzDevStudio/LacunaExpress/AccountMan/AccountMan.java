@@ -45,11 +45,15 @@ public class AccountMan {
     }
     public static AccountInfo GetAccount(String displayString){
         Accounts a = Load();
+	    Log.d("AccountMan.Java-48", displayString);
         for(AccountInfo i: a.accounts){
-            if(i.displayString.equals(displayString))
-                return i;
+            if(i.displayString.contains(displayString)) {
+	            Log.d("AccountMan.Java-51", displayString);
+	            return i;
+            }
         }
-        return null;
+        Log.d("AccountMan.Java", "Returning Null");
+	    return null;
     }
     public static void AddAccount(AccountInfo acnt){
     	Log.d("AccountInfo username", acnt.userName);
