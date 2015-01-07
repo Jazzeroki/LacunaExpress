@@ -336,6 +336,7 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		//Setup a remoteview referring to the context (Param1) and relating to the widget (Param2)
 		RemoteViews v1 = new RemoteViews(c.getPackageName(), R.layout.widget_mail_layout);
 
+		/*
 		//Set the username
 		v1.setTextViewText(R.id.widget_mail_username, chosen_accout_string);
 		//Set the message count
@@ -363,13 +364,6 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		v1.setInt(R.id.widget_mail_tag_choice, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
 
 		v1.setFloat(R.id.widget_mail_tag_choice, "setTextSize", 10);
-		/*
-			//TESTING
-			//Decrease the font size on this tag as it is the longest word and goes off the screen
-			if (tag_chosen.equalsIgnoreCase("Correspondence")){
-				v1.setFloat(R.id.widget_mail_tag_choice, "setTextSize", 10);
-			}
-		*/
 
 		//Check the number of messages and adjust the font size of the number of messages displayed. Prevents out of bounds on screen
 		int total_num_messages = Integer.parseInt(message_count_string);
@@ -383,6 +377,7 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		} else {
 			v1.setFloat(R.id.widget_mail_message_count, "setTextSize", 20);
 		}
+		*/
 
 		//IMPORTANT! The following code opens the class when clicked
 		Intent intent = new Intent(c, SelectMessageActivity2.class);

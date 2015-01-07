@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.JazzDevStudio.LacunaExpress.R;
@@ -15,10 +16,7 @@ import com.JazzDevStudio.LacunaExpress.R;
  */
 public class MailWidgetManager extends AppWidgetProvider {
 
-	/*
-	TempService mservice;
-	boolean status_service;
-	*/
+	String sync_frequency, username, tag;
 
 	//When the app is deleted, this will run, pop up window indicating it has been tossed
 	public void onDeleted(Context context, int[] appWidgetIds) {
@@ -36,19 +34,9 @@ public class MailWidgetManager extends AppWidgetProvider {
 	public void onReceive(Context context, Intent intent) {
 		super.onReceive(context, intent);
 
-		/*
-		Bundle getData =intent.getExtras();
-		String received_Sync_Frequency_mail_widget = getData.getString("Sync_Frequency_mail_widget");
-		String received_Username_mail_widget = getData.getString("Username_mail_widget");
-		String received_Tag_mail_widget = getData.getString("Tag_mail_widget");
-		sync_frequency = received_Sync_Frequency_mail_widget;
-		username = received_Username_mail_widget;
-		tag = received_Tag_mail_widget;
 
-		//Log.d("Checking in MailWidgetManager Passing Vars", sync_frequency);
-		//Log.d("Checking in MailWidgetManager Passing Vars", username);
-		//Log.d("Checking in MailWidgetManager Passing Vars", tag);
-		*/
+
+
 
 	}
 
@@ -63,11 +51,14 @@ public class MailWidgetManager extends AppWidgetProvider {
 
 		ComponentName thisWidget = new ComponentName(context, MailWidgetManager.class);
 
-		//Checks the number of widgets implemented
-		final int N = appWidgetIds.length;
+		String message_count_string;
+		int message_count_int;
 
 		int[] allWidgetIDs = appWidgetManager.getAppWidgetIds(thisWidget);
 
+		for (int i = 0; i<allWidgetIDs.length; i++){
+			Log.d("Check For Widget IDs Here: ", Integer.toString(allWidgetIDs[i]));
+		}
 		// Build the intent to call the service
 		Intent intent = new Intent(context.getApplicationContext(),
 				TempService.class);
