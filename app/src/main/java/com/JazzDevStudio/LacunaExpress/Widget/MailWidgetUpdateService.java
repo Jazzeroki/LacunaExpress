@@ -47,6 +47,8 @@ public class MailWidgetUpdateService extends IntentService implements serverFini
 	private static final String PACKAGE_NAME = MailWidgetUpdateService.class.getPackage().getName();
 	//For Log statements
 	private static final String TAG = "MailWidgetUpdateService:";
+	//For debugging
+	private final String debug_tag = "MailWidgetUpdateService: ";
 
 	//App widget manager
 	AppWidgetManager awm;
@@ -66,16 +68,25 @@ public class MailWidgetUpdateService extends IntentService implements serverFini
 	Boolean messagesReceived = false;
 
 	//Constructor
-	public MailWidgetUpdateService(String name){
-		super(name);
+	public MailWidgetUpdateService(){
+		super("MailWidgetUpdateService"); //Name of the worker thread
 	}
 
-	//Creates a service named MailWidgetUpdateService
-	public MailWidgetUpdateService(){
-		this("MailWidgetUpdateService");
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		Log.d(debug_tag, "Service has been Created");
+	}
+
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		Log.d(debug_tag, "Service has started");
+		return super.onStartCommand(intent, flags, startId);
 	}
 
 	protected void onHandleIntent(Intent intent) {
+		Log.d(debug_tag, "onHandleIntent method called");
+
 		awm = AppWidgetManager.getInstance(this);
 		int incomingAppWidgetId = intent.getIntExtra(EXTRA_APPWIDGET_ID, INVALID_APPWIDGET_ID);
 
@@ -98,6 +109,13 @@ public class MailWidgetUpdateService extends IntentService implements serverFini
 
 		//Schedules the next update
 		scheduleNextUpdate(sync_freq);
+	}
+
+	//When the thread is destroyed
+	@Override
+	public void onDestroy() {
+		Log.d(debug_tag, "Service has stopped");
+		super.onDestroy();
 	}
 
 	/**
@@ -199,7 +217,7 @@ public class MailWidgetUpdateService extends IntentService implements serverFini
 			selectedAccount = AccountMan.GetAccount(user_name);
 			Log.d("SelectMessage.onItemSelected", "Tag All Calling View Inbox");
 			//
-			String request = Inbox.ViewInbox(selectedAccount.sessionID);
+			String request = Inbox.ViewInbox(selectedAccount.sessionID);   //Error is here
 			Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);
 			Log.d("SelectMessage.OnSelectedItem Request to server", request);
 			ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
