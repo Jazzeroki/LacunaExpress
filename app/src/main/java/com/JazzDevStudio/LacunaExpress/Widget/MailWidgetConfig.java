@@ -114,8 +114,6 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 	private String tag_chosen = "All";
 	static final String[] messageTags = {"All", "Correspondence", "Tutorial", "Medal", "Intelligence", "Alert", "Attack", "Colonization", "Complaint", "Excavator", "Mission", "Parliament", "Probe", "Spies", "Trade", "Fissure"};
 
-
-	//
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -327,6 +325,7 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		}
 		awm = AppWidgetManager.getInstance(c);
 	}
+
 
 
 	//Create the widget here
@@ -635,4 +634,8 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 			Log.d("Error with Reply", "Error in onResponseReceived()");
 		}
 	}
+
+	//Activate the service
+
+	//Deactivate the service
 }

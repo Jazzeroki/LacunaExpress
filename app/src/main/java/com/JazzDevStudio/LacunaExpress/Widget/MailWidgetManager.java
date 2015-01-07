@@ -2,22 +2,23 @@ package com.JazzDevStudio.LacunaExpress.Widget;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.JazzDevStudio.LacunaExpress.R;
-
-import static android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID;
 
 /**
  * This will configure the widget that is placed on the user's homescreen.
  */
 public class MailWidgetManager extends AppWidgetProvider {
 
-
+	/*
+	TempService mservice;
+	boolean status_service;
+	*/
 
 	//When the app is deleted, this will run, pop up window indicating it has been tossed
 	public void onDeleted(Context context, int[] appWidgetIds) {
@@ -60,28 +61,67 @@ public class MailWidgetManager extends AppWidgetProvider {
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 
+		ComponentName thisWidget = new ComponentName(context, MailWidgetManager.class);
 
 		//Checks the number of widgets implemented
 		final int N = appWidgetIds.length;
+
+		int[] allWidgetIDs = appWidgetManager.getAppWidgetIds(thisWidget);
+
+		// Build the intent to call the service
+		Intent intent = new Intent(context.getApplicationContext(),
+				TempService.class);
+		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIDs);
+
+		// Update the widgets via the service
+		context.startService(intent);
+
+		/*
 		//Loops through all of the widgets one by one
 		for (int i = 0; i < N; i++){
 			//Get the app ID of the widget bring worked on here
 			int app_widget_ID = appWidgetIds[i];
 
-			Intent intent = new Intent(context, MailWidgetUpdateService.class);
+			//Intent intent = new Intent(context, MailWidgetUpdateService.class);
+			Intent intent = new Intent(context, TempService.class);
 			intent.putExtra(EXTRA_APPWIDGET_ID, app_widget_ID);
 
-			context.startService(intent);
+			/*
+			context.bindService(intent, sc, Context.BIND_AUTO_CREATE);
+			status_service = true;
+			Log.d("MailWidgetManager", "Service successfully binded");
+			*/
+
+			//context.startService(intent); /////////////////////////////////////
 			//context.getApplicationContext().bindService(intent, )
 
 			//TESTING FOR NOW
 
+			/*
 				//References the widget layout
 				RemoteViews v = new RemoteViews(context.getPackageName(), R.layout.widget_mail_layout);
 				//Updates the widget
 				appWidgetManager.updateAppWidget(app_widget_ID, v);
+			*/
+
+		//}////////////////
+
+	}
+
+	/*
+	//Service connection
+	private ServiceConnection sc = new ServiceConnection() {
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			TempService.LocalBinder binder = (TempService.LocalBinder) service;
+			mservice = binder.getService();
+			status_service = true;
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
 
 		}
-	}
+	};
+	*/
 }
 

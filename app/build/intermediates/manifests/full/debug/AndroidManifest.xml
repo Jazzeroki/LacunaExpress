@@ -85,8 +85,16 @@
                 android:resource="@xml/widget_refresh" />
         </receiver>
 
-        <!-- Service -->
-        <service android:name="com.JazzDevStudio.LacunaExpress.Widget.MailWidgetUpdateService" />
+        <!--
+        Service
+        <service
+            android:name = "com.JazzDevStudio.LacunaExpress.Widget.MailWidgetUpdateService"
+            android:exported="false"/>
+        -->
+
+        <service
+            android:name="com.JazzDevStudio.LacunaExpress.Widget.TempService"
+            android:exported="false" />
 
         <!-- This activity configures the widget -->
         <activity
