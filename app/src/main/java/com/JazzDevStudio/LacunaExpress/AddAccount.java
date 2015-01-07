@@ -215,6 +215,8 @@ public class AddAccount extends Activity implements serverFinishedListener, OnCl
 
 	//This handles the click methods of the buttons so when they are clicked, the actions are defined here
 	public void onClick(View v) {
+
+        //this can likely be removed
 		TextView serverReply = (TextView) findViewById(R.id.textViewServerReply);
 		//serverReply.setText((CharSequence) "A button was clicked", EditText.BufferType.NORMAL);
 		//serverReply.setText((CharSequence) "A button was clicked", EditText.BufferType.NORMAL);

@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-
     package="com.JazzDevStudio.LacunaExpress"
     android:versionCode="2"
-    android:versionName="0.11" >
-
-    <!-- SDK Levels -->
+    android:versionName="0.11" > <!-- SDK Levels -->
     <uses-sdk
         android:minSdkVersion="17"
         android:targetSdkVersion="20" />
@@ -14,8 +11,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    
-    
+
+    <!-- End Manifest -->
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <!-- Application Declarations -->
     <application
         android:allowBackup="true"
@@ -23,98 +22,99 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
-        
         <!-- This is the Splash Screen -->
         <activity
             android:name=".Splash"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    
-    	<!-- This is the Add Account Activity -->
-    	<activity 
-    	    android:name="com.JazzDevStudio.LacunaExpress.AddAccount"
-    	    android:label="@string/app_name" >
+
+        <!-- This is the Add Account Activity -->
+        <activity
+            android:name=".AddAccount"
+            android:label="@string/app_name" >
         </activity>
-            	
-    	<!-- This is the Add Select Account Activity for selecting the login account-->
-    	<activity 
-    	    android:name="com.JazzDevStudio.LacunaExpress.SelectAccount"
-    	    android:label="@string/app_name" >
+
+        <!-- This is the Add Select Account Activity for selecting the login account -->
+        <activity
+            android:name=".SelectAccount"
+            android:label="@string/app_name" >
         </activity>
-        
-    	<!-- This is the Modify Account Info Activity -->
-    	<activity 
-    	    android:name="com.JazzDevStudio.LacunaExpress.ModifyAccount"
-    	    android:label="@string/app_name" >
+
+        <!-- This is the Modify Account Info Activity -->
+        <activity
+            android:name=".ModifyAccount"
+            android:label="@string/app_name" >
         </activity>
-    		
-    	<!-- This is the User Settings Activity -->
-    	<activity 
-    	    android:name="com.JazzDevStudio.LacunaExpress.UserSettingActivity"
-    	    android:label="@string/app_name" >
+
+        <!-- This is the User Settings Activity -->
+        <activity
+            android:name=".UserSettingActivity"
+            android:label="@string/app_name" >
         </activity>
 
         <!-- This is the Select Message2 Activity -->
         <activity
-            android:name="com.JazzDevStudio.LacunaExpress.SelectMessageActivity2"
+            android:name=".SelectMessageActivity2"
             android:label="@string/app_name" >
         </activity>
-    	
-    	<!-- This is the compose message activity -->
-    	<activity 
-    	    android:name="com.JazzDevStudio.LacunaExpress.ComposeMessageActivity"
-    	    android:label="@string/app_name" >
-        </activity>
 
+        <!-- This is the compose message activity -->
         <activity
-            android:name="com.JazzDevStudio.LacunaExpress.ReadMessageActivity"
+            android:name=".ComposeMessageActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".ReadMessageActivity"
             android:label="@string/app_name" >
         </activity>
 
-
-        <!-- This manages the widget updates  -->
+        <!-- This manages the widget updates -->
         <receiver
-            android:name="com.JazzDevStudio.LacunaExpress.Widget.MailWidgetManager"
-            android:label="Lacuna Express Mail Widget"
-            >
+            android:name=".Widget.MailWidgetManager"
+            android:label="Lacuna Express Mail Widget" >
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_refresh" />
         </receiver>
 
-        <!-- Service
-        <service
-            android:name = "com.JazzDevStudio.LacunaExpress.Widget.MailWidgetUpdateService"
-            android:exported="false"/>
--->
-
-        <service
-            android:name=".Widget.TempService"
-            android:exported="false"/>
+        <!-- Service -->
+        <service android:name=".Widget.MailWidgetUpdateService" />
 
         <!-- This activity configures the widget -->
         <activity
-            android:name="com.JazzDevStudio.LacunaExpress.Widget.MailWidgetConfig"
+            android:name=".Widget.MailWidgetConfig"
             android:label="Widget Configuration" >
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"
-                    />
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
 
-
-
         <!-- End Application -->
+        <activity
+            android:name="com.jazzdevstudio.lacunaexpress.Utilities"
+            android:label="@string/title_activity_utilities"
+            android:parentActivityName=".SelectAccount" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.JazzDevStudio.LacunaExpress.SelectAccount" />
+        </activity>
+        <activity
+            android:name="com.jazzdevstudio.lacunaexpress.PlanetOptions"
+            android:label="@string/title_activity_planet_options"
+            android:parentActivityName="com.jazzdevstudio.lacunaexpress.Utilities" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jazzdevstudio.lacunaexpress.Utilities" />
+        </activity>
     </application>
 
-
-<!-- End Manifest -->
 </manifest>
-
