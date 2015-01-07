@@ -7,5 +7,6 @@
     <string name="use_positions">Use Positions</string>
     <string name="delete_selected">Delete Selected</string>
     <string name="title_activity_utilities">Utilities</string>
+    <string name="title_activity_planet_options">PlanetOptions</string>
 
 </resources>

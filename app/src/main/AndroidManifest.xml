@@ -13,7 +13,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- End Manifest -->
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- Application Declarations -->
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- Application Declarations -->
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -104,6 +106,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.JazzDevStudio.LacunaExpress.SelectAccount" />
+        </activity>
+        <activity
+            android:name="com.jazzdevstudio.lacunaexpress.PlanetOptions"
+            android:label="@string/title_activity_planet_options"
+            android:parentActivityName="com.jazzdevstudio.lacunaexpress.Utilities" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jazzdevstudio.lacunaexpress.Utilities" />
         </activity>
     </application>
 
