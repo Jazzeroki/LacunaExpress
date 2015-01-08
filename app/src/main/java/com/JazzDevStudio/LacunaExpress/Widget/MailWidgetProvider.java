@@ -14,7 +14,7 @@ import com.JazzDevStudio.LacunaExpress.R;
 /**
  * This will configure the widget that is placed on the user's homescreen.
  */
-public class MailWidgetManager extends AppWidgetProvider {
+public class MailWidgetProvider extends AppWidgetProvider {
 
 	String sync_frequency, username, tag;
 
@@ -49,7 +49,7 @@ public class MailWidgetManager extends AppWidgetProvider {
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 
-		ComponentName thisWidget = new ComponentName(context, MailWidgetManager.class);
+		ComponentName thisWidget = new ComponentName(context, MailWidgetProvider.class);
 
 		String message_count_string;
 		int message_count_int;
@@ -83,10 +83,10 @@ public class MailWidgetManager extends AppWidgetProvider {
 			Log.d("MailWidgetManager", "Service successfully binded");
 			*/
 
-			//context.startService(intent); /////////////////////////////////////
-			//context.getApplicationContext().bindService(intent, )
+		//context.startService(intent); /////////////////////////////////////
+		//context.getApplicationContext().bindService(intent, )
 
-			//TESTING FOR NOW
+		//TESTING FOR NOW
 
 			/*
 				//References the widget layout
