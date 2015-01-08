@@ -5,6 +5,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.JazzDevStudio.LacunaExpress.R;
@@ -12,10 +15,11 @@ import com.JazzDevStudio.LacunaExpress.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PlanetOptions extends ActionBarActivity {
+public class PlanetOptions extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
     com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo account;
     Spinner planetList;
     ArrayList<String> planetNamesForSpinner = new ArrayList<>();
+    ArrayAdapter<String> planetAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +35,9 @@ public class PlanetOptions extends ActionBarActivity {
         }
         if(account != null){
             planetNamesForSpinner = account.colonies.values();
+            planetList.onItemSelectedListener(this);
+            planetAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, planetNamesForSpinner);
+            planetList.setAdapter(planetAdapter);
         }
     }
 
@@ -55,5 +62,15 @@ public class PlanetOptions extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
