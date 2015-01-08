@@ -25,7 +25,7 @@ import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
 
 public class SelectAccount extends Activity implements OnClickListener, AdapterView.OnItemSelectedListener {
 	ArrayList<AccountInfo> accounts;
-	Button modifyAccount, addAccount, bMail;
+	Button modifyAccount, addAccount, bMail, utilities;
 	Spinner account_list;
 	String selectedAccount, word_in_spinner;
     Boolean modifyAccountActivity = false;
@@ -98,6 +98,7 @@ public class SelectAccount extends Activity implements OnClickListener, AdapterV
     	modifyAccount = (Button) findViewById(R.id.select_account_modify);
     	addAccount = (Button) findViewById(R.id.select_account_add);
     	bMail = (Button) findViewById(R.id.select_account_mail);
+        utilities = (Button) findViewById(R.id.buttonSelectAccountUtilities);
     	
     	modifyAccount.setOnClickListener(this);
     	addAccount.setOnClickListener(this);
@@ -223,7 +224,16 @@ public class SelectAccount extends Activity implements OnClickListener, AdapterV
 				e.printStackTrace();
 			}
 			break;	
-			
+        case R.id.buttonSelectAccountUtilities:
+            try{
+                Intent openActivity = new Intent (this, Utilities.class);
+                String text_display_string = account_list.getSelectedItem().toString();
+                openActivity.putExtra("displayString", text_display_string);
+                startActivity(openActivity);
+            }catch(Exception e){
+
+            }
+
 		}
 	}
 
