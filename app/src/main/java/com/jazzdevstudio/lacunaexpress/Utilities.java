@@ -1,4 +1,4 @@
-package com.jazzdevstudio.lacunaexpress;
+package com.JazzDevStudio.LacunaExpress;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
