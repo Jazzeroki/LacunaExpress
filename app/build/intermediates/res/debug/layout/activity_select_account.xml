@@ -56,4 +56,12 @@
         android:layout_marginTop="52dp"
         android:text="Mail" />
 
-</RelativeLayout><!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/layout/activity_select_account.xml -->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Utilities"
+        android:id="@+id/buttonSelectAccountUtilities"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout><!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/layout/activity_select_account.xml -->

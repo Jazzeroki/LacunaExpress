@@ -156,7 +156,7 @@ public class MailWidgetUpdateService extends IntentService implements serverFini
 	 * with all the information and registers click handling for its buttons.
 	 */
 	private void updateAllAppWidgets(AppWidgetManager appWidgetManager) {
-		ComponentName appWidgetProvider = new ComponentName(this, MailWidgetManager.class);
+		ComponentName appWidgetProvider = new ComponentName(this, MailWidgetProvider.class);
 		int[] appWidgetIds = appWidgetManager.getAppWidgetIds(appWidgetProvider);
 		int N = appWidgetIds.length;
 		for (int i = 0; i < N; i++)

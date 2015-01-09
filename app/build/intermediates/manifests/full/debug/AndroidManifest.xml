@@ -12,7 +12,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- End Application -->
 
+
+    <!-- End Manifest -->
     <!-- End Manifest -->
     <!-- Application Declarations -->
     <application
@@ -74,7 +78,7 @@
 
         <!-- This manages the widget updates -->
         <receiver
-            android:name="com.JazzDevStudio.LacunaExpress.Widget.MailWidgetManager"
+            android:name="com.JazzDevStudio.LacunaExpress.Widget.TempWidgetProvider"
             android:label="Lacuna Express Mail Widget" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -85,27 +89,21 @@
                 android:resource="@xml/widget_refresh" />
         </receiver>
 
-        <!--
-        Service
-        <service
-            android:name = "com.JazzDevStudio.LacunaExpress.Widget.MailWidgetUpdateService"
-            android:exported="false"/>
-        -->
-
-        <service
-            android:name="com.JazzDevStudio.LacunaExpress.Widget.TempService"
-            android:exported="false" />
+        <!-- Service -->
+        <service android:name="com.JazzDevStudio.LacunaExpress.Widget.TempService" />
 
         <!-- This activity configures the widget -->
         <activity
             android:name="com.JazzDevStudio.LacunaExpress.Widget.MailWidgetConfig"
             android:label="Widget Configuration" >
+        </activity>
+        <activity
+            android:name="com.JazzDevStudio.LacunaExpress.Widget.TempWidgetConfig"
+            android:label="Widget Config" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-
-        <!-- End Application -->
     </application>
 
 </manifest>

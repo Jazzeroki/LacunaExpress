@@ -11,9 +11,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <!-- End Manifest -->
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
 
     <!-- Application Declarations -->
     <application
@@ -75,7 +76,7 @@
 
         <!-- This manages the widget updates -->
         <receiver
-            android:name=".Widget.MailWidgetProvider"
+            android:name=".Widget.TempWidgetProvider"
             android:label="Lacuna Express Mail Widget" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -87,34 +88,26 @@
         </receiver>
 
         <!-- Service -->
-        <service android:name=".Widget.MailWidgetUpdateService" />
+        <service android:name=".Widget.TempService" />
 
         <!-- This activity configures the widget -->
         <activity
             android:name=".Widget.MailWidgetConfig"
             android:label="Widget Configuration" >
+
+        </activity>
+
+        <activity
+            android:name=".Widget.TempWidgetConfig"
+            android:label="Widget Config">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
+
         </activity>
 
-        <!-- End Application -->
-        <activity
-            android:name="com.jazzdevstudio.lacunaexpress.Utilities"
-            android:label="@string/title_activity_utilities"
-            android:parentActivityName=".SelectAccount" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.JazzDevStudio.LacunaExpress.SelectAccount" />
-        </activity>
-        <activity
-            android:name="com.jazzdevstudio.lacunaexpress.PlanetOptions"
-            android:label="@string/title_activity_planet_options"
-            android:parentActivityName="com.jazzdevstudio.lacunaexpress.Utilities" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jazzdevstudio.lacunaexpress.Utilities" />
-        </activity>
     </application>
+    <!-- End Application -->
 
+<!--End Manifest -->
 </manifest>

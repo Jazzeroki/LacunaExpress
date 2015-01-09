@@ -1,23 +1,30 @@
 package com.JazzDevStudio.LacunaExpress.Widget;
 
+import android.app.PendingIntent;
+import android.app.Service;
 import android.appwidget.AppWidgetManager;
-import android.content.Context;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.RemoteViewsService;
 
+import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
+import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
+import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Inbox;
+import com.JazzDevStudio.LacunaExpress.LEWrapperResponse.Response;
 import com.JazzDevStudio.LacunaExpress.MISCClasses.SharedPrefs;
 import com.JazzDevStudio.LacunaExpress.R;
+import com.JazzDevStudio.LacunaExpress.Server.AsyncServer;
+import com.JazzDevStudio.LacunaExpress.Server.ServerRequest;
+import com.JazzDevStudio.LacunaExpress.Server.serverFinishedListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class TempService extends RemoteViewsService {
-
-	private static final String LOG = "de.vogella.android.widget.example";
-	private static final String PACKAGE_NAME = TempService.class.getPackage().getName();
+public class TempService extends Service implements serverFinishedListener {
+	private static final String LOG = "com.JazzDevStudio.LacunaExpress.Widget.TempService";
 
 	//Shared Preferences Stuff
 	public static final String PREFS_NAME = "LacunaExpress";
@@ -25,210 +32,175 @@ public class TempService extends RemoteViewsService {
 	SharedPreferences settings;
 	SharedPreferences.Editor editor;
 
-	public RemoteViewsFactory onGetViewFactory(Intent intent) {
-		return new StackRemoteViewsFactory(this.getApplicationContext(), intent);
+	//Account info
+	AccountInfo selectedAccount;
+	//For storing all account files
+	ArrayList<AccountInfo> accounts;
+	//ArrayList of display strings for the spinner
+	ArrayList<String> user_accounts = new ArrayList<String>();
+
+	//Messages Info
+	ArrayList<Response.Messages> messages_array = new ArrayList<Response.Messages>();
+	Boolean messagesReceived = false;
+	private String tag_chosen = "All";
+
+	String message_count_string_test;
+	int message_count_int_test;
+
+	//Object
+	//MailCountObjects mo = new MailCountObjects();
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+
+		message_count_string_test = "-2";
+		message_count_int_test = -2;
 	}
 
-	class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
-		private static final int mCount = 10;
-		private List<WidgetItem> mWidgetItems = new ArrayList<WidgetItem>();
-		private Context mContext;
-		private int mAppWidgetId;
-
-		public StackRemoteViewsFactory(Context context, Intent intent) {
-			mContext = context;
-			mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-					AppWidgetManager.INVALID_APPWIDGET_ID);
-		}
-
-		public void onCreate() {
-			// In onCreate() you setup any connections / cursors to your data
-			// source. Heavy lifting,
-			// for example downloading or creating content etc, should be deferred
-			// to onDataSetChanged()
-			// or getViewAt(). Taking more than 20 seconds in this call will result
-			// in an ANR.
-			for (int i = 0; i < mCount; i++) {
-				mWidgetItems.add(new WidgetItem(i + "!"));
-			}
-
-			// We sleep for 3 seconds here to show how the empty view appears in the
-			// interim.
-			// The empty view is set in the StackWidgetProvider and should be a
-			// sibling of the
-			// collection view.
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-
-		public void onDestroy() {
-			// In onDestroy() you should tear down anything that was setup for your
-			// data source,
-			// eg. cursors, connections, etc.
-			mWidgetItems.clear();
-		}
-
-		public int getCount() {
-			return mCount;
-		}
-
-		public RemoteViews getViewAt(int position) {
-			// position will always range from 0 to getCount() - 1.
-
-			// We construct a remote views item based on our widget item xml file,
-			// and set the
-			// text based on the position.
-			RemoteViews rv = new RemoteViews(mContext.getPackageName(),
-					R.layout.widget_item);
-			if (position % 2 == 0) {
-				rv.setImageViewResource(R.id.widget_item, R.drawable.fire);
-			} else {
-				rv.setImageViewResource(R.id.widget_item, R.drawable.ente);
-			}
-			// rv.setTextViewText(R.id.widget_item,
-			// mWidgetItems.get(position).text);
-
-			// Next, we set a fill-intent which will be used to fill-in the pending
-			// intent template
-			// which is set on the collection view in StackWidgetProvider.
-			Bundle extras = new Bundle();
-			extras.putInt(StackWidgetProvider.EXTRA_ITEM, position);
-			Intent fillInIntent = new Intent();
-			fillInIntent.putExtras(extras);
-			rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
-
-			// You can do heaving lifting in here, synchronously. For example, if
-			// you need to
-			// process an image, fetch something from the network, etc., it is ok to
-			// do it here,
-			// synchronously. A loading view will show up in lieu of the actual
-			// contents in the
-			// interim.
-			try {
-				System.out.println("Loading view " + position);
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
-			// Return the remote views object.
-			return rv;
-		}
-
-		public RemoteViews getLoadingView() {
-			// You can create a custom loading view (for instance when getViewAt()
-			// is slow.) If you
-			// return null here, you will get the default loading view.
-			return null;
-		}
-
-		public int getViewTypeCount() {
-			return 1;
-		}
-
-		public long getItemId(int position) {
-			return position;
-		}
-
-		public boolean hasStableIds() {
-			return true;
-		}
-
-		public void onDataSetChanged() {
-			// This is triggered when you call AppWidgetManager
-			// notifyAppWidgetViewDataChanged
-			// on the collection view corresponding to this factory. You can do
-			// heaving lifting in
-			// here, synchronously. For example, if you need to process an image,
-			// fetch something
-			// from the network, etc., it is ok to do it here, synchronously. The
-			// widget will remain
-			// in its current state while work is being done here, so you don't need
-			// to worry about
-			// locking up the widget.
-		}
-	}
-
-	/*
 	@Override
 	public void onStart(Intent intent, int startId) {
 		Log.i(LOG, "Called");
-		// create some random data
 
+		//Begin pulling data:
+		//This block populates user_accounts for values to display in the select account spinner
+		ReadInAccounts();
+		if(accounts.size() == 1){
+			selectedAccount = accounts.get(0);
+			Log.d("SelectMessage.Initialize", "only 1 account setting as default" + selectedAccount.displayString);
+			user_accounts.add(selectedAccount.displayString);
+		} else{
+			for(AccountInfo i: accounts){
+				Log.d("SelectMessage.Initialize", "Multiple accounts found, Setting Default account to selected account: "+i.displayString); //
+				user_accounts.add(i.displayString);
+				if(i.defaultAccount)
+					selectedAccount = i;
+			}
+		}
+
+		Log.d(LOG, "OnStart Called");
 		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this
 				.getApplicationContext());
 
-		//Pulls the widget IDs into an array
-		int[] allWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+		int[] allWidgetIds = intent
+				.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
 
-		ComponentName thisWidget = new ComponentName(getApplicationContext(), MailWidgetManager.class);
+		ComponentName thisWidget = new ComponentName(getApplicationContext(),
+				TempWidgetProvider.class);
 		int[] allWidgetIds2 = appWidgetManager.getAppWidgetIds(thisWidget);
-
-		//Issue begins here with passing in of widgetIDs. Need to look into them again
-
 		Log.w(LOG, "From Intent" + String.valueOf(allWidgetIds.length));
 		Log.w(LOG, "Direct" + String.valueOf(allWidgetIds2.length));
 
-		for (int i = 0; i< allWidgetIds.length; i++){
-			int widgetID = allWidgetIds[i];
-			int widgetID2 = allWidgetIds2[i];
-			Log.d("Widget ID 1: ", Integer.toString(widgetID));
-			Log.d("Widget ID 2: ", Integer.toString(widgetID2));
-		}
-
-
+		int counter = 1;
+		//All widget IDs are passed through this for loop. Run calculations / set text fields here
 		for (int widgetId : allWidgetIds) {
-			//Shared preferences
+
+
+			//Retrieve all of the data from the shared preferences held via app widget ID
 			settings = getSharedPreferences(PREFS_NAME, 0);
 			editor = settings.edit();
 
-			String message_count_string;
-			int message_count_int;
-
 			String str = Integer.toString(widgetId);
-			String user_name = sp.getString(settings, str + "::" + "chosen_accout_string", "Silmarilos  (US1)");
-			message_count_string = sp.getString(settings, str + "::" + "message_count_string", "1000000"); //String defined in global
+
+
+
+			String user_name = sp.getString(settings, str + "::" + "chosen_accout_string", "Loading...");
 			String tag_chosen = sp.getString(settings, str + "::" + "tag_chosen", "All");
 			String color_background_choice = sp.getString(settings, str + "::" + "color_background_choice", "White");
 			String font_color_choice = sp.getString(settings, str + "::" + "font_color_choice", "Black");
-			String sync_freq = sp.getString(settings, str + "::" + "sync_frequency", "1");
+			//These 2 will be defined when a response is received from the server, still left in default values however.
+			//message_count_string = "1000000";//sp.getString(settings, str + "::" + "message_count_string", "1000000"); //String defined in global
+			//message_count_int = 1000000;//(int) sp.getInt(settings, str + "::" + "message_count_int", 1000000);
 
-			//Int converted from message_count_string
-			message_count_int = Integer.parseInt(message_count_string);
+			AccountMan.GetAccount(user_name);
+			//Depending on tag chosen, different URI request sent in JSON
+			if (tag_chosen.equalsIgnoreCase("All")){
+				Log.d("SelectMessage.onItemSelected", "Second Spinner Tag All Calling View Inbox");
+				String request = Inbox.ViewInbox(selectedAccount.sessionID);
+				Log.d("SelectMessage.OnSelectedItem Request to server", request);
+				Log.d("Select Message Activity, SelectedAccount", user_name);
+				ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
+				AsyncServer s = new AsyncServer();
+				s.addListener(this);
+				s.execute(sRequest);
+			} else {
+				Log.d("SelectMessage.onItemSelected", "Second Spinner word in spinner All Calling View Inbox");
+				String request = Inbox.ViewInbox(selectedAccount.sessionID, tag_chosen);
+				Log.d("SelectMessage.OnSelectedItem Request to server", request);
+				Log.d("Select Message Activity, SelectedAccount", user_name);
+				ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
+				AsyncServer s = new AsyncServer();
+				s.addListener(this);
+				s.execute(sRequest);
+			}
 
-			//Check values in logs
-			Log.d("Shared Preferences Pulled: user_name", user_name);
-			Log.d("Shared Preferences Pulled: message_count_string", message_count_string);
-			Log.d("Shared Preferences Pulled: tag_chosen", tag_chosen);
-			Log.d("Shared Preferences Pulled: color_background_choice", color_background_choice);
-			Log.d("Shared Preferences Pulled: font_color_choice", font_color_choice);
-
-			//Testing to see if I can get the timer to work
-			scheduleNextUpdate(sync_freq);
 
 
-			// create some random data
-			Log.d("Widget IDs are: ", Integer.toString(widgetId));
-			int number = (new Random().nextInt(100));
+
+
+
+
+			Log.d("Widget ID in Service: ", Integer.toString(widgetId));
+			Log.d("Counter is at: ", Integer.toString(counter));
+			counter++;
 
 			RemoteViews remoteViews = new RemoteViews(this
 					.getApplicationContext().getPackageName(),
 					R.layout.widget_mail_layout);
-			Log.w("WidgetExample", String.valueOf(number));
-			// Set the text
-
-			String tag_chosen_v1 = "Tag Chosen:\n" + tag_chosen;
-			remoteViews.setTextViewText(R.id.widget_mail_tag_choice, tag_chosen_v1);
-
-			remoteViews.setTextViewText(R.id.widget_mail_message_count,
-					"Random: " + String.valueOf(number));
 
 			// Register an onClickListener
 			Intent clickIntent = new Intent(this.getApplicationContext(),
-					MailWidgetManager.class);
+					TempWidgetProvider.class);
+
+
+
+			//Set all remote IDs with respective texts
+			//Set the username
+			remoteViews.setTextViewText(R.id.widget_mail_username, user_name);
+			//Set the message count
+
+			if (tag_chosen.equalsIgnoreCase("All")){
+				String temp_message_count = Integer.toString(message_count_int_test);
+				Log.d("Message count string is at:", temp_message_count);
+				remoteViews.setTextViewText(R.id.widget_mail_message_count, temp_message_count);
+				Log.d("Firing 1", "Firing 1");
+			} else {
+				Log.d("Message count string is at:", message_count_string_test);
+				remoteViews.setTextViewText(R.id.widget_mail_message_count, message_count_string_test);
+				Log.d("Firing 2", "Firing 2");
+			}
+
+			//Set the Tag choice
+			String tag_chosen_v1 = "Tag Chosen:\n" + tag_chosen;
+			remoteViews.setTextViewText(R.id.widget_mail_tag_choice, tag_chosen_v1);
+
+			Log.d("Background choice is: ", color_background_choice);
+			Log.d("Font color is: ", font_color_choice);
+
+			//Set the background color of the widget
+			remoteViews.setInt(R.id.widget_mail_layout, "setBackgroundColor", android.graphics.Color.parseColor(color_background_choice));
+
+			//Set the font color of the widget text
+			remoteViews.setInt(R.id.widget_mail_username, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
+			remoteViews.setInt(R.id.widget_mail_message_count, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
+			remoteViews.setInt(R.id.widget_mail_tag_choice, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
+
+			remoteViews.setFloat(R.id.widget_mail_tag_choice, "setTextSize", 10);
+
+			//Check the number of messages and adjust the font size of the number of messages displayed. Prevents out of bounds on screen
+			int total_num_messages = Integer.parseInt(message_count_string_test);
+			Log.d("Num messages", message_count_string_test);
+			if (total_num_messages < 10){
+				remoteViews.setFloat(R.id.widget_mail_message_count, "setTextSize", 32);
+			} else if (total_num_messages >=10 && total_num_messages <100){
+				remoteViews.setFloat(R.id.widget_mail_message_count, "setTextSize", 28);
+			} else if (total_num_messages >= 100 && total_num_messages <999){
+				remoteViews.setFloat(R.id.widget_mail_message_count, "setTextSize", 24);
+			} else {
+				remoteViews.setFloat(R.id.widget_mail_message_count, "setTextSize", 20);
+			}
+
+			/* Finished setting remoteViews */
 
 			clickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 			clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,
@@ -244,31 +216,44 @@ public class TempService extends RemoteViewsService {
 		super.onStart(intent, startId);
 	}
 
-	private void scheduleNextUpdate(String sync_interval) {
-		Intent changeWidgetIntent = new Intent(this, this.getClass());
-		// A content URI for this Intent may be unnecessary.
-		changeWidgetIntent.setData(Uri.parse("content://" + PACKAGE_NAME + "/change_passcode"));
-		PendingIntent pendingIntent1 = PendingIntent.getService(this, 0, changeWidgetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+	//Reads in the accounts from the existing objects
+	private void ReadInAccounts() {
+		Log.d("SelectAccountActivity.ReadInAccounts", "checking for file" + AccountMan.CheckForFile());
+		//accounts.clear(); //Clear any leftover accounts
+		accounts = AccountMan.GetAccounts();
+		Log.d("SelectAccountActivity.ReadInAccounts", String.valueOf(accounts.size()));
+	}
 
-		//Great AlarmManager Tutorial - http://www.programcreek.com/java-api-examples/index.php?api=android.app.AlarmManager
-		int sync_interval_int = Integer.parseInt(sync_interval);
-		// The update frequency should be user configurable.
-		Log.d("TIME TO LOOK: Current:", Long.toString(System.currentTimeMillis()));
-		final Calendar c=Calendar.getInstance();
-		c.setTimeInMillis(System.currentTimeMillis());
-		c.set(Calendar.SECOND,0);
-		c.set(Calendar.MILLISECOND,0);
-		c.add(Calendar.MINUTE,sync_interval_int); //Add X minutes where X is the sync interval
-		Log.d("TIME TO LOOK: Update", Long.toString(c.getTimeInMillis()));
+	//When a response is received from the server
+	public void onResponseReceived(String reply) {
+		if(!reply.equals("error")) {
+			Log.d("Deserializing Response", "Creating Response Object");
+			messagesReceived = true;
+			//Getting new messages, clearing list first.
+			Response r = new Gson().fromJson(reply, Response.class);
+			messages_array.clear();
+			messages_array = r.result.messages;
 
-		//Manages the sync interval
-		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC, c.getTimeInMillis(), pendingIntent1); //Update the timer to match the new sync time
+			int message_count_int_received = r.result.status.empire.has_new_messages;
+			String message_count_string_received = r.result.message_count;
+
+			Log.d("Message Count local string = ", message_count_string_received);
+			Log.d("Message Count local int = ", Integer.toString(message_count_int_received));
+
+			message_count_string_test = message_count_string_received;
+			message_count_int_test = message_count_int_received;
+
+			Log.d("Message Count global string = ", message_count_string_test);
+			Log.d("Message Count global int = ", Integer.toString(message_count_int_test));
+
+		} else {
+			Log.d("Error with Reply", "Error in onResponseReceived()");
+		}
 	}
 
 	@Override
 	public IBinder onBind(Intent intent) {
+		Log.d(LOG, "IBinder Called");
 		return null;
 	}
-	*/
 }
