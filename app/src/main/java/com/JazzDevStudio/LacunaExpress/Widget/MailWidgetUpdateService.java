@@ -1,14 +1,14 @@
 package com.JazzDevStudio.LacunaExpress.Widget;
 
-import android.app.AlarmManager;
-import android.app.IntentService;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -24,18 +24,20 @@ import com.JazzDevStudio.LacunaExpress.Server.ServerRequest;
 import com.JazzDevStudio.LacunaExpress.Server.serverFinishedListener;
 import com.google.gson.Gson;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Calendar;
-
-import static android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID;
-import static android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID;
-import static com.JazzDevStudio.LacunaExpress.MISCClasses.L.longInfo;
+import java.util.List;
 
 /**
  * Useful information on this class setup @: http://programmerbruce.blogspot.com/2011/04/simple-complete-app-widget-part-1.html
  */
 //This class manages the service for the Mail widget updating
-public class MailWidgetUpdateService extends IntentService implements serverFinishedListener {
+public class MailWidgetUpdateService extends Service implements serverFinishedListener {
+	private static final String LOG = "com.JazzDevStudio.LacunaExpress.Widget.TempService";
 
 	//Shared Preferences Stuff
 	public static final String PREFS_NAME = "LacunaExpress";
@@ -43,164 +45,37 @@ public class MailWidgetUpdateService extends IntentService implements serverFini
 	SharedPreferences settings;
 	SharedPreferences.Editor editor;
 
-	//Package Name
-	private static final String PACKAGE_NAME = MailWidgetUpdateService.class.getPackage().getName();
-	//For Log statements
-	private static final String TAG = "MailWidgetUpdateService:";
-	//For debugging
-	private final String debug_tag = "MailWidgetUpdateService: ";
-
-	//App widget manager
-	AppWidgetManager awm;
-
-	//For pinging the server
-	String message_count_string;
-	int message_count_int;
-
-	//Account / Message info
+	//Account info
 	AccountInfo selectedAccount;
 	//For storing all account files
 	ArrayList<AccountInfo> accounts;
 	//ArrayList of display strings for the spinner
 	ArrayList<String> user_accounts = new ArrayList<String>();
+
 	//Messages Info
 	ArrayList<Response.Messages> messages_array = new ArrayList<Response.Messages>();
 	Boolean messagesReceived = false;
+	private String tag_chosen = "All";
 
-	//Constructor
-	public MailWidgetUpdateService(){
-		super("MailWidgetUpdateService"); //Name of the worker thread
-	}
+	int awid;
+
+	String message_count_string, message_count_int;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Log.d(debug_tag, "Service has been Created");
 	}
 
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.d(debug_tag, "Service has started");
-		return super.onStartCommand(intent, flags, startId);
-	}
+	public void onStart(Intent intent, int startId) {
+		Log.i(LOG, "Called");
 
-	protected void onHandleIntent(Intent intent) {
-		Log.d(debug_tag, "onHandleIntent method called");
-
-		awm = AppWidgetManager.getInstance(this);
-		int incomingAppWidgetId = intent.getIntExtra(EXTRA_APPWIDGET_ID, INVALID_APPWIDGET_ID);
-
-		//Shared preferences
-		settings = getSharedPreferences(PREFS_NAME, 0);
-		editor = settings.edit();
-
-		//GET all values from shared preferences
-		String str = Integer.toString(incomingAppWidgetId);
-		String sync_freq = sp.getString(settings, str + "::" + "sync_frequency", "15");
-		Log.d("Shared Preferences Pulled: Sync Freq", sync_freq);
-
-		if (incomingAppWidgetId != INVALID_APPWIDGET_ID) {
-			//Update one widget if == 1s
-			updateOneAppWidget(awm, incomingAppWidgetId);
-		} else {
-			//Update all widgets if >1
-			updateAllAppWidgets(awm);
-		}
-
-		//Schedules the next update
-		scheduleNextUpdate(sync_freq);
-	}
-
-	//When the thread is destroyed
-	@Override
-	public void onDestroy() {
-		Log.d(debug_tag, "Service has stopped");
-		super.onDestroy();
-	}
-
-	/**
-	 * Schedules the next App Widget update to occur  as per
-	 * the user defined update / sync interval.  Any
-	 * previously scheduled App Widget update is effectively
-	 * canceled and replaced by the newly scheduled update.
-	 *
-	 * The scheduled update does not wake the device up.  If
-	 * the update is scheduled to start while the device is
-	 * asleep, it will not run until the next time the device
-	 * is awake.
-	 */
-	private void scheduleNextUpdate(String sync_interval) {
-		Intent changeWidgetIntent = new Intent(this, this.getClass());
-		// A content URI for this Intent may be unnecessary.
-		changeWidgetIntent.setData(Uri.parse("content://" + PACKAGE_NAME + "/change_passcode"));
-		PendingIntent pendingIntent1 = PendingIntent.getService(this, 0, changeWidgetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-		//Great AlarmManager Tutorial - http://www.programcreek.com/java-api-examples/index.php?api=android.app.AlarmManager
-		int sync_interval_int = Integer.parseInt(sync_interval);
-		// The update frequency should be user configurable.
-		Log.d("TIME TO LOOK: Current:", Long.toString(System.currentTimeMillis()));
-		final Calendar c=Calendar.getInstance();
-		c.setTimeInMillis(System.currentTimeMillis());
-		c.set(Calendar.SECOND,0);
-		c.set(Calendar.MILLISECOND,0);
-		c.add(Calendar.MINUTE,sync_interval_int); //Add X minutes where X is the sync interval
-		Log.d("TIME TO LOOK: Update", Long.toString(c.getTimeInMillis()));
-
-		//Manages the sync interval
-		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC, c.getTimeInMillis(), pendingIntent1); //Update the timer to match the new sync time
-	}
-
-	/**
-	 * For each widget on the user's home screen, updates its display
-	 * with all the information and registers click handling for its buttons.
-	 */
-	private void updateAllAppWidgets(AppWidgetManager appWidgetManager) {
-		ComponentName appWidgetProvider = new ComponentName(this, MailWidgetProvider.class);
-		int[] appWidgetIds = appWidgetManager.getAppWidgetIds(appWidgetProvider);
-		int N = appWidgetIds.length;
-		for (int i = 0; i < N; i++)
-		{
-			int appWidgetId = appWidgetIds[i];
-			updateOneAppWidget(appWidgetManager, appWidgetId);
-		}
-	}
-
-	/**
-	 * Updates the individual widgets passed in via the for loop
-	 * and registers click handling for its buttons.
-	 */
-	private void updateOneAppWidget(AppWidgetManager appWidgetManager, int app_widget_ID) {
-
-		//Shared preferences
-		settings = getSharedPreferences(PREFS_NAME, 0);
-		editor = settings.edit();
-
-		String str = Integer.toString(app_widget_ID);
-		String user_name = sp.getString(settings, str + "::" + "chosen_accout_string", "Silmarilos  (US1)");
-		message_count_string = sp.getString(settings, str + "::" + "message_count_string", "1000000"); //String defined in global
-		String tag_chosen = sp.getString(settings, str + "::" + "tag_chosen", "All");
-		String color_background_choice = sp.getString(settings, str + "::" + "color_background_choice", "White");
-		String font_color_choice = sp.getString(settings, str + "::" + "font_color_choice", "Black");
-
-		//Int converted from message_count_string
-		message_count_int = Integer.parseInt(message_count_string);
-
-		//Check values in logs
-		Log.d("Shared Preferences Pulled: user_name", user_name);
-		Log.d("Shared Preferences Pulled: message_count_string", message_count_string);
-		Log.d("Shared Preferences Pulled: tag_chosen", tag_chosen);
-		Log.d("Shared Preferences Pulled: color_background_choice", color_background_choice);
-		Log.d("Shared Preferences Pulled: font_color_choice", font_color_choice);
-
-		//Setup and send server request code
+		//Begin pulling data:
 		//This block populates user_accounts for values to display in the select account spinner
-		ReadInAccounts(user_name);
-
+		ReadInAccounts();
 		if(accounts.size() == 1){
-			//selectedAccount = accounts.get(0);
 			selectedAccount = accounts.get(0);
-			Log.d("SelectMessage.Initialize", "only 1 account setting as default"+selectedAccount.displayString);
+			Log.d("SelectMessage.Initialize", "only 1 account setting as default" + selectedAccount.displayString);
 			user_accounts.add(selectedAccount.displayString);
 		} else{
 			for(AccountInfo i: accounts){
@@ -210,97 +85,144 @@ public class MailWidgetUpdateService extends IntentService implements serverFini
 					selectedAccount = i;
 			}
 		}
-		//This will read the username like Silmarilos (US1) or TMT (PT)
 
-		if (tag_chosen.equalsIgnoreCase("All")){
-			//Check the account via the spinner chosen
-			selectedAccount = AccountMan.GetAccount(user_name);
-			Log.d("SelectMessage.onItemSelected", "Tag All Calling View Inbox");
-			//
-			String request = Inbox.ViewInbox(selectedAccount.sessionID);   //Error is here
-			Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);
-			Log.d("SelectMessage.OnSelectedItem Request to server", request);
-			ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
-			AsyncServer s = new AsyncServer();
-			s.addListener(this);
-			s.execute(sRequest);
-		} else {
-			//Check the account via the spinner chosen
-			selectedAccount = AccountMan.GetAccount(user_name);
-			Log.d("SelectMessage.onItemSelected", "Tag Word in spinner Calling View Inbox");
-			String request = Inbox.ViewInbox(selectedAccount.sessionID, tag_chosen);
-			Log.d("SelectMessage.OnSelectedItem Request to server", request);
-			Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);
-			ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
-			AsyncServer s = new AsyncServer();
-			s.addListener(this);
-			s.execute(sRequest);
+		Log.d(LOG, "OnStart Called");
+		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this
+				.getApplicationContext());
+
+		int[] allWidgetIds = intent
+				.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+
+		ComponentName thisWidget = new ComponentName(getApplicationContext(),
+				MailWidgetProvider.class);
+		int[] allWidgetIds2 = appWidgetManager.getAppWidgetIds(thisWidget);
+		Log.w(LOG, "From Intent" + String.valueOf(allWidgetIds.length));
+		Log.w(LOG, "Direct" + String.valueOf(allWidgetIds2.length));
+
+		int counter = 1;
+		//All widget IDs are passed through this for loop. Run calculations / set text fields here
+		for (int widgetId : allWidgetIds) {
+
+			awid = widgetId;
+
+			//Retrieve all of the data from the shared preferences held via app widget ID
+			settings = getSharedPreferences(PREFS_NAME, 0);
+			editor = settings.edit();
+
+			String str = Integer.toString(widgetId);
+
+			RemoteViews remoteViews = new RemoteViews(this
+					.getApplicationContext().getPackageName(),
+					R.layout.widget_mail_layout);
+
+			String user_name = sp.getString(settings, str + "::" + "chosen_accout_string", "Loading...");
+			Log.d("Service username passed is: ", user_name);
+			String tag_chosen = sp.getString(settings, str + "::" + "tag_chosen", "All");
+			String color_background_choice = sp.getString(settings, str + "::" + "color_background_choice", "White");
+			String font_color_choice = sp.getString(settings, str + "::" + "font_color_choice", "Black");
+			//These 2 will be defined when a response is received from the server, still left in default values however.
+			String message_count_string = sp.getString(settings, str + "::" + "message_count_string", "1000000"); //String defined in global
+			String message_count_int = sp.getString(settings, str + "::" + "message_count_int", "1000000");
+
+			AccountMan.GetAccount(user_name);
+			//Depending on tag chosen, different URI request sent in JSON
+			if (tag_chosen.equalsIgnoreCase("All")){
+				Log.d("SelectMessage.onItemSelected", "Second Spinner Tag All Calling View Inbox");
+				String request = Inbox.ViewInbox(selectedAccount.sessionID);
+				Log.d("SelectMessage.OnSelectedItem Request to server", request);
+				Log.d("Select Message Activity, SelectedAccount", user_name);
+				ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
+				AsyncServer s = new AsyncServer();
+
+				UpdateRemoteViewsViaAsync s1 = new UpdateRemoteViewsViaAsync(MailWidgetUpdateService.this,
+						remoteViews, widgetId, tag_chosen, appWidgetManager, user_name);
+
+				s1.addListener(this);
+				s1.execute(sRequest);
+			} else {
+				Log.d("SelectMessage.onItemSelected", "Second Spinner word in spinner All Calling View Inbox");
+				String request = Inbox.ViewInbox(selectedAccount.sessionID, tag_chosen);
+				Log.d("SelectMessage.OnSelectedItem Request to server", request);
+				Log.d("Select Message Activity, SelectedAccount", user_name);
+				ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
+				AsyncServer s = new AsyncServer();
+
+				UpdateRemoteViewsViaAsync s1 = new UpdateRemoteViewsViaAsync(MailWidgetUpdateService.this,
+						remoteViews, widgetId, tag_chosen, appWidgetManager, user_name);
+
+				s1.addListener(this);
+				s1.execute(sRequest);
+			}
+
+			Log.d("Widget ID in Service: ", Integer.toString(widgetId));
+			Log.d("Counter is at: ", Integer.toString(counter));
+			counter++;
+
+
+
+			// Register an onClickListener
+			Intent clickIntent = new Intent(this.getApplicationContext(),
+					SelectMessageActivity2.class);
+
+
+
+			//Set all remote IDs with respective texts
+
+			//Set the message count
+
+
+			//Set the Tag choice
+			String tag_chosen_v1 = "Tag Chosen:\n" + tag_chosen;
+			remoteViews.setTextViewText(R.id.widget_mail_tag_choice, tag_chosen_v1);
+
+			Log.d("Background choice is: ", color_background_choice);
+			Log.d("Font color is: ", font_color_choice);
+
+			//Set the background color of the widget
+			remoteViews.setInt(R.id.widget_mail_layout, "setBackgroundColor", android.graphics.Color.parseColor(color_background_choice));
+
+			//Set the font color of the widget text
+			remoteViews.setInt(R.id.widget_mail_username, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
+			remoteViews.setInt(R.id.widget_mail_message_count, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
+			remoteViews.setInt(R.id.widget_mail_tag_choice, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
+
+			remoteViews.setFloat(R.id.widget_mail_tag_choice, "setTextSize", 10);
+
+			/* Finished setting remoteViews */
+
+			clickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+			clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,
+					allWidgetIds);
+
+			PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, clickIntent, 0);
+			//Set the onClickListener the TEXTVIEW. If the click the textview, it opens up the SelectMessageActivity2
+			remoteViews.setOnClickPendingIntent(R.id.widget_mail_message_count, pendingIntent);
+
+
+			//PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, clickIntent,
+			//PendingIntent.FLAG_UPDATE_CURRENT);
+			//remoteViews.setOnClickPendingIntent(R.id.widget_mail_message_count, pendingIntent);
+			appWidgetManager.updateAppWidget(widgetId, remoteViews);
 		}
+		stopSelf();
 
-		//Setup a remoteview referring to the context (Param1) and relating to the widget (Param2)
-		RemoteViews v1 = new RemoteViews(PACKAGE_NAME, R.layout.widget_mail_layout);
-
-		//Set the username
-		v1.setTextViewText(R.id.widget_mail_username, selectedAccount.userName);
-		//Set the message count
-
-		if (tag_chosen.equalsIgnoreCase("All")){
-			message_count_string = Integer.toString(message_count_int);
-			v1.setTextViewText(R.id.widget_mail_message_count, message_count_string);
-		} else {
-			v1.setTextViewText(R.id.widget_mail_message_count, message_count_string);
-		}
-
-		//Set the Tag choice
-		String tag_chosen_v1 = "Tag Chosen:\n" + tag_chosen;
-		v1.setTextViewText(R.id.widget_mail_tag_choice, tag_chosen_v1);
-
-		//Set the background color of the widget
-		v1.setInt(R.id.widget_mail_layout, "setBackgroundColor", android.graphics.Color.parseColor(color_background_choice));
-
-		//Set the font color of the widget text
-		v1.setInt(R.id.widget_mail_username, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
-		v1.setInt(R.id.widget_mail_message_count, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
-		v1.setInt(R.id.widget_mail_tag_choice, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
-
-		v1.setFloat(R.id.widget_mail_tag_choice, "setTextSize", 10);
-
-		//Check the number of messages and adjust the font size of the number of messages displayed. Prevents out of bounds on screen
-		int total_num_messages = Integer.parseInt(message_count_string);
-		Log.d("Num messages", message_count_string);
-
-		if (total_num_messages < 10){
-			v1.setFloat(R.id.widget_mail_message_count, "setTextSize", 32);
-		} else if (total_num_messages >=10 && total_num_messages <100){
-			v1.setFloat(R.id.widget_mail_message_count, "setTextSize", 28);
-		} else if (total_num_messages >= 100 && total_num_messages <999){
-			v1.setFloat(R.id.widget_mail_message_count, "setTextSize", 24);
-		} else {
-			v1.setFloat(R.id.widget_mail_message_count, "setTextSize", 20);
-		}
-
-		//IMPORTANT! The following code opens the class when clicked
-		Intent intent = new Intent(this, SelectMessageActivity2.class);
-		//A pending intent to launch upon clicking
-		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0); //THIS may need to be changed from 'this'
-		//Set the onClickListener the TEXTVIEW. If the click the textview, it opens up the SelectMessageActivity2
-		v1.setOnClickPendingIntent(R.id.widget_mail_message_count, pendingIntent);
-		//Update the widget with the remote view
-		appWidgetManager.updateAppWidget(app_widget_ID, v1);
-
+		super.onStart(intent, startId);
 	}
 
 	//Reads in the accounts from the existing objects
-	private void ReadInAccounts(String username1) {
-		Log.d("MailWidgetUpdateService.ReadInAccounts", "checking for file" + AccountMan.CheckForFile());
-		accounts = AccountMan.GetAccounts();///////////////////////////
-		//selectedAccount = AccountMan.GetAccount(username1);
-		Log.d("MailWidgetUpdateService.ReadInAccounts", String.valueOf(accounts.size()));
+	private void ReadInAccounts() {
+		Log.d("SelectAccountActivity.ReadInAccounts", "checking for file" + AccountMan.CheckForFile());
+		//accounts.clear(); //Clear any leftover accounts
+		accounts = AccountMan.GetAccounts();
+		Log.d("SelectAccountActivity.ReadInAccounts", String.valueOf(accounts.size()));
 	}
 
-	//Parse the code
+	//When a response is received from the server
 	public void onResponseReceived(String reply) {
-		longInfo(reply); //Print out the data
+
+		//To place data in respectice awids
+		settings = getSharedPreferences(PREFS_NAME, 0);
+		editor = settings.edit();
 
 		if(!reply.equals("error")) {
 			Log.d("Deserializing Response", "Creating Response Object");
@@ -310,62 +232,149 @@ public class MailWidgetUpdateService extends IntentService implements serverFini
 			messages_array.clear();
 			messages_array = r.result.messages;
 
-			Log.d("295", "Hit");
-			message_count_int = r.result.status.empire.has_new_messages;
-			message_count_string = r.result.message_count;
+			int message_count_int_received = r.result.status.empire.has_new_messages;
+			String message_count_string_received = r.result.message_count;
 
 		} else {
 			Log.d("Error with Reply", "Error in onResponseReceived()");
 		}
 	}
 
+	@Override
+	public IBinder onBind(Intent intent) {
+		Log.d(LOG, "IBinder Called");
+		return null;
+	}
 
-	//NOT USED ATM
+	//Async task to both run the server code and adjust the remoteviews when finished
+	private class UpdateRemoteViewsViaAsync extends AsyncTask<ServerRequest, Void, String> {
+		List<serverFinishedListener> listeners = new ArrayList<serverFinishedListener>();
+		private String output = "";
 
-			/*
-			//For displaying really long Strings (IE JSON Requests)
-			public static void longInfo(String str) {
-				if(str.length() > 4000) {
-					Log.i("Lengthy String", str.substring(0, 4000));
-					longInfo(str.substring(4000));
-				} else
-					Log.i("Lengthy String", str);
+		private RemoteViews rv1;
+		private int appwid;
+		private String tag_chosen_async;
+		private AppWidgetManager appWidgetManager;
+		private String user_name;
+
+		private String async_message_count_string;
+		private int async_message_count_int;
+
+		public UpdateRemoteViewsViaAsync(Context c, RemoteViews rv, int appwid, String aTag,
+		                                 AppWidgetManager aAppWidgetManager, String username){
+			this.appwid = appwid;
+			this.rv1 = rv;
+			this.tag_chosen_async = aTag;
+			this.appWidgetManager = aAppWidgetManager;
+			this.user_name = username;
+			Log.d("Output from my Async, username is ", user_name);
+			Log.d("Output from my Async, Constructor:", "Here");
+		}
+		public void addListener(serverFinishedListener toAdd) {
+			listeners.add(toAdd);
+		}
+
+		protected String doInBackground(ServerRequest... a) {
+
+			Log.d("Output from my Async, doInBackground:", "Here");
+
+			output = ServerRequest(a[0].server, a[0].methodURL, a[0].json);
+			convertData(output);
+			Log.d("Output from my Async", output);
+			//ResponseReceived();
+			return output;
+		}
+
+		private void ResponseReceived() {
+			//Log.d("Firing Event", "Sending out response to listeners");
+			Log.d("Output from my Async, onResponseReceived:", "Here");
+			for (serverFinishedListener i : listeners) {
+				i.onResponseReceived(output);
 			}
-			 */
+			listeners.clear();
+		}
 
+		@Override
+		protected void onPostExecute(String r) {
+			//Log.d("OnPostExecute", "Firing On Post Execute");
+			Log.d("Output from my Async, onPostExecute:", "Here");
+			ResponseReceived();
 
-			/*
-			/**
-			 * Configures "Save Code" button clicks to pass the current
-			 * passcode of the parent app widget to the save passcode
-			 * Activity.
-			 */
-			/*
-			private void setSavePasscodeIntent(RemoteViews views, int appWidgetId, String newRandomPasscode) {
-				Intent intent = new Intent(this, SaveRandomPasscodeActivity.class);
-				intent.setData(Uri.parse("content://" +
-						PACKAGE_NAME + "/save_passcode/widget_id/" +
-						appWidgetId));
-				intent.putExtra("PASSCODE", newRandomPasscode);
-				PendingIntent pendingIntent2 = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-				views.setOnClickPendingIntent(R.id.save_passcode_button, pendingIntent2);
+			String messages_with_tag;
+
+			if (tag_chosen_async.equalsIgnoreCase("All")){
+				Log.d("Message count string is at:", Integer.toString(async_message_count_int));
+				rv1.setTextViewText(R.id.widget_mail_message_count, Integer.toString(async_message_count_int));
+				messages_with_tag = Integer.toString(async_message_count_int);
+			} else {
+				Log.d("Message count string is at:", async_message_count_string);
+				rv1.setTextViewText(R.id.widget_mail_message_count, async_message_count_string);
+				messages_with_tag = async_message_count_string;
 			}
-			*/
 
-			/**
-			 * Configures "New Code" button clicks to generate and set a
-			 * new passcode on the parent app widget.
-			 */
-			/*
-			private void setChangePasscodeIntent(RemoteViews views, int appWidgetId) {
-				Intent intent = new Intent(this, this.getClass());
-				intent.setData(Uri.parse("content://" +
-						PACKAGE_NAME + "/change_passcode/widget_id/" +
-						appWidgetId));
-				intent.putExtra(EXTRA_APPWIDGET_ID,
-						appWidgetId);
-				PendingIntent pendingIntent3 = PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-				views.setOnClickPendingIntent(R.id.new_passcode_button, pendingIntent3);
+			//Set the remote views dependent upon new data received
+			//Check the number of messages and adjust the font size of the number of messages displayed. Prevents out of bounds on screen
+			int total_num_messages = Integer.parseInt(messages_with_tag); //Conversion is needed, cannot use old one here as diff if statement is in effect
+			Log.d("Num messages", messages_with_tag);
+			if (total_num_messages < 10){
+				rv1.setFloat(R.id.widget_mail_message_count, "setTextSize", 32);
+			} else if (total_num_messages >=10 && total_num_messages <100){
+				rv1.setFloat(R.id.widget_mail_message_count, "setTextSize", 28);
+			} else if (total_num_messages >= 100 && total_num_messages <999){
+				rv1.setFloat(R.id.widget_mail_message_count, "setTextSize", 24);
+			} else {
+				rv1.setFloat(R.id.widget_mail_message_count, "setTextSize", 20);
 			}
-			*/
+
+			//Set the username
+			rv1.setTextViewText(R.id.widget_mail_username, user_name);
+
+			//Finally, update the widget
+			appWidgetManager.updateAppWidget(appwid, rv1);
+		}
+
+		public String ServerRequest(String gameServer, String methodURL, String JsonRequest) {
+			Log.d("Output from my Async, ServerRequest:", "Here");
+			try {
+				Log.d("AsyncServer.ServerRequest URL", (gameServer + "/" + methodURL));
+				Log.d("AsyncServer.ServerRequest", "Request string " + JsonRequest);
+				URL url = new URL(gameServer + "/" + methodURL);
+				URLConnection connection = url.openConnection();
+				connection.setDoOutput(true);
+				OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+				out.write(JsonRequest);
+				out.close();
+				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				output = in.readLine();
+				Log.d("AsyncServer.ServerRequest", "Reply string " + output);
+			} catch (java.net.MalformedURLException e) {
+				Log.d("Server Error", "Malformed URL Exception");
+				output = "error";
+			} catch (java.io.IOException e) {
+				Log.d("Server Error", "Malformed IO Exception");
+				output = "error";
+			}
+			return output;
+
+		}
+
+		public void convertData(String reply) {
+
+			//To place data in respectice awids
+			settings = getSharedPreferences(PREFS_NAME, 0);
+			editor = settings.edit();
+
+			if(!reply.equals("error")) {
+				Log.d("Deserializing Response", "Creating Response Object");
+				messagesReceived = true;
+				//Getting new messages, clearing list first.
+				Response r = new Gson().fromJson(reply, Response.class);
+				messages_array.clear();
+				messages_array = r.result.messages;
+
+				async_message_count_int = r.result.status.empire.has_new_messages;
+				async_message_count_string = r.result.message_count;
+			}
+		}
+	}
 }

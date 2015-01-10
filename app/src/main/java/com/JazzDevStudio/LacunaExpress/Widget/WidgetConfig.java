@@ -1,6 +1,11 @@
 package com.JazzDevStudio.LacunaExpress.Widget;
 
+/**
+ * Created by PatrickSSD2 on 1/8/2015.
+ */
+
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -11,6 +16,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -23,11 +29,11 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RemoteViews;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
@@ -46,19 +52,7 @@ import com.google.gson.Gson;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-/**
- * Widget --
- -If Mail is <100 font size = x. if mail is >=100 but <1000, font size = x. If mail is >=1000, font size = x.
- -Widget to show mail count of chosen account
- -drop down menu spinner to choose mail account to add. Have it read from accounts. If no accounts or if file does not exist, take to add account activity.
- -options to choose font color
- -options to choose background color
- -options to choose refresh interval
- -If widget is clicked, open the activity to view mail passing in the respective account information.
- -Need to have the account info held in the widget itself before passing it into the class.
- -Update
- */
-public class MailWidgetConfig extends Activity implements serverFinishedListener, View.OnClickListener, OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
+public class WidgetConfig extends Activity implements serverFinishedListener, View.OnClickListener, RadioGroup.OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
 
 	//Shared Preferences Stuff
 	public static final String PREFS_NAME = "LacunaExpress";
@@ -66,7 +60,6 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 	SharedPreferences settings;
 	SharedPreferences.Editor editor;
 
-	private static final int RESULT_SETTINGS = 1;
 	String color_background_choice, font_color_choice;
 
 	String chosen_accout_string;
@@ -113,6 +106,8 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 	Boolean messagesReceived = false;
 	private String tag_chosen = "All";
 	static final String[] messageTags = {"All", "Correspondence", "Tutorial", "Medal", "Intelligence", "Alert", "Attack", "Colonization", "Complaint", "Excavator", "Mission", "Parliament", "Probe", "Spies", "Trade", "Fissure"};
+
+	private static final String LOG = "com.JazzDevStudio.LacunaExpress.Widget.TempWidgetConfig";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +170,7 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		ReadInAccounts();
 		if(accounts.size() == 1){
 			selectedAccount = accounts.get(0);
-			Log.d("SelectMessage.Initialize", "only 1 account setting as default"+selectedAccount.displayString);
+			Log.d("SelectMessage.Initialize", "only 1 account setting as default" + selectedAccount.displayString);
 			user_accounts.add(selectedAccount.displayString);
 		} else{
 			for(AccountInfo i: accounts){
@@ -212,7 +207,6 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 			Log.d("MailWidgetConfig", "Color Choices errored out. Check Field[] fields");
 		}
 
-
 		//String array of all the color choices
 		String[] color_names_temp = getResources().getStringArray(R.array.color_choices_names);
 		try {
@@ -225,20 +219,10 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 			Log.d("MailWidgetConfig", "Color Choices errored out. Check Field[] fields");
 		}
 
-		/*
-		//Background Color Choice spinner
-		ArrayAdapter adapter_background_color_choice = new ArrayAdapter(this, android.R.layout.simple_spinner_item, color_names_strings);
-		adapter_message_tag.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		widget_mail_config_spinner_color.setAdapter(adapter_background_color_choice);
-		*/
+		//Set an adapter to allow for different colors to be presented
 		widget_mail_config_spinner_color.setAdapter(new MyAdapter(this, R.layout.custom_spinner, color_names_strings));
 
-		/*
-		//Font color choice spinner
-		ArrayAdapter adapter_font_color_choice = new ArrayAdapter(this, android.R.layout.simple_spinner_item, color_names_strings);
-		adapter_message_tag.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		widget_mail_config_spinner_font.setAdapter(adapter_font_color_choice);
-		*/
+		//Set an adapter to allow for different colors to be presented
 		widget_mail_config_spinner_font.setAdapter(new MyAdapter(this, R.layout.custom_spinner, color_names_strings));
 
 		//Set the default values in each spinner
@@ -261,7 +245,7 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 		create = (Button) findViewById(R.id.widget_mail_config_create);
 		create.setOnClickListener(this);
 
-		c = MailWidgetConfig.this;
+		c = WidgetConfig.this;
 
 		//Shared preferences
 		settings = getSharedPreferences(PREFS_NAME, 0);
@@ -331,87 +315,54 @@ public class MailWidgetConfig extends Activity implements serverFinishedListener
 	//Create the widget here
 	public void onClick(View v) {
 
-
-
-		//Setup a remoteview referring to the context (Param1) and relating to the widget (Param2)
 		RemoteViews v1 = new RemoteViews(c.getPackageName(), R.layout.widget_mail_layout);
 
-		/*
-		//Set the username
-		v1.setTextViewText(R.id.widget_mail_username, chosen_accout_string);
-		//Set the message count
-
-		if (tag_chosen.equalsIgnoreCase("All")){
-			message_count_string = Integer.toString(message_count_int);
-			v1.setTextViewText(R.id.widget_mail_message_count, message_count_string);
-		} else {
-			v1.setTextViewText(R.id.widget_mail_message_count, message_count_string);
-		}
-
-		//Set the Tag choice
-		String tag_chosen_v1 = "Tag Chosen:\n" + tag_chosen;
-		v1.setTextViewText(R.id.widget_mail_tag_choice, tag_chosen_v1);
-
-		Log.d("Background choice is: ", color_background_choice);
-		Log.d("Font color is: ", font_color_choice);
-
-		//Set the background color of the widget
-		v1.setInt(R.id.widget_mail_layout, "setBackgroundColor", android.graphics.Color.parseColor(color_background_choice));
-
-		//Set the font color of the widget text
-		v1.setInt(R.id.widget_mail_username, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
-		v1.setInt(R.id.widget_mail_message_count, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
-		v1.setInt(R.id.widget_mail_tag_choice, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
-
-		v1.setFloat(R.id.widget_mail_tag_choice, "setTextSize", 10);
-
-		//Check the number of messages and adjust the font size of the number of messages displayed. Prevents out of bounds on screen
-		int total_num_messages = Integer.parseInt(message_count_string);
-		Log.d("Num messages", message_count_string);
-		if (total_num_messages < 10){
-			v1.setFloat(R.id.widget_mail_message_count, "setTextSize", 32);
-		} else if (total_num_messages >=10 && total_num_messages <100){
-			v1.setFloat(R.id.widget_mail_message_count, "setTextSize", 28);
-		} else if (total_num_messages >= 100 && total_num_messages <999){
-			v1.setFloat(R.id.widget_mail_message_count, "setTextSize", 24);
-		} else {
-			v1.setFloat(R.id.widget_mail_message_count, "setTextSize", 20);
-		}
-		*/
-
-		//IMPORTANT! The following code opens the class when clicked
-		Intent intent = new Intent(c, SelectMessageActivity2.class);
-		//A pending intent to launch upon clicking
-		PendingIntent pendingIntent = PendingIntent.getActivity(c, 0, intent, 0);
-		//Set the onClickListener the TEXTVIEW. If the click the textview, it opens up the SelectMessageActivity2
-		v1.setOnClickPendingIntent(R.id.widget_mail_message_count, pendingIntent);
-		//Update the widget with the remote view
-		awm.updateAppWidget(awID, v1);
-		//Lastly, need to set a result
-		Intent result = new Intent();
-		//Updating the ID that is being called
-		result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, awID);
-		//Add the sync frequency into the intent
-		result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_OPTIONS, sync_frequency);
-		result.putExtra("Sync_Frequency_mail_widget", sync_frequency);
-		result.putExtra("Username_mail_widget", chosen_accout_string);
-		result.putExtra("Tag_mail_widget", tag_chosen);
-
-		//THIS IS TEMPORARY - Shared Preferences
+		//Shared Preferences
 		String str = Integer.toString(awID);
 		sp.putString(editor, str + "::" + "sync_frequency", Integer.toString(sync_frequency)); //Sync Frequency in minutes
 		sp.putString(editor, str + "::" + "chosen_accout_string", chosen_accout_string); //Username
 		sp.putString(editor, str + "::" + "message_count_string", message_count_string); //Message count
+		sp.putString(editor, str + "::" + "message_count_int", Integer.toString(message_count_int));
 		sp.putString(editor, str + "::" + "tag_chosen", tag_chosen); //Tag Chosen
 		sp.putString(editor, str + "::" + "color_background_choice", color_background_choice); //Background Color
 		sp.putString(editor, str + "::" + "font_color_choice", font_color_choice); //Font color
 		editor.commit();
 
-		//Confirm the result works then set it
-		setResult(RESULT_OK, result);
+		//Set and launch the Alarm Manager
+		Uri.Builder build = new Uri.Builder();
+		build.appendPath(""+awID);
+		Uri uri = build.build();
+		Intent intentUpdate = new Intent(c, MailWidgetProvider.class);
+		intentUpdate.setAction(LOG);//Set an action anyway to filter it in onReceive()
+		intentUpdate.setData(uri);//One Alarm per instance.
+		//We will need the exact instance to identify the intent.
+		MailWidgetProvider.addUri(awID, uri);
+		intentUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, awID);
+		PendingIntent pendingIntentAlarm = PendingIntent.getBroadcast(WidgetConfig.this,
+				0,
+				intentUpdate,
+				PendingIntent.FLAG_UPDATE_CURRENT);
 
-		//We want this to finish when the button is clicked
+		//Setup a long to work with the sync interval chosen
+		long sync_interval = (long) sync_frequency;
+		AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+				System.currentTimeMillis()+(2*1000),
+				(60*sync_interval*1000),
+				pendingIntentAlarm);
+		Log.d("Ok Button", "Created Alarm. Action = " + "TempWidgetConfig" +
+				" URI = " + build.build().toString() +
+				" Seconds = " + 60*sync_interval);
+
+		//Return the original widget ID, found in onCreate().
+		Intent resultValue = new Intent(c, SelectMessageActivity2.class);
+		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, awID);
+		resultValue.putExtra("chosen_accout_string", chosen_accout_string);
+		resultValue.putExtra("tag_chosen", tag_chosen);
+		setResult(RESULT_OK, resultValue);
+		Toast.makeText(this, "Your widget will update shortly", Toast.LENGTH_LONG).show();
 		finish();
+
 	}
 
 	//When an item is selected with the spinner

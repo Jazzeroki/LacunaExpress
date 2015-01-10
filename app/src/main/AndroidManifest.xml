@@ -76,7 +76,7 @@
 
         <!-- This manages the widget updates -->
         <receiver
-            android:name=".Widget.TempWidgetProvider"
+            android:name=".Widget.MailWidgetProvider"
             android:label="Lacuna Express Mail Widget" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -88,17 +88,11 @@
         </receiver>
 
         <!-- Service -->
-        <service android:name=".Widget.TempService" />
+        <service android:name=".Widget.MailWidgetUpdateService" />
 
-        <!-- This activity configures the widget -->
-        <activity
-            android:name=".Widget.MailWidgetConfig"
-            android:label="Widget Configuration" >
-
-        </activity>
 
         <activity
-            android:name=".Widget.TempWidgetConfig"
+            android:name=".Widget.WidgetConfig"
             android:label="Widget Config">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />

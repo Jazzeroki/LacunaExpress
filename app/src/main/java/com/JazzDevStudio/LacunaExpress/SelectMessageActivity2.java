@@ -174,7 +174,36 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 			s.execute(sRequest);
 
 		}
-		else{
+		else if (iExtra.hasExtra("chosen_accout_string")) {
+
+			String a = iExtra.getStringExtra("chosen_accout_string");
+			String passed_tag = iExtra.getStringExtra("tag_chosen");
+
+			Log.d("SelectMessage", "Assigning selected account = a from hasExtras a is: "+a);
+
+			//This code sets the default spinner to the one passed in by the intent
+			ArrayAdapter name_adapter_1 = (ArrayAdapter) account_list.getAdapter(); //cast to an ArrayAdapter
+			int spinnerPosition = name_adapter_1.getPosition(a);
+			//set the default according to value
+			account_list.setSelection(spinnerPosition);
+
+			//Sets the default tag via the passed in intent
+			ArrayAdapter tag_adapter_1 = (ArrayAdapter) message_tag.getAdapter();
+			int spinnerPosition1 = tag_adapter_1.getPosition(passed_tag);
+			message_tag.setSelection(spinnerPosition1);
+
+			selectedAccount = AccountMan.GetAccount(a);
+			//Inbox inbox = new Inbox();
+			Log.d("SelectMessage.onCreate", "Calling View Inbox");
+			String request = Inbox.ViewInbox(selectedAccount.sessionID);
+
+			Log.d("SelecteMessage.Oncreate Request to server", request);
+			ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
+			AsyncServer s = new AsyncServer();
+			s.addListener(this);
+			s.execute(sRequest);
+
+		} else{
 			Log.d("AddAccount.onCreate", "Intent is type addAccount");
 		}
 

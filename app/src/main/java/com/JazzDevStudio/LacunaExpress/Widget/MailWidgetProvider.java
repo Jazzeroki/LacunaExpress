@@ -1,118 +1,178 @@
 package com.JazzDevStudio.LacunaExpress.Widget;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
+import android.widget.RemoteViews;
 
 import com.JazzDevStudio.LacunaExpress.R;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 
 /**
  * This will configure the widget that is placed on the user's homescreen.
  */
 public class MailWidgetProvider extends AppWidgetProvider {
 
-	String sync_frequency, username, tag;
+	private static final String LOG = "com.JazzDevStudio.LacunaExpress.Widget.TempWidgetProvider";
 
-	//When the app is deleted, this will run, pop up window indicating it has been tossed
-	public void onDeleted(Context context, int[] appWidgetIds) {
-		super.onDeleted(context, appWidgetIds);
-		//This is a mini dialog window that disappears after a short bit of time
-		Toast.makeText(context, "Widget removed", Toast.LENGTH_SHORT).show();
-
-		//Funny sound for when widget is removed
-		MediaPlayer aww;
-		aww = MediaPlayer.create(context, R.raw.aww_sound_effect);
-		aww.start();
-	}
-
-	//For receiving data
-	public void onReceive(Context context, Intent intent) {
-		super.onReceive(context, intent);
-
-
-
-
+	public void onReceive(){
 
 	}
 
-	/*
-		 * When the widget updates (Using service to dictate refresh time) @Params:
-		 *1) Context - Package name to refer to intents/ layouts
-		 *2) Appwidgetmanager - Refer to for update
-		 *3) AppwidgetIDs - Reference multiple IDs (IE in xml)
-		 */
-	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-		super.onUpdate(context, appWidgetManager, appWidgetIds);
 
-		ComponentName thisWidget = new ComponentName(context, MailWidgetProvider.class);
+	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
+	                     int[] appWidgetIds) {
 
-		String message_count_string;
-		int message_count_int;
+		Log.w(LOG, "onUpdate method called");
+		// Get all ids
+		ComponentName thisWidget = new ComponentName(context,
+				MailWidgetProvider.class);
+		int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
 
-		int[] allWidgetIDs = appWidgetManager.getAppWidgetIds(thisWidget);
-
-		for (int i = 0; i<allWidgetIDs.length; i++){
-			Log.d("Check For Widget IDs Here: ", Integer.toString(allWidgetIDs[i]));
+		int counter = 1;
+		for (int widgetId : allWidgetIds) {
+			Log.d("Widget ID in Provider: ", Integer.toString(widgetId));
+			Log.d("Counter is at: ", Integer.toString(counter));
+			counter++;
 		}
+
 		// Build the intent to call the service
 		Intent intent = new Intent(context.getApplicationContext(),
-				TempService.class);
-		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIDs);
+				MailWidgetUpdateService.class);
+		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIds);
 
 		// Update the widgets via the service
 		context.startService(intent);
+	}
 
-		/*
-		//Loops through all of the widgets one by one
-		for (int i = 0; i < N; i++){
-			//Get the app ID of the widget bring worked on here
-			int app_widget_ID = appWidgetIds[i];
+	private static HashMap<Integer, Uri> uris = new HashMap<Integer, Uri>();
 
-			//Intent intent = new Intent(context, MailWidgetUpdateService.class);
-			Intent intent = new Intent(context, TempService.class);
-			intent.putExtra(EXTRA_APPWIDGET_ID, app_widget_ID);
-
-			/*
-			context.bindService(intent, sc, Context.BIND_AUTO_CREATE);
-			status_service = true;
-			Log.d("MailWidgetManager", "Service successfully binded");
-			*/
-
-		//context.startService(intent); /////////////////////////////////////
-		//context.getApplicationContext().bindService(intent, )
-
-		//TESTING FOR NOW
-
-			/*
-				//References the widget layout
-				RemoteViews v = new RemoteViews(context.getPackageName(), R.layout.widget_mail_layout);
-				//Updates the widget
-				appWidgetManager.updateAppWidget(app_widget_ID, v);
-			*/
-
-		//}////////////////
-
+	@Override
+	public void onReceive(Context context,
+	                      Intent intent)
+	{
+		String action = intent.getAction();
+		Log.d("onReceive", "action: " + action);
+		if(action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE) ||
+				action.equals("com.JazzDevStudio.LacunaExpress.Widget.TempWidgetConfig"))
+		{
+			//Check if there is a single widget ID.
+			int widgetID = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+					AppWidgetManager.INVALID_APPWIDGET_ID);
+			//If there is no single ID, call the super implementation.
+			if(widgetID == AppWidgetManager.INVALID_APPWIDGET_ID)
+				super.onReceive(context, intent);
+				//Otherwise call our onUpdate() passing a one element array, with the retrieved ID.
+			else
+				this.onUpdate(context, AppWidgetManager.getInstance(context), new int[]{widgetID});
+		}
+		else
+			super.onReceive(context, intent);
 	}
 
 	/*
-	//Service connection
-	private ServiceConnection sc = new ServiceConnection() {
-		public void onServiceConnected(ComponentName name, IBinder service) {
-			TempService.LocalBinder binder = (TempService.LocalBinder) service;
-			mservice = binder.getService();
-			status_service = true;
+	@Override
+	public void onUpdate(Context context,
+	                     AppWidgetManager appWidgetManager,
+	                     int[] appWidgetIds)
+	{
+		Log.d("onUpdate", "called, number of instances " + appWidgetIds.length);
+		for (int widgetId : appWidgetIds)
+		{
+			updateAppWidget(context,
+					appWidgetManager,
+					widgetId);
 		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName name) {
-
-		}
-	};
+	}
 	*/
-}
 
+	/**
+	 * Each time an instance is removed, we cancel the associated AlarmManager.
+	 */
+	@Override
+	public void onDeleted(Context context, int[] appWidgetIds)
+	{
+		super.onDeleted(context, appWidgetIds);
+		for (int appWidgetId : appWidgetIds)
+		{
+			cancelAlarmManager(context, appWidgetId);
+		}
+	}
+
+	protected void cancelAlarmManager(Context context, int widgetID)
+	{
+		AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		Intent intentUpdate = new Intent(context, MailWidgetProvider.class);
+		//AlarmManager are identified with Intent's Action and Uri.
+		intentUpdate.setAction("com.JazzDevStudio.LacunaExpress.Widget.TempWidgetConfig");
+		//Don't put the uri to cancel all the AlarmManager with action UPDATE_ONE.
+		intentUpdate.setData(uris.get(widgetID));
+		intentUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID);
+		PendingIntent pendingIntentAlarm = PendingIntent.getBroadcast(context,
+				0,
+				intentUpdate,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		alarm.cancel(pendingIntentAlarm);
+		Log.d("cancelAlarmManager", "Cancelled Alarm. Action = " +
+				"com.JazzDevStudio.LacunaExpress.Widget.TempWidgetConfig" +
+				" URI = " + uris.get(widgetID));
+		uris.remove(widgetID);
+	}
+
+	public static void addUri(int id, Uri uri)
+	{
+		uris.put(new Integer(id), uri);
+	}
+
+	private void updateAppWidget(Context context,
+	                             AppWidgetManager appWidgetManager,
+	                             int appWidgetId)
+	{
+		//Inflate layout.
+		RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
+				R.layout.widget_mail_layout);
+		//Update UI.
+		remoteViews.setTextViewText(R.id.widget_mail_message_count, "This is working:"+getTimeStamp());
+		//Retrieve color.
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+		//Apply color.
+		String color_background_choice = "white";
+		remoteViews.setInt(R.id.widget_mail_layout, "setBackgroundColor", android.graphics.Color.parseColor(color_background_choice));
+
+		//Create the intent.
+		Intent labelIntent = new Intent(context, MailWidgetProvider.class);
+		labelIntent.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+		//Put the ID of our widget to identify it later.
+		labelIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+		PendingIntent labelPendingIntent = PendingIntent.getBroadcast(context,
+				appWidgetId,
+				labelIntent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		remoteViews.setOnClickPendingIntent(R.id.widget_mail_message_count, labelPendingIntent);
+		Log.d("updateAppWidget", "Updated ID: " + appWidgetId);
+		//Call the Manager to ensure the changes take effect.
+		appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+	}
+
+	private String getTimeStamp()
+	{
+		String res="";
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		Date now = calendar.getTime();
+		res += now.getHours()+":"+now.getMinutes()+":"+now.getSeconds();
+		return res;
+	}
+}
