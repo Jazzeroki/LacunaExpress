@@ -379,7 +379,7 @@ public class TempWidgetConfig extends Activity implements serverFinishedListener
 		sp.putString(editor, str + "::" + "sync_frequency", Integer.toString(sync_frequency)); //Sync Frequency in minutes
 		sp.putString(editor, str + "::" + "chosen_accout_string", chosen_accout_string); //Username
 		sp.putString(editor, str + "::" + "message_count_string", message_count_string); //Message count
-		sp.putInt(editor, str + "::" + "message_count_int", message_count_int);
+		sp.putString(editor, str + "::" + "message_count_int", Integer.toString(message_count_int));
 		sp.putString(editor, str + "::" + "tag_chosen", tag_chosen); //Tag Chosen
 		sp.putString(editor, str + "::" + "color_background_choice", color_background_choice); //Background Color
 		sp.putString(editor, str + "::" + "font_color_choice", font_color_choice); //Font color

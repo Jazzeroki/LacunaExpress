@@ -44,18 +44,11 @@ public class TempService extends Service implements serverFinishedListener {
 	Boolean messagesReceived = false;
 	private String tag_chosen = "All";
 
-	String message_count_string_test;
-	int message_count_int_test;
-
-	//Object
-	//MailCountObjects mo = new MailCountObjects();
+	int awid;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-
-		message_count_string_test = "-2";
-		message_count_int_test = -2;
 	}
 
 	@Override
@@ -95,6 +88,7 @@ public class TempService extends Service implements serverFinishedListener {
 		//All widget IDs are passed through this for loop. Run calculations / set text fields here
 		for (int widgetId : allWidgetIds) {
 
+			awid = widgetId;
 
 			//Retrieve all of the data from the shared preferences held via app widget ID
 			settings = getSharedPreferences(PREFS_NAME, 0);
@@ -109,8 +103,8 @@ public class TempService extends Service implements serverFinishedListener {
 			String color_background_choice = sp.getString(settings, str + "::" + "color_background_choice", "White");
 			String font_color_choice = sp.getString(settings, str + "::" + "font_color_choice", "Black");
 			//These 2 will be defined when a response is received from the server, still left in default values however.
-			//message_count_string = "1000000";//sp.getString(settings, str + "::" + "message_count_string", "1000000"); //String defined in global
-			//message_count_int = 1000000;//(int) sp.getInt(settings, str + "::" + "message_count_int", 1000000);
+			String message_count_string = sp.getString(settings, str + "::" + "message_count_string", "1000000"); //String defined in global
+			String message_count_int = sp.getString(settings, str + "::" + "message_count_int", "1000000");
 
 			AccountMan.GetAccount(user_name);
 			//Depending on tag chosen, different URI request sent in JSON
@@ -159,14 +153,16 @@ public class TempService extends Service implements serverFinishedListener {
 			remoteViews.setTextViewText(R.id.widget_mail_username, user_name);
 			//Set the message count
 
+			String messages_with_tag;
 			if (tag_chosen.equalsIgnoreCase("All")){
-				String temp_message_count = Integer.toString(message_count_int_test);
-				Log.d("Message count string is at:", temp_message_count);
-				remoteViews.setTextViewText(R.id.widget_mail_message_count, temp_message_count);
+				Log.d("Message count string is at:", message_count_int);
+				remoteViews.setTextViewText(R.id.widget_mail_message_count, message_count_int);
+				messages_with_tag = message_count_int;
 				Log.d("Firing 1", "Firing 1");
 			} else {
-				Log.d("Message count string is at:", message_count_string_test);
-				remoteViews.setTextViewText(R.id.widget_mail_message_count, message_count_string_test);
+				Log.d("Message count string is at:", message_count_string);
+				remoteViews.setTextViewText(R.id.widget_mail_message_count, message_count_string);
+				messages_with_tag = message_count_string;
 				Log.d("Firing 2", "Firing 2");
 			}
 
@@ -188,8 +184,8 @@ public class TempService extends Service implements serverFinishedListener {
 			remoteViews.setFloat(R.id.widget_mail_tag_choice, "setTextSize", 10);
 
 			//Check the number of messages and adjust the font size of the number of messages displayed. Prevents out of bounds on screen
-			int total_num_messages = Integer.parseInt(message_count_string_test);
-			Log.d("Num messages", message_count_string_test);
+			int total_num_messages = Integer.parseInt(messages_with_tag);
+			Log.d("Num messages", messages_with_tag);
 			if (total_num_messages < 10){
 				remoteViews.setFloat(R.id.widget_mail_message_count, "setTextSize", 32);
 			} else if (total_num_messages >=10 && total_num_messages <100){
@@ -226,6 +222,11 @@ public class TempService extends Service implements serverFinishedListener {
 
 	//When a response is received from the server
 	public void onResponseReceived(String reply) {
+
+		//To place data in respectice awids
+		settings = getSharedPreferences(PREFS_NAME, 0);
+		editor = settings.edit();
+
 		if(!reply.equals("error")) {
 			Log.d("Deserializing Response", "Creating Response Object");
 			messagesReceived = true;
@@ -237,14 +238,11 @@ public class TempService extends Service implements serverFinishedListener {
 			int message_count_int_received = r.result.status.empire.has_new_messages;
 			String message_count_string_received = r.result.message_count;
 
-			Log.d("Message Count local string = ", message_count_string_received);
-			Log.d("Message Count local int = ", Integer.toString(message_count_int_received));
-
-			message_count_string_test = message_count_string_received;
-			message_count_int_test = message_count_int_received;
-
-			Log.d("Message Count global string = ", message_count_string_test);
-			Log.d("Message Count global int = ", Integer.toString(message_count_int_test));
+			String str = Integer.toString(awid);
+			sp.putString(editor, str + "::" + "message_count_string", message_count_string_received); //Message count
+			Log.d("message_count_string in service ", message_count_string_received);
+			sp.putString(editor, str + "::" + "message_count_int", Integer.toString(message_count_int_received));
+			Log.d("message_count_int in service ", Integer.toString(message_count_int_received));
 
 		} else {
 			Log.d("Error with Reply", "Error in onResponseReceived()");
