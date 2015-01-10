@@ -16,6 +16,7 @@ import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Inbox;
 import com.JazzDevStudio.LacunaExpress.LEWrapperResponse.Response;
 import com.JazzDevStudio.LacunaExpress.MISCClasses.SharedPrefs;
 import com.JazzDevStudio.LacunaExpress.R;
+import com.JazzDevStudio.LacunaExpress.SelectMessageActivity2;
 import com.JazzDevStudio.LacunaExpress.Server.AsyncServer;
 import com.JazzDevStudio.LacunaExpress.Server.ServerRequest;
 import com.JazzDevStudio.LacunaExpress.Server.serverFinishedListener;
@@ -45,6 +46,8 @@ public class TempService extends Service implements serverFinishedListener {
 	private String tag_chosen = "All";
 
 	int awid;
+
+	String message_count_string, message_count_int;
 
 	@Override
 	public void onCreate() {
@@ -144,7 +147,7 @@ public class TempService extends Service implements serverFinishedListener {
 
 			// Register an onClickListener
 			Intent clickIntent = new Intent(this.getApplicationContext(),
-					TempWidgetProvider.class);
+					SelectMessageActivity2.class);
 
 
 
@@ -202,9 +205,14 @@ public class TempService extends Service implements serverFinishedListener {
 			clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,
 					allWidgetIds);
 
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, clickIntent,
-					PendingIntent.FLAG_UPDATE_CURRENT);
+			PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, clickIntent, 0);
+			//Set the onClickListener the TEXTVIEW. If the click the textview, it opens up the SelectMessageActivity2
 			remoteViews.setOnClickPendingIntent(R.id.widget_mail_message_count, pendingIntent);
+
+
+			//PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, clickIntent,
+					//PendingIntent.FLAG_UPDATE_CURRENT);
+			//remoteViews.setOnClickPendingIntent(R.id.widget_mail_message_count, pendingIntent);
 			appWidgetManager.updateAppWidget(widgetId, remoteViews);
 		}
 		stopSelf();
@@ -243,6 +251,17 @@ public class TempService extends Service implements serverFinishedListener {
 			Log.d("message_count_string in service ", message_count_string_received);
 			sp.putString(editor, str + "::" + "message_count_int", Integer.toString(message_count_int_received));
 			Log.d("message_count_int in service ", Integer.toString(message_count_int_received));
+
+			/*
+			HERE LIES THE ISSUE. Basically, these values get assigned here, but if we try to use these values (message_count_string)
+			elsewhere, they need to be initialized else they will return a null pointer. If they are initialized however,
+			then that initialized value is all that is ever used. I am unsure as to what we can do other than to run this section
+			of code (onResponseReceived) as a regular thread, a non-asynced thread as the problem is mainly coming from the fact
+			that the data is updated WHILE the rest of the code is running. We need to run the code either on the main thread, or
+			store it / run it elsewhere.
+			 */
+			message_count_string = message_count_string_received;
+			message_count_int = Integer.toString(message_count_int_received);
 
 		} else {
 			Log.d("Error with Reply", "Error in onResponseReceived()");

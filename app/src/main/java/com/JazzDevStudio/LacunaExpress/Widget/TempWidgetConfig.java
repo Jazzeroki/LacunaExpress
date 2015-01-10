@@ -43,6 +43,7 @@ import com.JazzDevStudio.LacunaExpress.LEWrapperResponse.Response;
 import com.JazzDevStudio.LacunaExpress.MISCClasses.L;
 import com.JazzDevStudio.LacunaExpress.MISCClasses.SharedPrefs;
 import com.JazzDevStudio.LacunaExpress.R;
+import com.JazzDevStudio.LacunaExpress.SelectMessageActivity2;
 import com.JazzDevStudio.LacunaExpress.Server.AsyncServer;
 import com.JazzDevStudio.LacunaExpress.Server.ServerRequest;
 import com.JazzDevStudio.LacunaExpress.Server.serverFinishedListener;
@@ -411,7 +412,7 @@ public class TempWidgetConfig extends Activity implements serverFinishedListener
 				" Seconds = " + 60*sync_interval);
 
 		//Return the original widget ID, found in onCreate().
-		Intent resultValue = new Intent();
+		Intent resultValue = new Intent(c, SelectMessageActivity2.class);
 		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, awID);
 		setResult(RESULT_OK, resultValue);
 		Toast.makeText(this, "Your widget will update shortly", Toast.LENGTH_LONG).show();
