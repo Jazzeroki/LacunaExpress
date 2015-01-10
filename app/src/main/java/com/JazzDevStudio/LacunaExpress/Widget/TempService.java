@@ -4,8 +4,10 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -22,7 +24,13 @@ import com.JazzDevStudio.LacunaExpress.Server.ServerRequest;
 import com.JazzDevStudio.LacunaExpress.Server.serverFinishedListener;
 import com.google.gson.Gson;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TempService extends Service implements serverFinishedListener {
 	private static final String LOG = "com.JazzDevStudio.LacunaExpress.Widget.TempService";
@@ -99,7 +107,9 @@ public class TempService extends Service implements serverFinishedListener {
 
 			String str = Integer.toString(widgetId);
 
-
+			RemoteViews remoteViews = new RemoteViews(this
+					.getApplicationContext().getPackageName(),
+					R.layout.widget_mail_layout);
 
 			String user_name = sp.getString(settings, str + "::" + "chosen_accout_string", "Loading...");
 			String tag_chosen = sp.getString(settings, str + "::" + "tag_chosen", "All");
@@ -118,8 +128,12 @@ public class TempService extends Service implements serverFinishedListener {
 				Log.d("Select Message Activity, SelectedAccount", user_name);
 				ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
 				AsyncServer s = new AsyncServer();
-				s.addListener(this);
-				s.execute(sRequest);
+
+				UpdateRemoteViewsViaAsync s1 = new UpdateRemoteViewsViaAsync(TempService.this,
+						remoteViews, widgetId, tag_chosen, appWidgetManager);
+
+				s1.addListener(this);
+				s1.execute(sRequest);
 			} else {
 				Log.d("SelectMessage.onItemSelected", "Second Spinner word in spinner All Calling View Inbox");
 				String request = Inbox.ViewInbox(selectedAccount.sessionID, tag_chosen);
@@ -127,23 +141,19 @@ public class TempService extends Service implements serverFinishedListener {
 				Log.d("Select Message Activity, SelectedAccount", user_name);
 				ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
 				AsyncServer s = new AsyncServer();
-				s.addListener(this);
-				s.execute(sRequest);
+
+				UpdateRemoteViewsViaAsync s1 = new UpdateRemoteViewsViaAsync(TempService.this,
+						remoteViews, widgetId, tag_chosen, appWidgetManager);
+
+				s1.addListener(this);
+				s1.execute(sRequest);
 			}
-
-
-
-
-
-
 
 			Log.d("Widget ID in Service: ", Integer.toString(widgetId));
 			Log.d("Counter is at: ", Integer.toString(counter));
 			counter++;
 
-			RemoteViews remoteViews = new RemoteViews(this
-					.getApplicationContext().getPackageName(),
-					R.layout.widget_mail_layout);
+
 
 			// Register an onClickListener
 			Intent clickIntent = new Intent(this.getApplicationContext(),
@@ -156,18 +166,6 @@ public class TempService extends Service implements serverFinishedListener {
 			remoteViews.setTextViewText(R.id.widget_mail_username, user_name);
 			//Set the message count
 
-			String messages_with_tag;
-			if (tag_chosen.equalsIgnoreCase("All")){
-				Log.d("Message count string is at:", message_count_int);
-				remoteViews.setTextViewText(R.id.widget_mail_message_count, message_count_int);
-				messages_with_tag = message_count_int;
-				Log.d("Firing 1", "Firing 1");
-			} else {
-				Log.d("Message count string is at:", message_count_string);
-				remoteViews.setTextViewText(R.id.widget_mail_message_count, message_count_string);
-				messages_with_tag = message_count_string;
-				Log.d("Firing 2", "Firing 2");
-			}
 
 			//Set the Tag choice
 			String tag_chosen_v1 = "Tag Chosen:\n" + tag_chosen;
@@ -185,19 +183,6 @@ public class TempService extends Service implements serverFinishedListener {
 			remoteViews.setInt(R.id.widget_mail_tag_choice, "setTextColor", android.graphics.Color.parseColor(font_color_choice));
 
 			remoteViews.setFloat(R.id.widget_mail_tag_choice, "setTextSize", 10);
-
-			//Check the number of messages and adjust the font size of the number of messages displayed. Prevents out of bounds on screen
-			int total_num_messages = Integer.parseInt(messages_with_tag);
-			Log.d("Num messages", messages_with_tag);
-			if (total_num_messages < 10){
-				remoteViews.setFloat(R.id.widget_mail_message_count, "setTextSize", 32);
-			} else if (total_num_messages >=10 && total_num_messages <100){
-				remoteViews.setFloat(R.id.widget_mail_message_count, "setTextSize", 28);
-			} else if (total_num_messages >= 100 && total_num_messages <999){
-				remoteViews.setFloat(R.id.widget_mail_message_count, "setTextSize", 24);
-			} else {
-				remoteViews.setFloat(R.id.widget_mail_message_count, "setTextSize", 20);
-			}
 
 			/* Finished setting remoteViews */
 
@@ -246,23 +231,6 @@ public class TempService extends Service implements serverFinishedListener {
 			int message_count_int_received = r.result.status.empire.has_new_messages;
 			String message_count_string_received = r.result.message_count;
 
-			String str = Integer.toString(awid);
-			sp.putString(editor, str + "::" + "message_count_string", message_count_string_received); //Message count
-			Log.d("message_count_string in service ", message_count_string_received);
-			sp.putString(editor, str + "::" + "message_count_int", Integer.toString(message_count_int_received));
-			Log.d("message_count_int in service ", Integer.toString(message_count_int_received));
-
-			/*
-			HERE LIES THE ISSUE. Basically, these values get assigned here, but if we try to use these values (message_count_string)
-			elsewhere, they need to be initialized else they will return a null pointer. If they are initialized however,
-			then that initialized value is all that is ever used. I am unsure as to what we can do other than to run this section
-			of code (onResponseReceived) as a regular thread, a non-asynced thread as the problem is mainly coming from the fact
-			that the data is updated WHILE the rest of the code is running. We need to run the code either on the main thread, or
-			store it / run it elsewhere.
-			 */
-			message_count_string = message_count_string_received;
-			message_count_int = Integer.toString(message_count_int_received);
-
 		} else {
 			Log.d("Error with Reply", "Error in onResponseReceived()");
 		}
@@ -272,5 +240,132 @@ public class TempService extends Service implements serverFinishedListener {
 	public IBinder onBind(Intent intent) {
 		Log.d(LOG, "IBinder Called");
 		return null;
+	}
+
+	//Async task to both run the server code and adjust the remoteviews when finished
+	private class UpdateRemoteViewsViaAsync extends AsyncTask<ServerRequest, Void, String> {
+		List<serverFinishedListener> listeners = new ArrayList<serverFinishedListener>();
+		private String output = "";
+
+		private Context context;
+		private RemoteViews rv1;
+		private int appwid;
+		private String tag_chosen_async;
+		private AppWidgetManager appWidgetManager;
+
+		private String async_message_count_string;
+		private int async_message_count_int;
+
+		public UpdateRemoteViewsViaAsync(Context c, RemoteViews rv, int appwid, String aTag, AppWidgetManager aAppWidgetManager){
+			this.appwid = appwid;
+			this.rv1 = rv;
+			this.context = c;
+			this.tag_chosen_async = aTag;
+			this.appWidgetManager = aAppWidgetManager;
+			Log.d("Output from my Async, Constructor:", "Here");
+		}
+		public void addListener(serverFinishedListener toAdd) {
+			listeners.add(toAdd);
+		}
+
+		protected String doInBackground(ServerRequest... a) {
+
+			Log.d("Output from my Async, doInBackground:", "Here");
+
+			output = ServerRequest(a[0].server, a[0].methodURL, a[0].json);
+			convertData(output);
+			Log.d("Output from my Async", output);
+			//ResponseReceived();
+			return output;
+		}
+
+		private void ResponseReceived() {
+			//Log.d("Firing Event", "Sending out response to listeners");
+			Log.d("Output from my Async, onResponseReceived:", "Here");
+			for (serverFinishedListener i : listeners) {
+				i.onResponseReceived(output);
+			}
+			listeners.clear();
+		}
+
+		@Override
+		protected void onPostExecute(String r) {
+			//Log.d("OnPostExecute", "Firing On Post Execute");
+			Log.d("Output from my Async, onPostExecute:", "Here");
+			ResponseReceived();
+
+			String messages_with_tag;
+
+			if (tag_chosen_async.equalsIgnoreCase("All")){
+				Log.d("Message count string is at:", Integer.toString(async_message_count_int));
+				rv1.setTextViewText(R.id.widget_mail_message_count, Integer.toString(async_message_count_int));
+				messages_with_tag = Integer.toString(async_message_count_int);
+			} else {
+				Log.d("Message count string is at:", async_message_count_string);
+				rv1.setTextViewText(R.id.widget_mail_message_count, async_message_count_string);
+				messages_with_tag = async_message_count_string;
+			}
+
+			//Set the remote views dependent upon new data received
+			//Check the number of messages and adjust the font size of the number of messages displayed. Prevents out of bounds on screen
+			int total_num_messages = Integer.parseInt(messages_with_tag); //Conversion is needed, cannot use old one here as diff if statement is in effect
+			Log.d("Num messages", messages_with_tag);
+			if (total_num_messages < 10){
+				rv1.setFloat(R.id.widget_mail_message_count, "setTextSize", 32);
+			} else if (total_num_messages >=10 && total_num_messages <100){
+				rv1.setFloat(R.id.widget_mail_message_count, "setTextSize", 28);
+			} else if (total_num_messages >= 100 && total_num_messages <999){
+				rv1.setFloat(R.id.widget_mail_message_count, "setTextSize", 24);
+			} else {
+				rv1.setFloat(R.id.widget_mail_message_count, "setTextSize", 20);
+			}
+
+			//Finally, update the widget
+			appWidgetManager.updateAppWidget(appwid, rv1);
+		}
+
+		public String ServerRequest(String gameServer, String methodURL, String JsonRequest) {
+			Log.d("Output from my Async, ServerRequest:", "Here");
+			try {
+				Log.d("AsyncServer.ServerRequest URL", (gameServer + "/" + methodURL));
+				Log.d("AsyncServer.ServerRequest", "Request string " + JsonRequest);
+				URL url = new URL(gameServer + "/" + methodURL);
+				URLConnection connection = url.openConnection();
+				connection.setDoOutput(true);
+				OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+				out.write(JsonRequest);
+				out.close();
+				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				output = in.readLine();
+				Log.d("AsyncServer.ServerRequest", "Reply string " + output);
+			} catch (java.net.MalformedURLException e) {
+				Log.d("Server Error", "Malformed URL Exception");
+				output = "error";
+			} catch (java.io.IOException e) {
+				Log.d("Server Error", "Malformed IO Exception");
+				output = "error";
+			}
+			return output;
+
+		}
+
+		public void convertData(String reply) {
+
+			//To place data in respectice awids
+			settings = getSharedPreferences(PREFS_NAME, 0);
+			editor = settings.edit();
+
+			if(!reply.equals("error")) {
+				Log.d("Deserializing Response", "Creating Response Object");
+				messagesReceived = true;
+				//Getting new messages, clearing list first.
+				Response r = new Gson().fromJson(reply, Response.class);
+				messages_array.clear();
+				messages_array = r.result.messages;
+
+				async_message_count_int = r.result.status.empire.has_new_messages;
+				async_message_count_string = r.result.message_count;
+			}
+		}
 	}
 }

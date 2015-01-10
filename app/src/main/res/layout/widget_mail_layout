@@ -19,7 +19,7 @@
         android:layout_width="64dp"
         android:layout_height="41dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="247"
+        android:text="-1"
         android:gravity="center"
         android:id="@+id/widget_mail_message_count"
         android:layout_gravity="center_horizontal"/>
