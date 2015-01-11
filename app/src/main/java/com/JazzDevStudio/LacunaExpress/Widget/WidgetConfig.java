@@ -29,7 +29,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
-import android.widget.RemoteViews;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -145,6 +144,28 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 		}
 
 		//Internet has now been confirmed, move forward//
+
+
+		//Bug
+		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+
+					case DialogInterface.BUTTON_NEGATIVE:
+						try {
+							dialog.dismiss();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						break;
+				}
+			}
+		};
+		String heads_up = "There is currently a bug that will allow widgets to work ONLY if you have one account on the device. " +
+				"If you have more than one account, please note this will not work. " +
+				"I will have a fix out as soon as I can. Thank you for your patience";
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(heads_up).setNegativeButton("Ok", dialogClickListener).show();
 
 		//Check if any accounts exist
 		boolean does_file_exist = false;
@@ -302,6 +323,7 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 		if (extras != null){
 			//Get an ID and pass it in. IE, a way to checking which widget activated this class
 			awID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+			Log.d("Widget ID in Widget Config", Integer.toString(awID));
 			//This returns 1 App widget ID
 		} else {
 			//In case something gets a-broken!
@@ -315,7 +337,7 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 	//Create the widget here
 	public void onClick(View v) {
 
-		RemoteViews v1 = new RemoteViews(c.getPackageName(), R.layout.widget_mail_layout);
+		//RemoteViews v1 = new RemoteViews(c.getPackageName(), R.layout.widget_mail_layout);
 
 		//Shared Preferences
 		String str = Integer.toString(awID);
@@ -326,6 +348,15 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 		sp.putString(editor, str + "::" + "tag_chosen", tag_chosen); //Tag Chosen
 		sp.putString(editor, str + "::" + "color_background_choice", color_background_choice); //Background Color
 		sp.putString(editor, str + "::" + "font_color_choice", font_color_choice); //Font color
+
+		//TESTING
+		sp.putString(editor, "sync_frequency_temp", Integer.toString(sync_frequency)); //Sync Frequency in minutes
+		sp.putString(editor, "chosen_accout_string_temp", chosen_accout_string); //Username
+		sp.putString(editor, "message_count_string_temp", message_count_string); //Message count
+		sp.putString(editor, "message_count_int_temp", Integer.toString(message_count_int));
+		sp.putString(editor, "tag_chosen_temp", tag_chosen); //Tag Chosen
+		sp.putString(editor, "color_background_choice_temp", color_background_choice); //Background Color
+		sp.putString(editor, "font_color_choice_temp", font_color_choice); //Font color
 		editor.commit();
 
 		//Set and launch the Alarm Manager
@@ -333,6 +364,9 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 		build.appendPath(""+awID);
 		Uri uri = build.build();
 		Intent intentUpdate = new Intent(c, MailWidgetProvider.class);
+		//Add user account choice
+		intentUpdate.putExtra("user_name", chosen_accout_string);
+		intentUpdate.putExtra("tag_chosen", tag_chosen);
 		intentUpdate.setAction(LOG);//Set an action anyway to filter it in onReceive()
 		intentUpdate.setData(uri);//One Alarm per instance.
 		//We will need the exact instance to identify the intent.

@@ -7,13 +7,8 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.RemoteViews;
-
-import com.JazzDevStudio.LacunaExpress.R;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -25,11 +20,6 @@ import java.util.HashMap;
 public class MailWidgetProvider extends AppWidgetProvider {
 
 	private static final String LOG = "com.JazzDevStudio.LacunaExpress.Widget.TempWidgetProvider";
-
-	public void onReceive(){
-
-	}
-
 
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 	                     int[] appWidgetIds) {
@@ -51,7 +41,8 @@ public class MailWidgetProvider extends AppWidgetProvider {
 		Intent intent = new Intent(context.getApplicationContext(),
 				MailWidgetUpdateService.class);
 		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIds);
-
+		//intent.putExtra("one", 123);
+		//intent.putExtra("one", 123);
 		// Update the widgets via the service
 		context.startService(intent);
 	}
@@ -59,14 +50,16 @@ public class MailWidgetProvider extends AppWidgetProvider {
 	private static HashMap<Integer, Uri> uris = new HashMap<Integer, Uri>();
 
 	@Override
-	public void onReceive(Context context,
-	                      Intent intent)
-	{
+	public void onReceive(Context context, Intent intent) {
+
+
+
 		String action = intent.getAction();
 		Log.d("onReceive", "action: " + action);
 		if(action.equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE) ||
-				action.equals("com.JazzDevStudio.LacunaExpress.Widget.TempWidgetConfig"))
+				action.equals("com.JazzDevStudio.LacunaExpress.Widget.MailWidgetConfig"))
 		{
+
 			//Check if there is a single widget ID.
 			int widgetID = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
 					AppWidgetManager.INVALID_APPWIDGET_ID);
@@ -81,28 +74,8 @@ public class MailWidgetProvider extends AppWidgetProvider {
 			super.onReceive(context, intent);
 	}
 
-	/*
 	@Override
-	public void onUpdate(Context context,
-	                     AppWidgetManager appWidgetManager,
-	                     int[] appWidgetIds)
-	{
-		Log.d("onUpdate", "called, number of instances " + appWidgetIds.length);
-		for (int widgetId : appWidgetIds)
-		{
-			updateAppWidget(context,
-					appWidgetManager,
-					widgetId);
-		}
-	}
-	*/
-
-	/**
-	 * Each time an instance is removed, we cancel the associated AlarmManager.
-	 */
-	@Override
-	public void onDeleted(Context context, int[] appWidgetIds)
-	{
+	public void onDeleted(Context context, int[] appWidgetIds) {
 		super.onDeleted(context, appWidgetIds);
 		for (int appWidgetId : appWidgetIds)
 		{
@@ -110,8 +83,7 @@ public class MailWidgetProvider extends AppWidgetProvider {
 		}
 	}
 
-	protected void cancelAlarmManager(Context context, int widgetID)
-	{
+	protected void cancelAlarmManager(Context context, int widgetID) {
 		AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		Intent intentUpdate = new Intent(context, MailWidgetProvider.class);
 		//AlarmManager are identified with Intent's Action and Uri.
@@ -135,10 +107,10 @@ public class MailWidgetProvider extends AppWidgetProvider {
 		uris.put(new Integer(id), uri);
 	}
 
+	/*
 	private void updateAppWidget(Context context,
 	                             AppWidgetManager appWidgetManager,
-	                             int appWidgetId)
-	{
+	                             int appWidgetId) {
 		//Inflate layout.
 		RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
 				R.layout.widget_mail_layout);
@@ -165,9 +137,9 @@ public class MailWidgetProvider extends AppWidgetProvider {
 		//Call the Manager to ensure the changes take effect.
 		appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 	}
+	*/
 
-	private String getTimeStamp()
-	{
+	private String getTimeStamp() {
 		String res="";
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
