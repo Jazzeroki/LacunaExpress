@@ -1,7 +1,7 @@
 package com.JazzDevStudio.LacunaExpress.Database;
 
-import android.net.Uri;
 import android.content.ContentUris;
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
@@ -21,6 +21,7 @@ public class DatabaseContract {
 	//Strings for the PATH_ variables
 	public static final String PATH_MESSAGES = "messages";
 	public static final String PATH_EMPIRE = "empire";
+	public static final String PATH_WIDGET = "widget";
 
 	// Inner class that defines the table contents of the Messages table
 	public static final class MessagesEntry implements BaseColumns {
@@ -36,6 +37,8 @@ public class DatabaseContract {
 		// Table name
 		public static final String TABLE_NAME = "messages";
 
+		// Stored as a string, message ID. Foreign key
+		public static final String COLUMN_MESSAGES_ID = "messages_id";
 		// Stored as a string, name of person or people who sent mail (IE Silmarilos)
 		public static final String COLUMN_FROM = "from";
 		// Stored as a string, name of person or people are having mail sent to them (IE Silmarilos)
@@ -67,7 +70,7 @@ public class DatabaseContract {
 		// Stored as an int, To ID (IE )
 		public static final String COLUMN_TO_ID = "to_id";
 		// Stored as an int, the mail ID # (IE 231402)
-		public static final String COLUMN_ID = "id";
+		public static final String COLUMN_MAIL_ID = "id";
 
 		public static Uri buildLocationUri(long id) {
 			return ContentUris.withAppendedId(CONTENT_URI, id);
@@ -88,8 +91,6 @@ public class DatabaseContract {
 		//Table Name: empire (IE Silmarilos' Empire)
 		public static final String TABLE_NAME = "empire";
 
-		// Column with the foreign key into the location table.
-		public static final String COLUMN_LOC_KEY = "location_id";
 		// Stored as an int, RPC count (IE 2492)
 		public static final String COLUMN_RPC_COUNT = "rpc_count";
 		// Stored as an int, How many new messages there are (IE 250)
@@ -124,8 +125,8 @@ public class DatabaseContract {
 		public static final String COLUMN_SERVER = "server";
 		// Stored as a string, Alignment
 		public static final String COLUMN_Alignment = "alignment";
-		// Stored as a string, empire ID. This should likely be the primary key / foreign key
-		public static final String COLUMN_ID = "id";
+		// Stored as a string, empire ID. Foreign key
+		public static final String COLUMN_EMPIRE_ID = "empire_id";
 
 		//
 		public static Uri buildWeatherUri(long id) {
@@ -156,6 +157,71 @@ public class DatabaseContract {
 
 		public static String getStartDateFromUri(Uri uri) {
 			return uri.getQueryParameter(COLUMN_NAME);
+		}
+	}
+
+	/* Inner class that defines the table contents of the Widget table */
+	public static final class WidgetEntry implements BaseColumns {
+
+		public static final Uri CONTENT_URI =
+				BASE_CONTENT_URI.buildUpon().appendPath(PATH_WIDGET).build();
+
+		public static final String CONTENT_TYPE =
+				"vnd.android.cursor.dir/" + CONTENT_AUTHORITY + "/" + PATH_WIDGET;
+		public static final String CONTENT_ITEM_TYPE =
+				"vnd.android.cursor.item/" + CONTENT_AUTHORITY + "/" + PATH_WIDGET;
+
+		// Table name
+		public static final String TABLE_NAME = "widget";
+
+		// Column with the foreign key into the location table.
+		public static final String COLUMN_WIDGET_ID = "widget_id";
+		// Stored as an int, frequency in minutes that the widget updates (IE 15)
+		public static final String COLUMN_SYNC_FREQUENCY = "sync_frequency";
+		// Stored as a string, username (IE Silmailos (US1))
+		public static final String COLUMN_USERNAME = "username";
+		// Stored as a string, total number of messages with no specified tag (IE 1210)
+		public static final String COLUMN_MESSAGE_COUNT_ALL = "message_count_all";
+		// Stored as an int, total number of messages with received tag correspondence. (IE 15)
+		public static final String COLUMN_MESSAGE_COUNT_CORRESPONDENCE = "message_count_correspondence";
+		// Stored as an int, total number of messages with received tag tutorial
+		public static final String COLUMN_MESSAGE_COUNT_TUTORIAL = "message_count_tutorial";
+		// Stored as an int, total number of messages with received tag medal
+		public static final String COLUMN_MESSAGE_COUNT_MEDAL = "message_count_medal";
+		// Stored as an int, total number of messages with received tag intelligence
+		public static final String COLUMN_MESSAGE_COUNT_INTELLIGENCE = "message_count_intelligence";
+		// Stored as an int, total number of messages with received tag alert
+		public static final String COLUMN_MESSAGE_COUNT_ALERT = "message_count_alert";
+		// Stored as an int, total number of messages with received tag attack
+		public static final String COLUMN_MESSAGE_COUNT_ATTACK = "message_count_attack";
+		// Stored as an int, total number of messages with received tag colonization
+		public static final String COLUMN_MESSAGE_COUNT_COLONIZATION = "message_count_colonization";
+		// Stored as an int, total number of messages with received tag complaint
+		public static final String COLUMN_MESSAGE_COUNT_COMPLAINT = "message_count_complaint";
+		// Stored as an int, total number of messages with received tag excavator
+		public static final String COLUMN_MESSAGE_COUNT_EXCAVATOR = "message_count_excavator";
+		// Stored as an int, total number of messages with received tag mission
+		public static final String COLUMN_MESSAGE_COUNT_MISSION = "message_count_mission";
+		// Stored as an int, total number of messages with received tag parliament
+		public static final String COLUMN_MESSAGE_COUNT_PARLIAMENT = "message_count_parliament";
+		// Stored as an int, total number of messages with received tag probe
+		public static final String COLUMN_MESSAGE_COUNT_PROBE = "message_count_probe";
+		// Stored as an int, total number of messages with received tag spies
+		public static final String COLUMN_MESSAGE_COUNT_SPIES = "message_count_spies";
+		// Stored as an int, total number of messages with received tag fissure
+		public static final String COLUMN_MESSAGE_COUNT_FISSURE = "message_count_fissure";
+		// Stored as a string, tag chosen (IE Correspondence)
+		public static final String COLUMN_TAG_CHOSEN = "tag_chosen";
+		// Stored as a string, choice of color background (IE blue)
+		public static final String COLUMN_COLOR_BACKGROUND_CHOICE = "color_background_choice";
+		// Stored as a string, choice of color font (IE blue)
+		public static final String COLUMN_COLOR_FONT_CHOICE = "color_font_choice";
+		// Stored as a String, the Session ID (IE 14th3-jk123k-12345k)
+		public static final String COLUMN_SESSION_ID = "session_id";
+
+
+		public static Uri buildLocationUri(long id) {
+			return ContentUris.withAppendedId(CONTENT_URI, id);
 		}
 	}
 }

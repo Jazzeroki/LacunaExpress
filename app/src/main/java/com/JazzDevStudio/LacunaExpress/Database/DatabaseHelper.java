@@ -41,7 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 				DatabaseContract.EmpireEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
 
 				// the ID of the location entry associated with this weather data
-				DatabaseContract.EmpireEntry.COLUMN_LOC_KEY + " INTEGER NOT NULL, " +
+				DatabaseContract.EmpireEntry.COLUMN_EMPIRE_ID + " INTEGER NOT NULL, " +
 				DatabaseContract.EmpireEntry.COLUMN_RPC_COUNT + " TEXT NOT NULL, " +
 				DatabaseContract.EmpireEntry.COLUMN_RPC_COUNT + " TEXT NOT NULL, " +
 				DatabaseContract.EmpireEntry.COLUMN_RPC_COUNT + " INTEGER NOT NULL," +
@@ -55,16 +55,60 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 				DatabaseContract.EmpireEntry.COLUMN_RPC_COUNT + " REAL NOT NULL, " +
 
 				// Set up the location column as a foreign key to location table.
-				" FOREIGN KEY (" + DatabaseContract.EmpireEntry.COLUMN_LOC_KEY + ") REFERENCES " +
-				DatabaseContract.MessagesEntry.TABLE_NAME + " (" + DatabaseContract.MessagesEntry._ID + "), " +
+				//" FOREIGN KEY (" + DatabaseContract.EmpireEntry.COLUMN_LOC_KEY + ") REFERENCES " +
+				//DatabaseContract.MessagesEntry.TABLE_NAME + " (" + DatabaseContract.MessagesEntry._ID + "), " +
 
 				// To assure the application have just one weather entry per day
 				// per location, it's created a UNIQUE constraint with REPLACE strategy
-				" UNIQUE (" + DatabaseContract.EmpireEntry.COLUMN_RPC_COUNT + ", " +
-				DatabaseContract.EmpireEntry.COLUMN_LOC_KEY + ") ON CONFLICT REPLACE);";
+				//" UNIQUE (" + DatabaseContract.EmpireEntry.COLUMN_RPC_COUNT + ", " +
+				//DatabaseContract.EmpireEntry.COLUMN_LOC_KEY + ") ON CONFLICT REPLACE);";
+				");";
+
+		final String SQL_CREATE_WIDGET_TABLE = "CREATE TABLE " + DatabaseContract.WidgetEntry.TABLE_NAME + " (" +
+				// Why AutoIncrement here, and not above?
+				// Unique keys will be auto-generated in either case.  But for weather
+				// forecasting, it's reasonable to assume the user will want information
+				// for a certain date and all dates *following*, so the forecast data
+				// should be sorted accordingly.
+				DatabaseContract.WidgetEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+
+				// the ID of the location entry associated with this weather data
+				DatabaseContract.WidgetEntry.COLUMN_TAG_CHOSEN + " TEXT NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_SYNC_FREQUENCY + " INTEGER NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_USERNAME + " TEXT NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_MESSAGE_COUNT_ALL + " TEXT NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_TAG_CHOSEN + " TEXT NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_COLOR_BACKGROUND_CHOICE + " TEXT NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_COLOR_FONT_CHOICE + " TEXT NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_MESSAGE_COUNT_CORRESPONDENCE + " INTEGER NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_MESSAGE_COUNT_TUTORIAL + " INTEGER NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_MESSAGE_COUNT_MEDAL + " INTEGER NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_MESSAGE_COUNT_INTELLIGENCE + " INTEGER NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_MESSAGE_COUNT_ATTACK + " INTEGER NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_MESSAGE_COUNT_ALERT + " INTEGER NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_MESSAGE_COUNT_COLONIZATION + " INTEGER NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_MESSAGE_COUNT_COMPLAINT + " INTEGER NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_MESSAGE_COUNT_EXCAVATOR + " INTEGER NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_MESSAGE_COUNT_MISSION + " INTEGER NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_MESSAGE_COUNT_PARLIAMENT + " INTEGER NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_MESSAGE_COUNT_PROBE + " INTEGER NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_MESSAGE_COUNT_SPIES + " INTEGER NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_MESSAGE_COUNT_FISSURE + " INTEGER NOT NULL, " +
+				DatabaseContract.WidgetEntry.COLUMN_SESSION_ID + "TEXT NOT NULL" +
+
+				// Set up the location column as a foreign key to location table.
+				//" FOREIGN KEY (" + DatabaseContract.WidgetEntry.COLUMN_WIDGET_ID + ") REFERENCES " +
+				//DatabaseContract.MessagesEntry.TABLE_NAME + " (" + DatabaseContract.MessagesEntry._ID + "), " +
+
+				// To assure the application have just one weather entry per day
+				// per location, it's created a UNIQUE constraint with REPLACE strategy
+				//" UNIQUE (" + DatabaseContract.WidgetEntry.COLUMN_RPC_COUNT + ", " +
+				//DatabaseContract.EmpireEntry.COLUMN_LOC_KEY + ") ON CONFLICT REPLACE);";
+				");";
 
 		sqLiteDatabase.execSQL(SQL_CREATE_MESSAGE_TABLE);
 		sqLiteDatabase.execSQL(SQL_CREATE_EMPIRE_TABLE);
+		sqLiteDatabase.execSQL(SQL_CREATE_WIDGET_TABLE);
 	}
 
 	@Override
@@ -77,6 +121,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 		// should be your top priority before modifying this method.
 		sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.EmpireEntry.TABLE_NAME);
 		sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.MessagesEntry.TABLE_NAME);
+		sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.WidgetEntry.TABLE_NAME);
 		onCreate(sqLiteDatabase);
 	}
 }
