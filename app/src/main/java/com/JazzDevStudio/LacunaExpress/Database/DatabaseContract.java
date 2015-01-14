@@ -126,35 +126,41 @@ public class DatabaseContract {
 		// Stored as a string, Alignment
 		public static final String COLUMN_Alignment = "alignment";
 		// Stored as a string, empire ID. Foreign key
-		public static final String COLUMN_EMPIRE_ID = "empire_id";
+		//public static final String COLUMN_EMPIRE_ID = "empire_id"; //Transferred to widget below
 
-		//
+		//For standard URI with ID base integer key (Item or list of items)
 		public static Uri buildWeatherUri(long id) {
 			return ContentUris.withAppendedId(CONTENT_URI, id);
 		}
 
+		//Adding on to the above method by adding a specific setting
 		public static Uri buildWeatherLocation(String locationSetting) {
 			return CONTENT_URI.buildUpon().appendPath(locationSetting).build();
 		}
 
+		//Adding to above method by adding query parameters, IE, username, tag, session_id
 		public static Uri buildWeatherLocationWithStartDate(
 				String locationSetting, String startDate) {
 			return CONTENT_URI.buildUpon().appendPath(locationSetting)
 					.appendQueryParameter(COLUMN_NAME, startDate).build();
 		}
 
+		//Adding to above method by creating a 2 part URI. Contains both !!!LOCATION!!! and !!!DATE!!! segments
 		public static Uri buildWeatherLocationWithDate(String locationSetting, String date) {
 			return CONTENT_URI.buildUpon().appendPath(locationSetting).appendPath(date).build();
 		}
 
+		//Helps decode the URI structure. Hides URI Structure from code
 		public static String getLocationSettingFromUri(Uri uri) {
 			return uri.getPathSegments().get(1);
 		}
 
+		//Helps decode the URI structure. Hides URI Structure from code
 		public static String getDateFromUri(Uri uri) {
 			return uri.getPathSegments().get(2);
 		}
 
+		//Helps decode the URI structure. Hides URI Structure from code
 		public static String getStartDateFromUri(Uri uri) {
 			return uri.getQueryParameter(COLUMN_NAME);
 		}
@@ -218,8 +224,10 @@ public class DatabaseContract {
 		public static final String COLUMN_COLOR_FONT_CHOICE = "color_font_choice";
 		// Stored as a String, the Session ID (IE 14th3-jk123k-12345k)
 		public static final String COLUMN_SESSION_ID = "session_id";
+		//Foreign Key
+		public static final String COLUMN_EMPIRE_ID = "empire_id";
 
-		//For standard URI with ID base integer key
+		//For standard URI with ID base integer key. Appends the ID of the record (IE Session_ID)
 		public static Uri buildLocationUri(long id) {
 			return ContentUris.withAppendedId(CONTENT_URI, id);
 		}

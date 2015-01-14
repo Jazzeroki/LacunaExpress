@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.JazzDevStudio.LacunaExpress"
     android:versionCode="2"
-    android:versionName="0.11" > <!-- SDK Levels -->
+    android:versionName="0.11" > 
+	
+	<!-- SDK Levels -->
     <uses-sdk
         android:minSdkVersion="17"
         android:targetSdkVersion="20" />
@@ -12,9 +14,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
-    <!-- End Manifest -->
-
 
     <!-- Application Declarations -->
     <application
@@ -99,6 +98,12 @@
             </intent-filter>
 
         </activity>
+
+        <!--Adding the ContentProvider -->
+        <provider
+            android:authorities="com.JazzDevStudio.LacunaExpress"
+            android:name=".Database.DatabaseProvider"
+            />
 
     </application>
     <!-- End Application -->
