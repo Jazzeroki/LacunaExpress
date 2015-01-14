@@ -219,7 +219,7 @@ public class DatabaseContract {
 		// Stored as a String, the Session ID (IE 14th3-jk123k-12345k)
 		public static final String COLUMN_SESSION_ID = "session_id";
 
-
+		//For standard URI with ID base integer key
 		public static Uri buildLocationUri(long id) {
 			return ContentUris.withAppendedId(CONTENT_URI, id);
 		}
