@@ -5,8 +5,11 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.os.Parcelable;
 
 /**
  * Created by PatrickSSD2 on 1/13/2015.
@@ -182,7 +185,28 @@ public class DatabaseProvider extends ContentProvider {
 	}
 
 	public Uri insert(Uri uri, ContentValues values) {
-		return null;
+		final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+		final int match = sUriMatcher.match(uri);
+		Uri returnuri;
+
+		switch (match){
+			case WEATHER:{
+				long _id = db.insert(DatabaseContract.WidgetEntry.TABLE_NAME, null, contentValues);
+				if (_id > 0){
+					returnuri = DatabaseContract.WidgetEntry.buildLocationUri(_id);
+				} else {
+					throw new SQLException("Failed to insert row into "+uri);
+				}
+
+				break;
+			}
+			case LOCATION:{
+				returnuri = null;
+				break;
+			}
+			default:
+				throw new UnsupportedOperationException("Unkown URI: "+uri);
+		}
 	}
 
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
