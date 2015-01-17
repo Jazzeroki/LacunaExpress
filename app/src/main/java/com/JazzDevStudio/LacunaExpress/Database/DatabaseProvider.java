@@ -114,7 +114,7 @@ public class DatabaseProvider extends ContentProvider {
 			// "weather"
 			case WEATHER: {
 				retCursor = mOpenHelper.getReadableDatabase().query(
-						WeatherContract.WeatherEntry.TABLE_NAME,
+						WeatherContract.WeatherEntry.TABLE_NAME, //Edit to allow for right table access
 						projection,
 						selection,
 						selectionArgs,
