@@ -1,21 +1,16 @@
 package com.JazzDevStudio.LacunaExpress.Database;
 
 import android.content.ContentProvider;
-import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.os.Parcelable;
 
 /**
  * Created by PatrickSSD2 on 1/13/2015.
  */
 public class DatabaseProvider extends ContentProvider {
 
+	/*
 	// The URI Matcher used by this content provider.
 	private static final UriMatcher sUriMatcher = buildUriMatcher();
 	private DatabaseHelper mOpenHelper;
@@ -82,18 +77,19 @@ public class DatabaseProvider extends ContentProvider {
 		//Items stored as Strings use *
 		matcher.addURI(authority, DatabaseContract.PATH_WIDGET, WEATHER);  //EDIT
 		matcher.addURI(authority, DatabaseContract.PATH_WIDGET + "/*", WEATHER_WITH_LOCATION); //EDIT
-		matcher.addURI(authority, DatabaseContract.PATH_WIDGET + "/*/*", WEATHER_WITH_LOCATION_AND_DATE); //EDIT
+		matcher.addURI(authority, DatabaseContract.PATH_WIDGET +  */
+		//               "/*/*", WEATHER_WITH_LOCATION_AND_DATE); //EDIT
 
 		//Items stored as numbers use #
-		matcher.addURI(authority, DatabaseContract.PATH_WIDGET, LOCATION); //EDIT
-		matcher.addURI(authority, DatabaseContract.PATH_WIDGET + "/#", LOCATION_ID); //EDIT //Though leave as # as _id is always long int
+		//matcher.addURI(authority, DatabaseContract.PATH_WIDGET, LOCATION); //EDIT
+		//matcher.addURI(authority, DatabaseContract.PATH_WIDGET + "/#", LOCATION_ID); //EDIT //Though leave as # as _id is always long int
 
-		return matcher;
-	}
+		//return matcher;
+	//}
 
-	//
+
 	public boolean onCreate() {
-		mOpenHelper = new DatabaseHelper(getContext());
+		//mOpenHelper = new DatabaseHelper(getContext());
 		return true; //Return true to tell android the content provider has been created successfully
 	}
 
@@ -102,32 +98,33 @@ public class DatabaseProvider extends ContentProvider {
 
 		Cursor retCursor;
 
-		switch (sUriMatcher.match(uri)) {
-			// "weather/*/*"
-			case WEATHER_WITH_LOCATION_AND_DATE:
-			{
-				retCursor = getWeatherByLocationSetting(uri, projection, sortOrder);
-				break;
-			}
-			// "weather/*"
-			case WEATHER_WITH_LOCATION: {
-				retCursor = getWeatherByLocationSetting(uri, projection, sortOrder);
-				break;
-			}
-			// "weather"
-			case WEATHER: {
-				retCursor = mOpenHelper.getReadableDatabase().query(
-						WeatherContract.WeatherEntry.TABLE_NAME, //Edit to allow for right table access
-						projection,
-						selection,
-						selectionArgs,
-						null,
-						null,
-						sortOrder
-				);
-				break;
-			}
-			// "location/*"
+		//switch (sUriMatcher.match(uri)) {
+		// "weather/*/*"
+		//case WEATHER_WITH_LOCATION_AND_DATE:
+		{
+			//retCursor = getWeatherByLocationSetting(uri, projection, sortOrder);
+			//break;
+		}
+		// "weather/*"
+		//case WEATHER_WITH_LOCATION: {
+		//retCursor = getWeatherByLocationSetting(uri, projection, sortOrder);
+		//break;
+		//}
+		// "weather"
+		//case WEATHER: {
+		//retCursor = mOpenHelper.getReadableDatabase().query(
+		//WeatherContract.WeatherEntry.TABLE_NAME, //Edit to allow for right table access
+		//projection,
+		//selection,
+		//selectionArgs,
+		//null,
+		//null,
+		//sortOrder
+		//);
+		//break;
+		//}
+		// "location/*"
+	/*
 			case LOCATION_ID: {
 				retCursor = mOpenHelper.getReadableDatabase().query(
 						WeatherContract.LocationEntry.TABLE_NAME,
@@ -213,6 +210,31 @@ public class DatabaseProvider extends ContentProvider {
 		return 0;
 	}
 
+	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+		return 0;
+	}
+
+	*/
+
+		return null;
+	}
+
+	@Override
+	public String getType(Uri uri) {
+		return null;
+	}
+
+	@Override
+	public Uri insert(Uri uri, ContentValues values) {
+		return null;
+	}
+
+	@Override
+	public int delete(Uri uri, String selection, String[] selectionArgs) {
+		return 0;
+	}
+
+	@Override
 	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 		return 0;
 	}

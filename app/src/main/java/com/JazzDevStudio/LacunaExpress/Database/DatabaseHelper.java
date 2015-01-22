@@ -41,7 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 				DatabaseContract.EmpireEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
 
 				// the ID of the location entry associated with this weather data
-				DatabaseContract.EmpireEntry.COLUMN_EMPIRE_ID + " INTEGER NOT NULL, " +
+				//DatabaseContract.EmpireEntry.COLUMN_EMPIRE_ID + " INTEGER NOT NULL, " +
 				DatabaseContract.EmpireEntry.COLUMN_RPC_COUNT + " TEXT NOT NULL, " +
 				DatabaseContract.EmpireEntry.COLUMN_RPC_COUNT + " TEXT NOT NULL, " +
 				DatabaseContract.EmpireEntry.COLUMN_RPC_COUNT + " INTEGER NOT NULL," +

@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
 import com.JazzDevStudio.LacunaExpress.AddAccount;
+import com.JazzDevStudio.LacunaExpress.Database.TEMPDatabaseAdapter;
 import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Inbox;
 import com.JazzDevStudio.LacunaExpress.LEWrapperResponse.Response;
 import com.JazzDevStudio.LacunaExpress.MISCClasses.L;
@@ -50,6 +51,7 @@ import com.google.gson.Gson;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
 public class WidgetConfig extends Activity implements serverFinishedListener, View.OnClickListener, RadioGroup.OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
 
@@ -66,6 +68,10 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 	//Total number of messages
 	String message_count_string;
 	int message_count_int;
+
+	//To be written into the database
+	String session_id;
+	String empire_id;
 
 	//Do they want notifications?
 	boolean notifications_option;
@@ -336,28 +342,8 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 
 	//Create the widget here
 	public void onClick(View v) {
-
-		//RemoteViews v1 = new RemoteViews(c.getPackageName(), R.layout.widget_mail_layout);
-
-		//Shared Preferences
-		String str = Integer.toString(awID);
-		sp.putString(editor, str + "::" + "sync_frequency", Integer.toString(sync_frequency)); //Sync Frequency in minutes
-		sp.putString(editor, str + "::" + "chosen_accout_string", chosen_accout_string); //Username
-		sp.putString(editor, str + "::" + "message_count_string", message_count_string); //Message count
-		sp.putString(editor, str + "::" + "message_count_int", Integer.toString(message_count_int));
-		sp.putString(editor, str + "::" + "tag_chosen", tag_chosen); //Tag Chosen
-		sp.putString(editor, str + "::" + "color_background_choice", color_background_choice); //Background Color
-		sp.putString(editor, str + "::" + "font_color_choice", font_color_choice); //Font color
-
-		//TESTING
-		sp.putString(editor, "sync_frequency_temp", Integer.toString(sync_frequency)); //Sync Frequency in minutes
-		sp.putString(editor, "chosen_accout_string_temp", chosen_accout_string); //Username
-		sp.putString(editor, "message_count_string_temp", message_count_string); //Message count
-		sp.putString(editor, "message_count_int_temp", Integer.toString(message_count_int));
-		sp.putString(editor, "tag_chosen_temp", tag_chosen); //Tag Chosen
-		sp.putString(editor, "color_background_choice_temp", color_background_choice); //Background Color
-		sp.putString(editor, "font_color_choice_temp", font_color_choice); //Font color
-		editor.commit();
+		//Write all the data into the database
+		putDataInDatabase();
 
 		//Set and launch the Alarm Manager
 		Uri.Builder build = new Uri.Builder();
@@ -397,6 +383,60 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 		Toast.makeText(this, "Your widget will update shortly", Toast.LENGTH_LONG).show();
 		finish();
 
+	}
+
+	//Puts the data into the database
+	private void putDataInDatabase() {
+		//Create a database object and set the values here
+		TEMPDatabaseAdapter db = new TEMPDatabaseAdapter(this);
+
+		//For the row ID
+		String widget_id = Integer.toString(awID);
+
+		try {
+
+			//List of Strings to hold the passed data
+			List<String> passed_data = new ArrayList<>();
+
+			passed_data.add(widget_id); //0
+			passed_data.add(Integer.toString(sync_frequency)); //1
+			passed_data.add(chosen_accout_string); //2
+			passed_data.add(Integer.toString(message_count_int)); //3
+			/*
+			I am writing all of these in as the specific tag chosen because as the App widget ID is unique, it
+			will not matter as it is not checking the other columns. Once I add an update to allow for editing
+			widgets however, this will need to be changed. Furthermore, I will need to change it to raw SQL
+			update code to allow for specific passing of the tag chosen and using that to write.
+			 */
+			passed_data.add(message_count_string); //4
+			passed_data.add(message_count_string); //5
+			passed_data.add(message_count_string); //6
+			passed_data.add(message_count_string); //7
+			passed_data.add(message_count_string); //8
+			passed_data.add(message_count_string); //9
+			passed_data.add(message_count_string); //10
+			passed_data.add(message_count_string); //11
+			passed_data.add(message_count_string); //12
+			passed_data.add(message_count_string); //13
+			passed_data.add(message_count_string); //14
+			passed_data.add(message_count_string); //15
+			passed_data.add(message_count_string); //16
+			passed_data.add(message_count_string); //17
+			passed_data.add(tag_chosen); //18
+			passed_data.add(color_background_choice); //19
+			passed_data.add(font_color_choice); //20
+			passed_data.add(color_background_choice); //19
+			passed_data.add(color_background_choice); //20
+			passed_data.add(selectedAccount.sessionID); //21
+			passed_data.add(selectedAccount.homePlanetID); //22
+			//AS OF RIGHT NOW, this line above is passing in the homePlanetID instead of the empire ID.
+			//This will be changed later on
+			db.insertData(passed_data);
+
+		} catch (Exception e){
+			e.printStackTrace();
+			Log.d("WidgetConfig", "Error in insertData() method");
+		}
 	}
 
 	//When an item is selected with the spinner

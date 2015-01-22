@@ -14,6 +14,7 @@ import android.widget.RemoteViews;
 
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
+import com.JazzDevStudio.LacunaExpress.Database.TEMPDatabaseAdapter;
 import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Inbox;
 import com.JazzDevStudio.LacunaExpress.LEWrapperResponse.Response;
 import com.JazzDevStudio.LacunaExpress.MISCClasses.SharedPrefs;
@@ -115,6 +116,20 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 					.getApplicationContext().getPackageName(),
 					R.layout.widget_mail_layout);
 
+			//Create a database object and set the values here
+			TEMPDatabaseAdapter db = new TEMPDatabaseAdapter(this);
+
+			//For the row ID
+			String widget_id = Integer.toString(awid);
+
+			//List to hold returned data
+			List<String> db_data = new ArrayList<>();
+
+			//Set the returned data = to the row's returned data
+			db_data = db.getRow(widget_id);
+
+			//Extract the return data from the List and use it
+
 			String user_name = sp.getString(settings, str + "::" + "chosen_accout_string", "Loading...");
 			Log.d("Service username passed is: ", user_name);
 			String tag_chosen = sp.getString(settings, str + "::" + "tag_chosen", "All");
@@ -123,6 +138,10 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 			//These 2 will be defined when a response is received from the server, still left in default values however.
 			String message_count_string = sp.getString(settings, str + "::" + "message_count_string", "1000000"); //String defined in global
 			String message_count_int = sp.getString(settings, str + "::" + "message_count_int", "1000000");
+			
+			//Still need to implement add the data in as well
+
+
 
 			AccountMan.GetAccount(user_name);
 			//Depending on tag chosen, different URI request sent in JSON
@@ -205,6 +224,7 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 			appWidgetManager.updateAppWidget(widgetId, remoteViews);
 		}
 		stopSelf();
+		Log.d("Service", "Has been Stopped");
 
 		super.onStart(intent, startId);
 	}
