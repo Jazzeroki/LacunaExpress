@@ -72,6 +72,14 @@
             android:name=".ReadMessageActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".Utilities"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".PlanetOptions"
+            android:label="@string/app_name" >
+        </activity>
 
         <!-- This manages the widget updates -->
         <receiver
