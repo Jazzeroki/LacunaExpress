@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,8 @@ public class TEMPDatabaseAdapter {
 
 	//Helper object
 	DatabaseHelper helper;
+
+	private SQLiteDatabase database;
 
 	//Constructor
 	public TEMPDatabaseAdapter(Context context){
@@ -48,12 +51,13 @@ public class TEMPDatabaseAdapter {
 		contentValues.put(helper.COLUMN_MESSAGE_COUNT_PARLIAMENT,  newData.get(14));
 		contentValues.put(helper.COLUMN_MESSAGE_COUNT_PROBE,  newData.get(15));
 		contentValues.put(helper.COLUMN_MESSAGE_COUNT_SPIES,  newData.get(16));
-		contentValues.put(helper.COLUMN_MESSAGE_COUNT_FISSURE,  newData.get(17));
-		contentValues.put(helper.COLUMN_TAG_CHOSEN,  newData.get(18));
-		contentValues.put(helper.COLUMN_COLOR_BACKGROUND_CHOICE,  newData.get(19));
-		contentValues.put(helper.COLUMN_COLOR_FONT_CHOICE,  newData.get(20));
-		contentValues.put(helper.COLUMN_SESSION_ID,  newData.get(21));
-		contentValues.put(helper.COLUMN_EMPIRE_ID,  newData.get(22));
+		contentValues.put(helper.COLUMN_MESSAGE_COUNT_TRADE,  newData.get(17));
+		contentValues.put(helper.COLUMN_MESSAGE_COUNT_FISSURE,  newData.get(18));
+		contentValues.put(helper.COLUMN_TAG_CHOSEN,  newData.get(19));
+		contentValues.put(helper.COLUMN_COLOR_BACKGROUND_CHOICE,  newData.get(20));
+		contentValues.put(helper.COLUMN_COLOR_FONT_CHOICE,  newData.get(21));
+		contentValues.put(helper.COLUMN_SESSION_ID,  newData.get(22));
+		contentValues.put(helper.COLUMN_EMPIRE_ID,  newData.get(23));
 
 		//Put the data into the database itself
 		long result = db.insert(helper.TABLE_NAME, null, contentValues);
@@ -122,10 +126,10 @@ public class TEMPDatabaseAdapter {
 				helper.COLUMN_MESSAGE_COUNT_COLONIZATION, helper.COLUMN_MESSAGE_COUNT_COMPLAINT,
 				helper.COLUMN_MESSAGE_COUNT_EXCAVATOR, helper.COLUMN_MESSAGE_COUNT_MISSION,
 				helper.COLUMN_MESSAGE_COUNT_PARLIAMENT, helper.COLUMN_MESSAGE_COUNT_PROBE,
-				helper.COLUMN_MESSAGE_COUNT_SPIES, helper.COLUMN_MESSAGE_COUNT_FISSURE,
-				helper.COLUMN_TAG_CHOSEN, helper.COLUMN_COLOR_BACKGROUND_CHOICE,
-				helper.COLUMN_COLOR_FONT_CHOICE, helper.COLUMN_SESSION_ID,
-				helper.COLUMN_EMPIRE_ID};
+				helper.COLUMN_MESSAGE_COUNT_SPIES, helper.COLUMN_MESSAGE_COUNT_TRADE,
+				helper.COLUMN_MESSAGE_COUNT_FISSURE, helper.COLUMN_TAG_CHOSEN,
+				helper.COLUMN_COLOR_BACKGROUND_CHOICE, helper.COLUMN_COLOR_FONT_CHOICE,
+				helper.COLUMN_SESSION_ID, helper.COLUMN_EMPIRE_ID};
 
 		//Query the database. Third param are the search params. This returns a cursor object
 		cursor = db.query(DatabaseHelper.TABLE_NAME, columns,
@@ -175,18 +179,20 @@ public class TEMPDatabaseAdapter {
 			String str15 = cursor.getString(index15);
 			int index16 = cursor.getColumnIndex(DatabaseHelper.COLUMN_MESSAGE_COUNT_SPIES);
 			String str16 = cursor.getString(index16);
-			int index17 = cursor.getColumnIndex(DatabaseHelper.COLUMN_MESSAGE_COUNT_FISSURE);
+			int index17 = cursor.getColumnIndex(DatabaseHelper.COLUMN_MESSAGE_COUNT_TRADE);
 			String str17 = cursor.getString(index17);
-			int index18 = cursor.getColumnIndex(DatabaseHelper.COLUMN_TAG_CHOSEN);
+			int index18 = cursor.getColumnIndex(DatabaseHelper.COLUMN_MESSAGE_COUNT_FISSURE);
 			String str18 = cursor.getString(index18);
-			int index19 = cursor.getColumnIndex(DatabaseHelper.COLUMN_COLOR_BACKGROUND_CHOICE);
+			int index19 = cursor.getColumnIndex(DatabaseHelper.COLUMN_TAG_CHOSEN);
 			String str19 = cursor.getString(index19);
-			int index20 = cursor.getColumnIndex(DatabaseHelper.COLUMN_COLOR_FONT_CHOICE);
+			int index20 = cursor.getColumnIndex(DatabaseHelper.COLUMN_COLOR_BACKGROUND_CHOICE);
 			String str20 = cursor.getString(index20);
-			int index21 = cursor.getColumnIndex(DatabaseHelper.COLUMN_SESSION_ID);
+			int index21 = cursor.getColumnIndex(DatabaseHelper.COLUMN_COLOR_FONT_CHOICE);
 			String str21 = cursor.getString(index21);
-			int index22 = cursor.getColumnIndex(DatabaseHelper.COLUMN_EMPIRE_ID);
+			int index22 = cursor.getColumnIndex(DatabaseHelper.COLUMN_SESSION_ID);
 			String str22 = cursor.getString(index22);
+			int index23 = cursor.getColumnIndex(DatabaseHelper.COLUMN_EMPIRE_ID);
+			String str23 = cursor.getString(index23);
 
 			pulled_data.add(str0);
 			pulled_data.add(str1);
@@ -211,6 +217,7 @@ public class TEMPDatabaseAdapter {
 			pulled_data.add(str20);
 			pulled_data.add(str21);
 			pulled_data.add(str22);
+			pulled_data.add(str23);
 
 			/*
 			//Add the items to the buffer
@@ -311,12 +318,13 @@ public class TEMPDatabaseAdapter {
 		contentValues.put(helper.COLUMN_MESSAGE_COUNT_PARLIAMENT,  newData.get(14));
 		contentValues.put(helper.COLUMN_MESSAGE_COUNT_PROBE,  newData.get(15));
 		contentValues.put(helper.COLUMN_MESSAGE_COUNT_SPIES,  newData.get(16));
-		contentValues.put(helper.COLUMN_MESSAGE_COUNT_FISSURE,  newData.get(17));
-		contentValues.put(helper.COLUMN_TAG_CHOSEN,  newData.get(18));
-		contentValues.put(helper.COLUMN_COLOR_BACKGROUND_CHOICE,  newData.get(19));
-		contentValues.put(helper.COLUMN_COLOR_FONT_CHOICE,  newData.get(20));
-		contentValues.put(helper.COLUMN_SESSION_ID,  newData.get(21));
-		contentValues.put(helper.COLUMN_EMPIRE_ID,  newData.get(22));
+		contentValues.put(helper.COLUMN_MESSAGE_COUNT_TRADE,  newData.get(17));
+		contentValues.put(helper.COLUMN_MESSAGE_COUNT_FISSURE,  newData.get(18));
+		contentValues.put(helper.COLUMN_TAG_CHOSEN,  newData.get(19));
+		contentValues.put(helper.COLUMN_COLOR_BACKGROUND_CHOICE,  newData.get(20));
+		contentValues.put(helper.COLUMN_COLOR_FONT_CHOICE,  newData.get(21));
+		contentValues.put(helper.COLUMN_SESSION_ID,  newData.get(22));
+		contentValues.put(helper.COLUMN_EMPIRE_ID,  newData.get(23));
 
 		//The last parameter in update needs a string array, not a string, so creating the array here
 		String[] whereArgs = {widget_id};
@@ -342,14 +350,22 @@ public class TEMPDatabaseAdapter {
 		return count;
 	}
 
+	public void open() throws SQLException {
+		database = helper.getWritableDatabase();
+	}
+
+	public void close() {
+		helper.close();
+	}
+
 	/////////////////////////////////////////////////////////////////////////////////
 	//This class creates an object which extends to the database for commands
 	//It is nested to encapsulate it
 	static class DatabaseHelper extends SQLiteOpenHelper {
 
-		private static final String DATABASE_NAME = "widget_database";
-		private static final String TABLE_NAME = "widget_table";
-		private static final int DATBASE_VERSION = 1;
+		private static final String DATABASE_NAME = "widgetdatabase";
+		private static final String TABLE_NAME = "widgettable";
+		private static final int DATBASE_VERSION = 2;
 		private static final String UID = "_id";
 		private static final String DROP_TABLE = "DROP TABLE IF EXISTS "+ TABLE_NAME;
 		// Column with the foreign key into the location table.
@@ -386,6 +402,8 @@ public class TEMPDatabaseAdapter {
 		public static final String COLUMN_MESSAGE_COUNT_PROBE = "message_count_probe";
 		// Stored as an int, total number of messages with received tag spies
 		public static final String COLUMN_MESSAGE_COUNT_SPIES = "message_count_spies";
+		// Stored as an int, total number of messages with received tag trade
+		public static final String COLUMN_MESSAGE_COUNT_TRADE = "message_count_trade";
 		// Stored as an int, total number of messages with received tag fissure
 		public static final String COLUMN_MESSAGE_COUNT_FISSURE = "message_count_fissure";
 		// Stored as a string, tag chosen (IE Correspondence)
@@ -401,30 +419,31 @@ public class TEMPDatabaseAdapter {
 
 		private Context context; //In case we need context
 
-		//Create table statement
-		private static final String CREATE_TABLE = "CREATE " + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ COLUMN_WIDGET_ID + " VARCHAR(255)"
-				+ COLUMN_SYNC_FREQUENCY + " VARCHAR(255)"
-				+ COLUMN_USERNAME + " VARCHAR(255)"
-				+ COLUMN_MESSAGE_COUNT_ALL + " VARCHAR(255)"
-				+ COLUMN_MESSAGE_COUNT_CORRESPONDENCE + " VARCHAR(255)"
-				+ COLUMN_MESSAGE_COUNT_TUTORIAL + " VARCHAR(255)"
-				+ COLUMN_MESSAGE_COUNT_MEDAL + " VARCHAR(255)"
-				+ COLUMN_MESSAGE_COUNT_INTELLIGENCE + " VARCHAR(255)"
-				+ COLUMN_MESSAGE_COUNT_ALERT + " VARCHAR(255)"
-				+ COLUMN_MESSAGE_COUNT_ATTACK + " VARCHAR(255)"
-				+ COLUMN_MESSAGE_COUNT_COLONIZATION + " VARCHAR(255)"
-				+ COLUMN_MESSAGE_COUNT_COMPLAINT + " VARCHAR(255)"
-				+ COLUMN_MESSAGE_COUNT_EXCAVATOR + " VARCHAR(255)"
-				+ COLUMN_MESSAGE_COUNT_MISSION + " VARCHAR(255)"
-				+ COLUMN_MESSAGE_COUNT_PARLIAMENT + " VARCHAR(255)"
-				+ COLUMN_MESSAGE_COUNT_PROBE + " VARCHAR(255)"
-				+ COLUMN_MESSAGE_COUNT_SPIES + " VARCHAR(255)"
-				+ COLUMN_MESSAGE_COUNT_FISSURE + " VARCHAR(255)"
-				+ COLUMN_TAG_CHOSEN + " VARCHAR(255)"
-				+ COLUMN_COLOR_BACKGROUND_CHOICE + " VARCHAR(255)"
-				+ COLUMN_COLOR_FONT_CHOICE + " VARCHAR(255)"
-				+ COLUMN_SESSION_ID + " VARCHAR(255)"
+		//Create table statement//
+		private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+				+ COLUMN_WIDGET_ID + " VARCHAR(255),"
+				+ COLUMN_SYNC_FREQUENCY + " VARCHAR(255),"
+				+ COLUMN_USERNAME + " VARCHAR(255),"
+				+ COLUMN_MESSAGE_COUNT_ALL + " VARCHAR(255),"
+				+ COLUMN_MESSAGE_COUNT_CORRESPONDENCE + " VARCHAR(255),"
+				+ COLUMN_MESSAGE_COUNT_TUTORIAL + " VARCHAR(255),"
+				+ COLUMN_MESSAGE_COUNT_MEDAL + " VARCHAR(255),"
+				+ COLUMN_MESSAGE_COUNT_INTELLIGENCE + " VARCHAR(255),"
+				+ COLUMN_MESSAGE_COUNT_ALERT + " VARCHAR(255),"
+				+ COLUMN_MESSAGE_COUNT_ATTACK + " VARCHAR(255),"
+				+ COLUMN_MESSAGE_COUNT_COLONIZATION + " VARCHAR(255),"
+				+ COLUMN_MESSAGE_COUNT_COMPLAINT + " VARCHAR(255),"
+				+ COLUMN_MESSAGE_COUNT_EXCAVATOR + " VARCHAR(255),"
+				+ COLUMN_MESSAGE_COUNT_MISSION + " VARCHAR(255),"
+				+ COLUMN_MESSAGE_COUNT_PARLIAMENT + " VARCHAR(255),"
+				+ COLUMN_MESSAGE_COUNT_PROBE + " VARCHAR(255),"
+				+ COLUMN_MESSAGE_COUNT_SPIES + " VARCHAR(255),"
+				+ COLUMN_MESSAGE_COUNT_TRADE + " VARCHAR(255),"
+				+ COLUMN_MESSAGE_COUNT_FISSURE + " VARCHAR(255),"
+				+ COLUMN_TAG_CHOSEN + " VARCHAR(255),"
+				+ COLUMN_COLOR_BACKGROUND_CHOICE + " VARCHAR(255),"
+				+ COLUMN_COLOR_FONT_CHOICE + " VARCHAR(255),"
+				+ COLUMN_SESSION_ID + " VARCHAR(255),"
 				+ COLUMN_EMPIRE_ID + " VARCHAR(255)"
 				+");";
 
@@ -437,10 +456,12 @@ public class TEMPDatabaseAdapter {
 
 		//This is called when the database is called for the first time
 		public void onCreate(SQLiteDatabase db) {
-
+			Log.d("Line 449 ", "Called");
 			try {
 				db.execSQL(CREATE_TABLE);
+				Log.d("Database ", "Has been created");
 			} catch (SQLException e) {
+				Log.d("Database ", "Was NOT created");
 				e.printStackTrace();
 			}
 		}
@@ -448,12 +469,14 @@ public class TEMPDatabaseAdapter {
 		//This is called when the database schema is changed (IE new columns or tables or deleting tables)
 		//YOU CAN use the ALTER TABLE call instead whenever you change a table if you don't want to use this
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+			Log.d("Line 472", "Called");
 			try {
 				db.execSQL(DROP_TABLE);
+				Log.d("Database ", "Has been Dropped");
 				onCreate(db);
 			} catch (SQLException e) {
 				e.printStackTrace();
+				Log.d("Database ", " Issue with onUpgrade");
 			}
 		}
 	}
