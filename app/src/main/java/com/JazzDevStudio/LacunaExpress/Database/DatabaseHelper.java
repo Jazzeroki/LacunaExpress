@@ -71,9 +71,6 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 				// for a certain date and all dates *following*, so the forecast data
 				// should be sorted accordingly.
 				DatabaseContract.WidgetEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-
-				// the ID of the location entry associated with this weather data
-				DatabaseContract.WidgetEntry.COLUMN_TAG_CHOSEN + " TEXT NOT NULL, " +
 				DatabaseContract.WidgetEntry.COLUMN_SYNC_FREQUENCY + " INTEGER NOT NULL, " +
 				DatabaseContract.WidgetEntry.COLUMN_USERNAME + " TEXT NOT NULL, " +
 				DatabaseContract.WidgetEntry.COLUMN_MESSAGE_COUNT_ALL + " TEXT NOT NULL, " +

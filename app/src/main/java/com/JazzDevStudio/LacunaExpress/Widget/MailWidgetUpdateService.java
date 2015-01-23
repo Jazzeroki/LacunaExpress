@@ -138,7 +138,7 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 			//These 2 will be defined when a response is received from the server, still left in default values however.
 			String message_count_string = sp.getString(settings, str + "::" + "message_count_string", "1000000"); //String defined in global
 			String message_count_int = sp.getString(settings, str + "::" + "message_count_int", "1000000");
-			
+
 			//Still need to implement add the data in as well
 
 

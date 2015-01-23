@@ -174,9 +174,9 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 			s.execute(sRequest);
 
 		}
-		else if (iExtra.hasExtra("chosen_accout_string")) {
+		else if (iExtra.hasExtra("chosen_account_string")) {
 
-			String a = iExtra.getStringExtra("chosen_accout_string");
+			String a = iExtra.getStringExtra("chosen_account_string");
 			String passed_tag = iExtra.getStringExtra("tag_chosen");
 
 			Log.d("SelectMessage", "Assigning selected account = a from hasExtras a is: "+a);

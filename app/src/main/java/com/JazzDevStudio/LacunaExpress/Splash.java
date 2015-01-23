@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
+import com.JazzDevStudio.LacunaExpress.Database.TEMPDatabaseAdapter;
 import com.JazzDevStudio.LacunaExpress.MISCClasses.IsMyActivityRunning;
 import com.JazzDevStudio.LacunaExpress.MISCClasses.sessionRefresh;
 
@@ -35,11 +36,20 @@ public class Splash extends Activity {
 
 	private boolean do_we_have_network_connection;
 
+	//Create the database
+	TEMPDatabaseAdapter db = new TEMPDatabaseAdapter(this);
+
 	@Override
 	protected void onCreate(Bundle inputVariableToSendToSuperClass) {
 
 		super.onCreate(inputVariableToSendToSuperClass);
 		setContentView(R.layout.splash);
+
+		//Creating the table if they do not already have it created as the service runs on startup
+		db.open();
+		//Close to prevent resource/ memory leaks
+		db.close();
+
 		Initialize();
 		//Setting background
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
