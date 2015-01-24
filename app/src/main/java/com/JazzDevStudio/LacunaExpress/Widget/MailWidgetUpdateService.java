@@ -130,14 +130,56 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 
 			//Extract the return data from the List and use it
 
-			String user_name = sp.getString(settings, str + "::" + "chosen_accout_string", "Loading...");
-			Log.d("Service username passed is: ", user_name);
-			String tag_chosen = sp.getString(settings, str + "::" + "tag_chosen", "All");
-			String color_background_choice = sp.getString(settings, str + "::" + "color_background_choice", "White");
-			String font_color_choice = sp.getString(settings, str + "::" + "font_color_choice", "Black");
-			//These 2 will be defined when a response is received from the server, still left in default values however.
-			String message_count_string = sp.getString(settings, str + "::" + "message_count_string", "1000000"); //String defined in global
-			String message_count_int = sp.getString(settings, str + "::" + "message_count_int", "1000000");
+			String user_name = db_data.get(2);
+			tag_chosen = db_data.get(18);
+			String color_background_choice = db_data.get(19);
+			String font_color_choice = db_data.get(20);;
+			message_count_int = db_data.get(3);
+
+			//Determine which tag chosen parameter was passed and return the mail respective to that call
+			if (tag_chosen.equalsIgnoreCase("All")){
+				message_count_string = db_data.get(4);
+			} else if (tag_chosen.equalsIgnoreCase("Correspondence")){
+				message_count_string = db_data.get(4);
+			} else if (tag_chosen.equalsIgnoreCase("Tutorial")){
+				message_count_string = db_data.get(5);
+			} else if (tag_chosen.equalsIgnoreCase("Medal")){
+				message_count_string = db_data.get(6);
+			} else if (tag_chosen.equalsIgnoreCase("Intelligence")){
+				message_count_string = db_data.get(7);
+			} else if (tag_chosen.equalsIgnoreCase("Alert")){
+				message_count_string = db_data.get(8);
+			} else if (tag_chosen.equalsIgnoreCase("Attack")){
+				message_count_string = db_data.get(9);
+			} else if (tag_chosen.equalsIgnoreCase("Colonization")){
+				message_count_string = db_data.get(10);
+			} else if (tag_chosen.equalsIgnoreCase("Complaint")){
+				message_count_string = db_data.get(11);
+			} else if (tag_chosen.equalsIgnoreCase("Excavator")){
+				message_count_string = db_data.get(12);
+			} else if (tag_chosen.equalsIgnoreCase("Mission")){
+				message_count_string = db_data.get(13);
+			} else if (tag_chosen.equalsIgnoreCase("Parliament")){
+				message_count_string = db_data.get(14);
+			} else if (tag_chosen.equalsIgnoreCase("Probe")){
+				message_count_string = db_data.get(15);
+			} else if (tag_chosen.equalsIgnoreCase("Spies")){
+				message_count_string = db_data.get(16);
+			} else if (tag_chosen.equalsIgnoreCase("Trade")){
+				message_count_string = db_data.get(17);
+			} else if (tag_chosen.equalsIgnoreCase("Fissure")){
+				message_count_string = db_data.get(18);
+			}
+
+			//contentValues.put(helper.COLUMN_SESSION_ID,  newData.get(22)); //May need...
+
+			//Still need to implement add the data in as well
+
+
+
+			//
+
+			//
 
 			//Still need to implement add the data in as well
 
