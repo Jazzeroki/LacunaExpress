@@ -435,6 +435,13 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 			e.printStackTrace();
 			Log.d("WidgetConfig", "Error in insertData() method");
 		}
+
+		try{
+			db.close();
+			Log.d("Database", "Has been closed");
+		} catch (Exception e){
+			Log.d("Database", "Could not be closed!");
+		}
 	}
 
 	//When an item is selected with the spinner

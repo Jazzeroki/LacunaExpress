@@ -106,10 +106,6 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 
 			awid = widgetId;
 
-			//Retrieve all of the data from the shared preferences held via app widget ID
-			settings = getSharedPreferences(PREFS_NAME, 0);
-			editor = settings.edit();
-
 			String str = Integer.toString(widgetId);
 
 			RemoteViews remoteViews = new RemoteViews(this
@@ -131,8 +127,15 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 			db_data = db.getRow(widget_id);
 
 			String user_name, color_background_choice, font_color_choice;
-			if (db_data.size() > 0){
 
+			user_name = "Loading...";
+			tag_chosen = "All";
+			color_background_choice = "blue";
+			font_color_choice = "white";
+			message_count_int = "-1";
+			message_count_string = "-1";
+
+			try {
 				user_name = db_data.get(2);
 				Log.d("MailWidgetUpdateService Database username = ", user_name);
 				tag_chosen = db_data.get(19);
@@ -145,37 +148,37 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 				Log.d("MailWidgetUpdateService Database message count int = ", message_count_int);
 
 				//Determine which tag chosen parameter was passed and return the mail respective to that call
-				if (tag_chosen.equalsIgnoreCase("All")){
+				if (tag_chosen.equalsIgnoreCase("All")) {
 					message_count_string = db_data.get(4);
-				} else if (tag_chosen.equalsIgnoreCase("Correspondence")){
+				} else if (tag_chosen.equalsIgnoreCase("Correspondence")) {
 					message_count_string = db_data.get(4);
-				} else if (tag_chosen.equalsIgnoreCase("Tutorial")){
+				} else if (tag_chosen.equalsIgnoreCase("Tutorial")) {
 					message_count_string = db_data.get(5);
-				} else if (tag_chosen.equalsIgnoreCase("Medal")){
+				} else if (tag_chosen.equalsIgnoreCase("Medal")) {
 					message_count_string = db_data.get(6);
-				} else if (tag_chosen.equalsIgnoreCase("Intelligence")){
+				} else if (tag_chosen.equalsIgnoreCase("Intelligence")) {
 					message_count_string = db_data.get(7);
-				} else if (tag_chosen.equalsIgnoreCase("Alert")){
+				} else if (tag_chosen.equalsIgnoreCase("Alert")) {
 					message_count_string = db_data.get(8);
-				} else if (tag_chosen.equalsIgnoreCase("Attack")){
+				} else if (tag_chosen.equalsIgnoreCase("Attack")) {
 					message_count_string = db_data.get(9);
-				} else if (tag_chosen.equalsIgnoreCase("Colonization")){
+				} else if (tag_chosen.equalsIgnoreCase("Colonization")) {
 					message_count_string = db_data.get(10);
-				} else if (tag_chosen.equalsIgnoreCase("Complaint")){
+				} else if (tag_chosen.equalsIgnoreCase("Complaint")) {
 					message_count_string = db_data.get(11);
-				} else if (tag_chosen.equalsIgnoreCase("Excavator")){
+				} else if (tag_chosen.equalsIgnoreCase("Excavator")) {
 					message_count_string = db_data.get(12);
-				} else if (tag_chosen.equalsIgnoreCase("Mission")){
+				} else if (tag_chosen.equalsIgnoreCase("Mission")) {
 					message_count_string = db_data.get(13);
-				} else if (tag_chosen.equalsIgnoreCase("Parliament")){
+				} else if (tag_chosen.equalsIgnoreCase("Parliament")) {
 					message_count_string = db_data.get(14);
-				} else if (tag_chosen.equalsIgnoreCase("Probe")){
+				} else if (tag_chosen.equalsIgnoreCase("Probe")) {
 					message_count_string = db_data.get(15);
-				} else if (tag_chosen.equalsIgnoreCase("Spies")){
+				} else if (tag_chosen.equalsIgnoreCase("Spies")) {
 					message_count_string = db_data.get(16);
-				} else if (tag_chosen.equalsIgnoreCase("Trade")){
+				} else if (tag_chosen.equalsIgnoreCase("Trade")) {
 					message_count_string = db_data.get(17);
-				} else if (tag_chosen.equalsIgnoreCase("Fissure")){
+				} else if (tag_chosen.equalsIgnoreCase("Fissure")) {
 					message_count_string = db_data.get(18);
 				}
 				Log.d("MailWidgetUpdateService Database message count string = ", message_count_string);
@@ -183,19 +186,10 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 				Log.d("Database", "Has been queried");
 
 				//contentValues.put(helper.COLUMN_SESSION_ID,  newData.get(22)); //May need...
-			} else {
-				user_name = "Loading...";
-				tag_chosen = "All";
-				color_background_choice = "blue";
-				font_color_choice = "white";
-				message_count_int = "-1";
-				message_count_string = "-1";
 
+			} catch (Exception e){
+				Log.d("Database", "Has NOT been queried");
 			}
-
-
-
-
 			//Still need to implement add the data in as well
 
 
@@ -272,6 +266,34 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 
 			remoteViews.setFloat(R.id.widget_mail_tag_choice, "setTextSize", 10);
 
+			int messages_with_tag;
+
+			if (tag_chosen.equalsIgnoreCase("All")){
+				Log.d("Message count string is at:", message_count_int);
+				remoteViews.setTextViewText(R.id.widget_mail_message_count, message_count_int);
+				messages_with_tag = Integer.parseInt(message_count_int);
+			} else {
+				Log.d("Message count string is at:", message_count_string);
+				remoteViews.setTextViewText(R.id.widget_mail_message_count, message_count_string);
+				messages_with_tag = Integer.parseInt(message_count_string);
+			}
+
+			//Set the remote views dependent upon new data received
+			//Check the number of messages and adjust the font size of the number of messages displayed. Prevents out of bounds on screen
+			Log.d("Num messages", Integer.toString(messages_with_tag));
+			if (messages_with_tag < 10){
+				remoteViews.setFloat(R.id.widget_mail_message_count, "setTextSize", 32);
+			} else if (messages_with_tag >=10 && messages_with_tag <100){
+				remoteViews.setFloat(R.id.widget_mail_message_count, "setTextSize", 28);
+			} else if (messages_with_tag >= 100 && messages_with_tag <999){
+				remoteViews.setFloat(R.id.widget_mail_message_count, "setTextSize", 24);
+			} else {
+				remoteViews.setFloat(R.id.widget_mail_message_count, "setTextSize", 20);
+			}
+
+			//Set the username
+			remoteViews.setTextViewText(R.id.widget_mail_username, user_name);
+
 			/* Finished setting remoteViews */
 
 			clickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
@@ -287,6 +309,13 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 			//PendingIntent.FLAG_UPDATE_CURRENT);
 			//remoteViews.setOnClickPendingIntent(R.id.widget_mail_message_count, pendingIntent);
 			appWidgetManager.updateAppWidget(widgetId, remoteViews);
+
+			try{
+				db.close();
+				Log.d("Database", "Has been closed");
+			} catch (Exception e){
+				Log.d("Database", "Could not be closed!");
+			}
 		}
 		stopSelf();
 		Log.d("Service", "Has been Stopped");
@@ -386,7 +415,7 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 			ResponseReceived();
 
 			String messages_with_tag;
-
+			/*
 			if (tag_chosen_async.equalsIgnoreCase("All")){
 				Log.d("Message count string is at:", Integer.toString(async_message_count_int));
 				rv1.setTextViewText(R.id.widget_mail_message_count, Integer.toString(async_message_count_int));
@@ -413,6 +442,7 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 
 			//Set the username
 			rv1.setTextViewText(R.id.widget_mail_username, user_name);
+			*/
 
 			//Finally, update the widget
 			appWidgetManager.updateAppWidget(appwid, rv1);
