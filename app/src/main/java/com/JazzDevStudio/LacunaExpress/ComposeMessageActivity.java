@@ -18,9 +18,11 @@ import android.widget.Toast;
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
 import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Inbox;
+import com.JazzDevStudio.LacunaExpress.MISCClasses.TextFilters;
 import com.JazzDevStudio.LacunaExpress.Server.AsyncServer;
 import com.JazzDevStudio.LacunaExpress.Server.ServerRequest;
 import com.JazzDevStudio.LacunaExpress.Server.serverFinishedListener;
+import com.JazzDevStudio.LacunaExpress.MISCClasses.MailFormat;
 
 
 public class ComposeMessageActivity extends Activity implements OnClickListener, serverFinishedListener {
@@ -36,11 +38,11 @@ public class ComposeMessageActivity extends Activity implements OnClickListener,
     public void onResponseReceived(String reply){
         Log.d("ComposeMessage.onResponseReceived", reply);
         if(!reply.equals("error")) {
-            Toast.makeText(getApplicationContext(), "Message Deleted", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Message Sent", Toast.LENGTH_LONG).show();
             finish();
         }
         else{
-            Toast.makeText(getApplicationContext(), "Message Failed to send.  /nCheck to ensure all contacts are valid", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Message Failed to send.  \nCheck to ensure all contacts are valid", Toast.LENGTH_LONG).show();
         }
     }
     @Override
@@ -78,7 +80,7 @@ public class ComposeMessageActivity extends Activity implements OnClickListener,
                     mail_to.setText((CharSequence)extras.get("from"));
                     Log.d("ComposeMessage.Initialize", extras.getString("subject"));
                     subject.setText((CharSequence)("RE:"+extras.get("subject")));
-                    mail_message.setText((CharSequence) ("\n\n ------------------------------\nSent from Lacuna Express\nLook for it in Google Play" + extras.get("body")));
+                    mail_message.setText((CharSequence) ("\n\n ------------------------------\nSent from Lacuna Express\nLook for it in Google Play\n" + extras.get("body")));
                     //mail_message.setText((CharSequence) ( extras.get("body")));
                 }
             }
@@ -98,11 +100,12 @@ public class ComposeMessageActivity extends Activity implements OnClickListener,
                         String compose_data = mail_message.getText().toString();
                         com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Inbox inbox = new com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Inbox();
                         Log.d("ComposeReadMessageActivity.onClick", mail_message.getText().toString());
-                        String request = inbox.SendMessage(1,account.sessionID, mail_to.getText().toString(), subject.getText().toString(), mail_message.getText().toString() );
+                        String request = inbox.SendMessage(1,account.sessionID, TextFilters.FilterIllegalCharacters(mail_to.getText().toString()), TextFilters.FilterIllegalCharacters(subject.getText().toString()), TextFilters.FilterIllegalCharacters(mail_message.getText().toString()));
                         Log.d("ComposeReadMessageActivity.onClick", request);
                         request = request.replace("\n", "\\n");
-                        request = request.replace("<", "");
-                        request = request.replace(">", "");
+                        //request = request.replace("<", "");
+                        //request = request.replace(">", "");
+                        //request = request.replace("", "");
                         Log.d("ComposeReadMessageActivity.onClick", request);
                         ServerRequest sRequest = new ServerRequest(account.server, Inbox.url, request);
                         AsyncServer s = new AsyncServer();
