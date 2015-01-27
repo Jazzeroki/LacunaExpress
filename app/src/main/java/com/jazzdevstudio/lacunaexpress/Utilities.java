@@ -29,6 +29,7 @@ public class Utilities extends ActionBarActivity implements View.OnClickListener
         return true;
     }
     private void Initialize(){
+        Log.d("Utilities.Initialize", "initializing Activity");
         planet = (Button) findViewById(R.id.buttonPlanetUtilities);
         station = (Button) findViewById(R.id.buttonPlanetUtilities);
         mail = (Button) findViewById(R.id.buttonPlanetUtilities);

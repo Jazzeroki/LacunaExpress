@@ -103,6 +103,7 @@ public class SelectAccount extends Activity implements OnClickListener, AdapterV
     	modifyAccount.setOnClickListener(this);
     	addAccount.setOnClickListener(this);
     	bMail.setOnClickListener(this);
+        utilities.setOnClickListener(this);
 		
     	account_list = (Spinner) findViewById(R.id.select_account_spinner);
 	    account_list.setOnItemSelectedListener(this);
@@ -226,6 +227,7 @@ public class SelectAccount extends Activity implements OnClickListener, AdapterV
 			break;	
         case R.id.buttonSelectAccountUtilities:
             try{
+                Log.d("SelectAccount.utilities button clicked", "Starting utilities intent");
                 Intent openActivity = new Intent (this, Utilities.class);
                 String text_display_string = account_list.getSelectedItem().toString();
                 openActivity.putExtra("displayString", text_display_string);
