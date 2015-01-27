@@ -1,5 +1,6 @@
 package com.JazzDevStudio.LacunaExpress;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -19,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.SortedSet;
 
-public class PlanetOptions extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
+public class PlanetOptions extends Activity implements AdapterView.OnItemSelectedListener {
     com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo account;
     Spinner planetList;
     ArrayList<String> planetNamesForSpinner = new ArrayList<String>();

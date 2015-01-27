@@ -1,5 +1,5 @@
 package com.JazzDevStudio.LacunaExpress;
-
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import android.widget.Button;
 import com.JazzDevStudio.LacunaExpress.R;
 import com.JazzDevStudio.LacunaExpress.SelectMessageActivity2;
 
-public class Utilities extends ActionBarActivity implements View.OnClickListener {
+public class Utilities extends Activity implements View.OnClickListener {
     Button planet, station, mail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
