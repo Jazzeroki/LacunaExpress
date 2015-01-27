@@ -125,7 +125,7 @@ ADDED from AndroidManifest.xml:79:9
 		ADDED from AndroidManifest.xml:81:13
 	android:name
 		ADDED from AndroidManifest.xml:80:13
-receiver#com.JazzDevStudio.LacunaExpress.Widget.MailWidgetProvider
+receiver#com.JazzDevStudio.LacunaExpress.Widget.TEMPMailWidgetProvider
 ADDED from AndroidManifest.xml:85:9
 	android:label
 		ADDED from AndroidManifest.xml:87:13

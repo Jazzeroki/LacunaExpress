@@ -179,7 +179,7 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 			String a = iExtra.getStringExtra("chosen_account_string");
 			String passed_tag = iExtra.getStringExtra("tag_chosen");
 
-			Log.d("SelectMessage", "Assigning selected account = a from hasExtras a is: "+a);
+			Log.d("SelectMessage", "Assigning selected account = a from hasExtras a is: " + a);
 
 			//This code sets the default spinner to the one passed in by the intent
 			ArrayAdapter name_adapter_1 = (ArrayAdapter) account_list.getAdapter(); //cast to an ArrayAdapter

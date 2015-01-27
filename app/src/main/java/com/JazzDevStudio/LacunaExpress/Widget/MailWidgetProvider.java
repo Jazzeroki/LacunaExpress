@@ -105,6 +105,7 @@ public class MailWidgetProvider extends AppWidgetProvider {
 	public static void addUri(int id, Uri uri)
 	{
 		uris.put(new Integer(id), uri);
+		Log.d("addURI added id: ", Integer.toString(id));
 	}
 
 	/*

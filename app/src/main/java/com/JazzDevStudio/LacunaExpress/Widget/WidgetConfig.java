@@ -167,9 +167,8 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 				}
 			}
 		};
-		String heads_up = "There is currently a bug that will allow widgets to work ONLY if you have one account on the device. " +
-				"If you have more than one account, please note this will not work. " +
-				"I will have a fix out as soon as I can. Thank you for your patience";
+		String heads_up = "Still under development. You will need to create 2 widgets and toss the second" +
+				"one for this to work properly right now";
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(heads_up).setNegativeButton("Ok", dialogClickListener).show();
 
@@ -422,13 +421,12 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 			passed_data.add(message_count_string); //15
 			passed_data.add(message_count_string); //16
 			passed_data.add(message_count_string); //17
-			passed_data.add(tag_chosen); //18
-			passed_data.add(color_background_choice); //19
-			passed_data.add(font_color_choice); //20
-			passed_data.add(color_background_choice); //19
+			passed_data.add(message_count_string); //18
+			passed_data.add(tag_chosen); //19
 			passed_data.add(color_background_choice); //20
-			passed_data.add(selectedAccount.sessionID); //21
-			passed_data.add(selectedAccount.homePlanetID); //22
+			passed_data.add(font_color_choice); //21
+			passed_data.add(selectedAccount.sessionID); //22
+			passed_data.add(selectedAccount.homePlanetID); //23
 			//AS OF RIGHT NOW, this line above is passing in the homePlanetID instead of the empire ID.
 			//This will be changed later on
 			db.insertData(passed_data);

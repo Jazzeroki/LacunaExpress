@@ -134,10 +134,15 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 			if (db_data.size() > 0){
 
 				user_name = db_data.get(2);
-				tag_chosen = db_data.get(18);
-				color_background_choice = db_data.get(19);
-				font_color_choice = db_data.get(20);;
+				Log.d("MailWidgetUpdateService Database username = ", user_name);
+				tag_chosen = db_data.get(19);
+				Log.d("MailWidgetUpdateService Database tag chosen = ", tag_chosen);
+				color_background_choice = db_data.get(20);
+				Log.d("MailWidgetUpdateService Database color background choice = ", color_background_choice);
+				font_color_choice = db_data.get(21);
+				Log.d("MailWidgetUpdateService Database font color choice = ", font_color_choice);
 				message_count_int = db_data.get(3);
+				Log.d("MailWidgetUpdateService Database message count int = ", message_count_int);
 
 				//Determine which tag chosen parameter was passed and return the mail respective to that call
 				if (tag_chosen.equalsIgnoreCase("All")){
@@ -173,6 +178,7 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 				} else if (tag_chosen.equalsIgnoreCase("Fissure")){
 					message_count_string = db_data.get(18);
 				}
+				Log.d("MailWidgetUpdateService Database message count string = ", message_count_string);
 
 				Log.d("Database", "Has been queried");
 
@@ -184,7 +190,7 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 				font_color_choice = "white";
 				message_count_int = "-1";
 				message_count_string = "-1";
-				
+
 			}
 
 
