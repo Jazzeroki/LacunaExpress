@@ -167,8 +167,9 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 				}
 			}
 		};
-		String heads_up = "Still under development. You will need to create 2 widgets and toss the second" +
-				"one for this to work properly right now";
+		String heads_up = "As of 2015-01-26, the widget works, but the sync interval is set to 30 minutes." +
+				"This will not be changed by you choosing a different sync interval. This feature will be " +
+				"added later";
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(heads_up).setNegativeButton("Ok", dialogClickListener).show();
 

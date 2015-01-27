@@ -28,7 +28,7 @@ import com.google.gson.Gson;
 
 public class ReadMessageActivity extends Activity implements serverFinishedListener, OnClickListener {
     //declaring variables to be used in activity
-	Button btReply, btDelete, btArchive;
+	Button btReply, btDelete, btArchive, btForward;
 	TextView tvFrom, tvTo, tvSubject, tvMessage, tvDate;
 	String messageID;
 	AccountInfo account;
@@ -58,6 +58,7 @@ public class ReadMessageActivity extends Activity implements serverFinishedListe
 	    btReply = (Button) findViewById(R.id.account_mail_read_reply);
 	    btDelete = (Button) findViewById(R.id.account_mail_read_delete);
 	    btArchive = (Button) findViewById(R.id.account_mail_read_archive);
+	    btForward = (Button) findViewById(R.id.account_mail_read_forward);
 
 	    //TextViews
 	    tvFrom = (TextView) findViewById(R.id.account_mail_read_from);
@@ -70,6 +71,7 @@ public class ReadMessageActivity extends Activity implements serverFinishedListe
 	    btReply.setOnClickListener(this);
 	    btDelete.setOnClickListener(this);
 	    btArchive.setOnClickListener(this);
+	    btForward.setOnClickListener(this);
 
 	    //Makes the message scrollable
 	    tvMessage.setMovementMethod(new ScrollingMovementMethod());
@@ -207,6 +209,15 @@ public class ReadMessageActivity extends Activity implements serverFinishedListe
                     e.printStackTrace();
                 }
                 break;
+
+			case R.id.account_mail_read_forward:
+				//Forward the mail here
+				try{
+
+				} catch (Exception e){
+					e.printStackTrace();
+				}
+				break;
         }
         }
     @Override
