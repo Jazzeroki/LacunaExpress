@@ -1,12 +1,12 @@
 package com.JazzDevStudio.LacunaExpress.Widget;
 
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
@@ -17,7 +17,7 @@ import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
 import com.JazzDevStudio.LacunaExpress.Database.TEMPDatabaseAdapter;
 import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Inbox;
 import com.JazzDevStudio.LacunaExpress.LEWrapperResponse.Response;
-import com.JazzDevStudio.LacunaExpress.MISCClasses.SharedPrefs;
+import com.JazzDevStudio.LacunaExpress.MISCClasses.Notifications;
 import com.JazzDevStudio.LacunaExpress.R;
 import com.JazzDevStudio.LacunaExpress.SelectMessageActivity2;
 import com.JazzDevStudio.LacunaExpress.Server.AsyncServer;
@@ -40,11 +40,6 @@ import java.util.List;
 public class MailWidgetUpdateService extends Service implements serverFinishedListener {
 	private static final String LOG = "com.JazzDevStudio.LacunaExpress.Widget.TempService";
 
-	//Shared Preferences Stuff
-	public static final String PREFS_NAME = "LacunaExpress";
-	SharedPrefs sp = new SharedPrefs();
-	SharedPreferences settings;
-	SharedPreferences.Editor editor;
 
 	//Account info
 	AccountInfo selectedAccount;
@@ -58,9 +53,14 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 	Boolean messagesReceived = false;
 	private String tag_chosen = "All";
 
-	int awid;
+	private int awid;
 
-	String message_count_string, message_count_int;
+	private String message_count_string, message_count_int, sync_frequency,
+			notifications_option, message_count_received;
+
+	//StatusBar and Notification Manager Stuff
+	NotificationManager notificationManager;
+	public static final int uniqueID = 8675309;
 
 	@Override
 	public void onCreate() {
@@ -70,6 +70,7 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 	@Override
 	public void onStart(Intent intent, int startId) {
 		Log.i(LOG, "Called");
+
 
 		//Begin pulling data:
 		//This block populates user_accounts for values to display in the select account spinner
@@ -82,8 +83,6 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 			for(AccountInfo i: accounts){
 				Log.d("SelectMessage.Initialize", "Multiple accounts found, Setting Default account to selected account: "+i.displayString); //
 				user_accounts.add(i.displayString);
-				if(i.defaultAccount)
-					selectedAccount = i;
 			}
 		}
 
@@ -97,8 +96,8 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 		ComponentName thisWidget = new ComponentName(getApplicationContext(),
 				MailWidgetProvider.class);
 		int[] allWidgetIds2 = appWidgetManager.getAppWidgetIds(thisWidget);
-		Log.w(LOG, "From Intent" + String.valueOf(allWidgetIds.length));
-		Log.w(LOG, "Direct" + String.valueOf(allWidgetIds2.length));
+		Log.w(LOG, "From Intent " + String.valueOf(allWidgetIds.length));
+		Log.w(LOG, "Direct " + String.valueOf(allWidgetIds2.length));
 
 		int counter = 1;
 		//All widget IDs are passed through this for loop. Run calculations / set text fields here
@@ -134,8 +133,10 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 			font_color_choice = "white";
 			message_count_int = "-1";
 			message_count_string = "-1";
+			sync_frequency = "15";
 
 			try {
+				sync_frequency = db_data.get(1);
 				user_name = db_data.get(2);
 				Log.d("MailWidgetUpdateService Database username = ", user_name);
 				tag_chosen = db_data.get(19);
@@ -183,6 +184,10 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 				}
 				Log.d("MailWidgetUpdateService Database message count string = ", message_count_string);
 
+				notifications_option = db_data.get(24);
+
+				message_count_received = db_data.get(25);
+
 				Log.d("Database", "Has been queried");
 
 				//contentValues.put(helper.COLUMN_SESSION_ID,  newData.get(22)); //May need...
@@ -190,52 +195,65 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 			} catch (Exception e){
 				Log.d("Database", "Has NOT been queried");
 			}
-			//Still need to implement add the data in as well
 
+			selectedAccount = AccountMan.GetAccount(user_name);
 
+			try {
 
-			//
+				//Depending on tag chosen, different URI request sent in JSON
+				if (tag_chosen.equalsIgnoreCase("All")){
+					Log.d("SelectMessage.onItemSelected", "Second Spinner Tag All Calling View Inbox");
+					String request = Inbox.ViewInbox(selectedAccount.sessionID);
+					Log.d("SelectMessage.OnSelectedItem Request to server", request);
+					Log.d("Select Message Activity, SelectedAccount", user_name);
+					ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
+					AsyncServer s = new AsyncServer();
 
-			//
+					UpdateRemoteViewsViaAsync s1 = new UpdateRemoteViewsViaAsync(MailWidgetUpdateService.this,
+							remoteViews, widgetId, tag_chosen, appWidgetManager, user_name, color_background_choice,
+							font_color_choice, sync_frequency, notifications_option, message_count_received);
 
-			//Still need to implement add the data in as well
+					s1.addListener(this);
+					s1.execute(sRequest);
 
+					try {
+						//Log.d("Waiting 5 Seconds", ".");
+						//wait(1000 * 5);
+						//Log.d("Done Waiting 5 Seconds", ".");
+					} catch (Exception e){
+						e.printStackTrace();
+					}
+				} else {
+					Log.d("SelectMessage.onItemSelected", "Second Spinner word in spinner All Calling View Inbox");
+					String request = Inbox.ViewInbox(selectedAccount.sessionID, tag_chosen);
+					Log.d("SelectMessage.OnSelectedItem Request to server", request);
+					Log.d("Select Message Activity, SelectedAccount", user_name);
+					ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
+					AsyncServer s = new AsyncServer();
 
+					UpdateRemoteViewsViaAsync s1 = new UpdateRemoteViewsViaAsync(MailWidgetUpdateService.this,
+							remoteViews, widgetId, tag_chosen, appWidgetManager, user_name, color_background_choice,
+							font_color_choice, sync_frequency, notifications_option, message_count_received);
 
-			AccountMan.GetAccount(user_name);
-			//Depending on tag chosen, different URI request sent in JSON
-			if (tag_chosen.equalsIgnoreCase("All")){
-				Log.d("SelectMessage.onItemSelected", "Second Spinner Tag All Calling View Inbox");
-				String request = Inbox.ViewInbox(selectedAccount.sessionID);
-				Log.d("SelectMessage.OnSelectedItem Request to server", request);
-				Log.d("Select Message Activity, SelectedAccount", user_name);
-				ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
-				AsyncServer s = new AsyncServer();
+					s1.addListener(this);
+					s1.execute(sRequest);
 
-				UpdateRemoteViewsViaAsync s1 = new UpdateRemoteViewsViaAsync(MailWidgetUpdateService.this,
-						remoteViews, widgetId, tag_chosen, appWidgetManager, user_name);
+					try {
+						Log.d("Waiting 5 Seconds", ".");
+						wait(1000*5);
+						Log.d("Done Waiting 5 Seconds", ".");
+					} catch (InterruptedException e){
+						e.printStackTrace();
+					}
+				}
 
-				s1.addListener(this);
-				s1.execute(sRequest);
-			} else {
-				Log.d("SelectMessage.onItemSelected", "Second Spinner word in spinner All Calling View Inbox");
-				String request = Inbox.ViewInbox(selectedAccount.sessionID, tag_chosen);
-				Log.d("SelectMessage.OnSelectedItem Request to server", request);
-				Log.d("Select Message Activity, SelectedAccount", user_name);
-				ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
-				AsyncServer s = new AsyncServer();
+				Log.d("Widget ID in Service: ", Integer.toString(widgetId));
+				Log.d("Counter is at: ", Integer.toString(counter));
+				counter++;
 
-				UpdateRemoteViewsViaAsync s1 = new UpdateRemoteViewsViaAsync(MailWidgetUpdateService.this,
-						remoteViews, widgetId, tag_chosen, appWidgetManager, user_name);
-
-				s1.addListener(this);
-				s1.execute(sRequest);
+			} catch (Exception e){
+				e.printStackTrace();
 			}
-
-			Log.d("Widget ID in Service: ", Integer.toString(widgetId));
-			Log.d("Counter is at: ", Integer.toString(counter));
-			counter++;
-
 
 
 			// Register an onClickListener
@@ -334,10 +352,6 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 	//When a response is received from the server
 	public void onResponseReceived(String reply) {
 
-		//To place data in respectice awids
-		settings = getSharedPreferences(PREFS_NAME, 0);
-		editor = settings.edit();
-
 		if(!reply.equals("error")) {
 			Log.d("Deserializing Response", "Creating Response Object");
 			messagesReceived = true;
@@ -365,33 +379,42 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 		List<serverFinishedListener> listeners = new ArrayList<serverFinishedListener>();
 		private String output = "";
 
+		private Context context;
 		private RemoteViews rv1;
 		private int appwid;
 		private String tag_chosen_async;
 		private AppWidgetManager appWidgetManager;
 		private String user_name;
-
+		private int messages_in_display;
 		private String async_message_count_string;
 		private int async_message_count_int;
+		int total_num_messages;
+		private String async_font_color_choice, async_color_background_choice, async_sync_frequency,
+				async_notifications_option, async_message_count_received;
 
 		public UpdateRemoteViewsViaAsync(Context c, RemoteViews rv, int appwid, String aTag,
-		                                 AppWidgetManager aAppWidgetManager, String username){
+		                                 AppWidgetManager aAppWidgetManager, String username,
+		                                 String async_color_background_choice1,
+		                                 String async_font_color_choice1, String async_sync_frequency1,
+		                                 String notifications_option1, String message_count_received1){
+			this.context = c;
 			this.appwid = appwid;
+			this.async_notifications_option = notifications_option1;
 			this.rv1 = rv;
+			this.async_sync_frequency = async_sync_frequency1;
 			this.tag_chosen_async = aTag;
 			this.appWidgetManager = aAppWidgetManager;
 			this.user_name = username;
+			this.async_message_count_received = message_count_received1;
+			this.async_color_background_choice = async_color_background_choice1;
+			this.async_font_color_choice = async_font_color_choice1;
 			Log.d("Output from my Async, username is ", user_name);
-			Log.d("Output from my Async, Constructor:", "Here");
 		}
 		public void addListener(serverFinishedListener toAdd) {
 			listeners.add(toAdd);
 		}
 
 		protected String doInBackground(ServerRequest... a) {
-
-			Log.d("Output from my Async, doInBackground:", "Here");
-
 			output = ServerRequest(a[0].server, a[0].methodURL, a[0].json);
 			convertData(output);
 			Log.d("Output from my Async", output);
@@ -401,7 +424,6 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 
 		private void ResponseReceived() {
 			//Log.d("Firing Event", "Sending out response to listeners");
-			Log.d("Output from my Async, onResponseReceived:", "Here");
 			for (serverFinishedListener i : listeners) {
 				i.onResponseReceived(output);
 			}
@@ -411,11 +433,11 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 		@Override
 		protected void onPostExecute(String r) {
 			//Log.d("OnPostExecute", "Firing On Post Execute");
-			Log.d("Output from my Async, onPostExecute:", "Here");
 			ResponseReceived();
 
 			String messages_with_tag;
-			/*
+
+
 			if (tag_chosen_async.equalsIgnoreCase("All")){
 				Log.d("Message count string is at:", Integer.toString(async_message_count_int));
 				rv1.setTextViewText(R.id.widget_mail_message_count, Integer.toString(async_message_count_int));
@@ -428,7 +450,7 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 
 			//Set the remote views dependent upon new data received
 			//Check the number of messages and adjust the font size of the number of messages displayed. Prevents out of bounds on screen
-			int total_num_messages = Integer.parseInt(messages_with_tag); //Conversion is needed, cannot use old one here as diff if statement is in effect
+			total_num_messages = Integer.parseInt(messages_with_tag); //Conversion is needed, cannot use old one here as diff if statement is in effect
 			Log.d("Num messages", messages_with_tag);
 			if (total_num_messages < 10){
 				rv1.setFloat(R.id.widget_mail_message_count, "setTextSize", 32);
@@ -442,7 +464,41 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 
 			//Set the username
 			rv1.setTextViewText(R.id.widget_mail_username, user_name);
-			*/
+
+			//Check the number of messages last time versus the number of message this time.
+			//If the number is higher this time and they have the notifications button checked, proceed
+			int old_total_num_messages = Integer.parseInt(async_message_count_received);
+			if (total_num_messages > old_total_num_messages){
+				if (async_notifications_option.equalsIgnoreCase("true")){
+
+					int x = total_num_messages - old_total_num_messages;
+					//Create a notification icon
+					String body = "You have " + x + " new messages " + user_name;
+					String title = "New " + tag_chosen_async + " Messages";
+					notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+					Notifications.addNotification(context, notificationManager, uniqueID,
+							body, title, "SelectMessageActivity2", user_name, tag_chosen_async);
+				}
+			}
+
+			try {
+				//Add the items here to a list
+				List<String> passed_data = new ArrayList<>();
+
+				passed_data = CreateListForDB.CreateList(
+						Integer.toString(appwid), async_sync_frequency, user_name,
+						Integer.toString(async_message_count_int), async_message_count_string, tag_chosen_async,
+						async_color_background_choice, async_font_color_choice, selectedAccount.sessionID,
+						selectedAccount.homePlanetID, notifications_option, Integer.toString(total_num_messages)
+				);
+
+				//Add the list to the database
+				putDataInDatabase(context, passed_data, appwid);
+
+			} catch (Exception e){
+				e.printStackTrace();
+				Log.d("Data not put into database ", "due to null pointer error on Selected account");
+			}
 
 			//Finally, update the widget
 			appWidgetManager.updateAppWidget(appwid, rv1);
@@ -475,10 +531,6 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 
 		public void convertData(String reply) {
 
-			//To place data in respectice awids
-			settings = getSharedPreferences(PREFS_NAME, 0);
-			editor = settings.edit();
-
 			if(!reply.equals("error")) {
 				Log.d("Deserializing Response", "Creating Response Object");
 				messagesReceived = true;
@@ -491,5 +543,29 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 				async_message_count_string = r.result.message_count;
 			}
 		}
+
+		private void putDataInDatabase(Context context, List<String> passed_list, int WidgetID) {
+			//Create a database object and set the values here
+			TEMPDatabaseAdapter db = new TEMPDatabaseAdapter(context);
+
+			//For the row ID
+			String widget_id = Integer.toString(WidgetID);
+
+			try {
+				db.updateRow(widget_id, passed_list);
+			} catch (Exception e){
+				e.printStackTrace();
+				Log.d("WidgetService", "Error in insertData() method");
+			}
+
+			try{
+				db.close();
+				Log.d("WidgetService Database", "Has been closed");
+			} catch (Exception e){
+				Log.d("WidgetService Database", "Could not be closed!");
+			}
+		}
 	}
+
+
 }

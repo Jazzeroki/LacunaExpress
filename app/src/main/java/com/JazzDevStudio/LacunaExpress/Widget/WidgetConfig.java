@@ -69,9 +69,8 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 	String message_count_string;
 	int message_count_int;
 
-	//To be written into the database
-	String session_id;
-	String empire_id;
+	//Total number of messages with tag chosen taken into account
+	private String message_count_received;
 
 	//Do they want notifications?
 	boolean notifications_option;
@@ -85,7 +84,8 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 
 	AppWidgetManager awm;
 	Context c;
-	int awID, sync_frequency;
+	private int awID;
+	private int sync_frequency = 30;
 
 	//For checking internet connection
 	private boolean do_we_have_network_connection;
@@ -296,9 +296,9 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 		widget_mail_config_spinner_color.setOnItemSelectedListener(this);
 		widget_mail_config_spinner_font.setOnItemSelectedListener(this);
 
-		//Radio Group
-		widget_mail_config_radiogroup = (RadioGroup) findViewById(R.id.widget_mail_config_radiogroup);
-		widget_mail_config_radiogroup.setOnCheckedChangeListener(this);
+		//Radio Group - Used for sync frequency, leaving out for now
+		//widget_mail_config_radiogroup = (RadioGroup) findViewById(R.id.widget_mail_config_radiogroup);
+		//widget_mail_config_radiogroup.setOnCheckedChangeListener(this);
 
 		//Default to no network connection
 		do_we_have_network_connection = false;
@@ -306,7 +306,7 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 		do_we_have_network_connection = haveNetworkConnection();
 
 		//Default frequency check if the user chooses nothing
-		sync_frequency = 15;
+		sync_frequency = 30;
 
 		//Switch to decide if the users want notifications in their notification bar
 		widget_mail_config_notification_switch = (Switch) findViewById(R.id.widget_mail_config_notification_switch);
@@ -398,38 +398,15 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 			//List of Strings to hold the passed data
 			List<String> passed_data = new ArrayList<>();
 
-			passed_data.add(widget_id); //0
-			passed_data.add(Integer.toString(sync_frequency)); //1
-			passed_data.add(chosen_accout_string); //2
-			passed_data.add(Integer.toString(message_count_int)); //3
-			/*
-			I am writing all of these in as the specific tag chosen because as the App widget ID is unique, it
-			will not matter as it is not checking the other columns. Once I add an update to allow for editing
-			widgets however, this will need to be changed. Furthermore, I will need to change it to raw SQL
-			update code to allow for specific passing of the tag chosen and using that to write.
-			 */
-			passed_data.add(message_count_string); //4
-			passed_data.add(message_count_string); //5
-			passed_data.add(message_count_string); //6
-			passed_data.add(message_count_string); //7
-			passed_data.add(message_count_string); //8
-			passed_data.add(message_count_string); //9
-			passed_data.add(message_count_string); //10
-			passed_data.add(message_count_string); //11
-			passed_data.add(message_count_string); //12
-			passed_data.add(message_count_string); //13
-			passed_data.add(message_count_string); //14
-			passed_data.add(message_count_string); //15
-			passed_data.add(message_count_string); //16
-			passed_data.add(message_count_string); //17
-			passed_data.add(message_count_string); //18
-			passed_data.add(tag_chosen); //19
-			passed_data.add(color_background_choice); //20
-			passed_data.add(font_color_choice); //21
-			passed_data.add(selectedAccount.sessionID); //22
-			passed_data.add(selectedAccount.homePlanetID); //23
-			//AS OF RIGHT NOW, this line above is passing in the homePlanetID instead of the empire ID.
-			//This will be changed later on
+			passed_data = CreateListForDB.CreateList(
+					widget_id, Integer.toString(sync_frequency), chosen_accout_string,
+					Integer.toString(message_count_int), message_count_string, tag_chosen,
+					color_background_choice, font_color_choice, selectedAccount.sessionID,
+					selectedAccount.homePlanetID, Boolean.toString(notifications_option),
+					message_count_received
+
+			);
+
 			db.insertData(passed_data);
 
 		} catch (Exception e){
@@ -522,11 +499,13 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 		}
 	}
 
-	//This handles the radio buttons
+	//This handles the radio buttons.
 	public void onCheckedChanged(RadioGroup rg, int checkedId) {
 		//Depending on which one is selected. Default is 15 minutes
 		switch(checkedId){
 
+			//Ignored for now as 30 minutes is default refresh rate
+			/*
 			//5 Minutes Refresh
 			case R.id.widget_mail_config_button5:
 				sync_frequency = 5;
@@ -551,6 +530,7 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 			case R.id.widget_mail_config_button60:
 				sync_frequency = 60;
 				break;
+				*/
 		}
 	}
 
@@ -655,6 +635,12 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 			message_count_int = r.result.status.empire.has_new_messages;
 
 			message_count_string = r.result.message_count;
+
+			if (tag_chosen.equalsIgnoreCase("All")){
+				message_count_received = Integer.toString(message_count_int);
+			} else {
+				message_count_received = message_count_string;
+			}
 
 		} else {
 			Log.d("Error with Reply", "Error in onResponseReceived()");

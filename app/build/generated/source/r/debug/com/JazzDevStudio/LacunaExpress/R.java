@@ -1343,15 +1343,17 @@ containing a value of this type.
         public static final int light_blue_boxes=0x7f020044;
         public static final int light_silver_background=0x7f020045;
         public static final int list_selector=0x7f020046;
-        public static final int mining_small=0x7f020047;
-        public static final int shadowed_background=0x7f020048;
-        public static final int simple_apricot=0x7f020049;
-        public static final int simple_grey=0x7f02004a;
-        public static final int simple_teal=0x7f02004b;
-        public static final int stained_glass_blue=0x7f02004c;
-        public static final int testing=0x7f02004d;
-        public static final int tv_background_with_divider=0x7f02004e;
-        public static final int xmas=0x7f02004f;
+        public static final int message_notification_icon=0x7f020047;
+        public static final int mining_small=0x7f020048;
+        public static final int notification_logo_small=0x7f020049;
+        public static final int shadowed_background=0x7f02004a;
+        public static final int simple_apricot=0x7f02004b;
+        public static final int simple_grey=0x7f02004c;
+        public static final int simple_teal=0x7f02004d;
+        public static final int stained_glass_blue=0x7f02004e;
+        public static final int testing=0x7f02004f;
+        public static final int tv_background_with_divider=0x7f020050;
+        public static final int xmas=0x7f020051;
     }
     public static final class id {
         public static final int UtilitiesActivityLayout=0x7f0b007b;
@@ -1377,8 +1379,8 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f0b002e;
         public static final int action_mode_bar_stub=0x7f0b002d;
         public static final int action_mode_close_button=0x7f0b0020;
-        public static final int action_settings=0x7f0b009d;
-        public static final int action_stuff=0x7f0b009e;
+        public static final int action_settings=0x7f0b0096;
+        public static final int action_stuff=0x7f0b0097;
         public static final int activity_add_account_layout=0x7f0b003f;
         public static final int activity_chooser_view_content=0x7f0b0021;
         public static final int activity_mail_compose_layout=0x7f0b0052;
@@ -1434,7 +1436,7 @@ containing a value of this type.
         public static final int listViewBackground=0x7f0b0050;
         public static final int list_item=0x7f0b0025;
         public static final int listview=0x7f0b0051;
-        public static final int menu_settings=0x7f0b009f;
+        public static final int menu_settings=0x7f0b0098;
         public static final int middle=0x7f0b0015;
         public static final int modify_account_default=0x7f0b0070;
         public static final int modify_account_modify_account=0x7f0b0071;
@@ -1476,10 +1478,9 @@ containing a value of this type.
         public static final int tabMode=0x7f0b000b;
         public static final int textView=0x7f0b0083;
         public static final int textView1=0x7f0b0042;
-        public static final int textView10=0x7f0b008f;
         public static final int textView11=0x7f0b0053;
         public static final int textView12=0x7f0b008c;
-        public static final int textView13=0x7f0b0096;
+        public static final int textView13=0x7f0b008e;
         public static final int textView2=0x7f0b0041;
         public static final int textView3=0x7f0b0044;
         public static final int textView4=0x7f0b0046;
@@ -1487,7 +1488,7 @@ containing a value of this type.
         public static final int textView6=0x7f0b0084;
         public static final int textView7=0x7f0b0086;
         public static final int textView8=0x7f0b0088;
-        public static final int textView9=0x7f0b008e;
+        public static final int textView9=0x7f0b008f;
         public static final int textViewServerReply=0x7f0b004d;
         public static final int text_view=0x7f0b0040;
         public static final int textview12=0x7f0b0059;
@@ -1495,23 +1496,17 @@ containing a value of this type.
         public static final int up=0x7f0b0008;
         public static final int useLogo=0x7f0b0012;
         public static final int widget_mail_config_background_color=0x7f0b008a;
-        public static final int widget_mail_config_button10=0x7f0b0092;
-        public static final int widget_mail_config_button15=0x7f0b0093;
-        public static final int widget_mail_config_button30=0x7f0b0094;
-        public static final int widget_mail_config_button5=0x7f0b0091;
-        public static final int widget_mail_config_button60=0x7f0b0095;
-        public static final int widget_mail_config_create=0x7f0b0098;
+        public static final int widget_mail_config_create=0x7f0b0091;
         public static final int widget_mail_config_layout=0x7f0b0085;
-        public static final int widget_mail_config_notification_switch=0x7f0b0097;
-        public static final int widget_mail_config_radiogroup=0x7f0b0090;
+        public static final int widget_mail_config_notification_switch=0x7f0b0090;
         public static final int widget_mail_config_spinner_account=0x7f0b0087;
         public static final int widget_mail_config_spinner_color=0x7f0b008b;
         public static final int widget_mail_config_spinner_font=0x7f0b008d;
         public static final int widget_mail_config_spinner_tag=0x7f0b0089;
-        public static final int widget_mail_layout=0x7f0b0099;
-        public static final int widget_mail_message_count=0x7f0b009b;
-        public static final int widget_mail_tag_choice=0x7f0b009c;
-        public static final int widget_mail_username=0x7f0b009a;
+        public static final int widget_mail_layout=0x7f0b0092;
+        public static final int widget_mail_message_count=0x7f0b0094;
+        public static final int widget_mail_tag_choice=0x7f0b0095;
+        public static final int widget_mail_username=0x7f0b0093;
         public static final int withText=0x7f0b001a;
         public static final int wrap_content=0x7f0b001d;
     }

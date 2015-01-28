@@ -1,6 +1,8 @@
 package com.JazzDevStudio.LacunaExpress;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,9 +31,11 @@ import com.JazzDevStudio.LacunaExpress.LEWrapperResponse.Response.Messages;
 import com.JazzDevStudio.LacunaExpress.ListViewRemoval.BackgroundContainer;
 import com.JazzDevStudio.LacunaExpress.ListViewRemoval.StableArrayAdapter;
 import com.JazzDevStudio.LacunaExpress.MISCClasses.MailFormat;
+import com.JazzDevStudio.LacunaExpress.MISCClasses.Notifications;
 import com.JazzDevStudio.LacunaExpress.Server.AsyncServer;
 import com.JazzDevStudio.LacunaExpress.Server.ServerRequest;
 import com.JazzDevStudio.LacunaExpress.Server.serverFinishedListener;
+import com.JazzDevStudio.LacunaExpress.Widget.MailWidgetUpdateService;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -214,6 +218,15 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 
 	//Initialize Variables
 	private void Initialize() {
+
+		//Remove the notification bar reminder if it was put there via the widget
+		try{
+			NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+			Notifications.removeNotification(notificationManager, MailWidgetUpdateService.uniqueID);
+		} catch (Exception e){
+			e.printStackTrace();
+			Log.d("Notification ", "Could not be removed");
+		}
 
 		compose = (Button) findViewById(R.id.activity_mail_temp_compose);
 

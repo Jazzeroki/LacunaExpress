@@ -58,6 +58,8 @@ public class TEMPDatabaseAdapter {
 		contentValues.put(helper.COLUMN_COLOR_FONT_CHOICE,  newData.get(21));
 		contentValues.put(helper.COLUMN_SESSION_ID,  newData.get(22));
 		contentValues.put(helper.COLUMN_EMPIRE_ID,  newData.get(23));
+		contentValues.put(helper.COLUMN_NOTIFICATIONS_BOOLEAN,  newData.get(24));
+		contentValues.put(helper.COLUMN_MESSAGE_COUNT_TOTAL_RECEIVED,  newData.get(25));
 
 		//Put the data into the database itself
 		long result = db.insert(helper.TABLE_NAME, null, contentValues);
@@ -75,7 +77,7 @@ public class TEMPDatabaseAdapter {
 		Cursor cursor;
 
 		//Create a string array of data
-		String[] columns = {helper.UID, helper.COLUMN_WIDGET_ID, helper.COLUMN_WIDGET_ID }; /////////////////This area needs to be updated///////////////////////
+		String[] columns = {helper.UID, helper.COLUMN_WIDGET_ID }; //Removed: , helper.COLUMN_WIDGET_ID
 
 		//Query the database. Third param is the search params, null returns ALL
 		//This returns a cursor object
@@ -129,7 +131,8 @@ public class TEMPDatabaseAdapter {
 				helper.COLUMN_MESSAGE_COUNT_SPIES, helper.COLUMN_MESSAGE_COUNT_TRADE,
 				helper.COLUMN_MESSAGE_COUNT_FISSURE, helper.COLUMN_TAG_CHOSEN,
 				helper.COLUMN_COLOR_BACKGROUND_CHOICE, helper.COLUMN_COLOR_FONT_CHOICE,
-				helper.COLUMN_SESSION_ID, helper.COLUMN_EMPIRE_ID};
+				helper.COLUMN_SESSION_ID, helper.COLUMN_EMPIRE_ID, helper.COLUMN_NOTIFICATIONS_BOOLEAN,
+				helper.COLUMN_MESSAGE_COUNT_TOTAL_RECEIVED};
 
 		//Query the database. Third param are the search params. This returns a cursor object
 		cursor = db.query(DatabaseHelper.TABLE_NAME, columns,
@@ -193,6 +196,10 @@ public class TEMPDatabaseAdapter {
 			String str22 = cursor.getString(index22);
 			int index23 = cursor.getColumnIndex(DatabaseHelper.COLUMN_EMPIRE_ID);
 			String str23 = cursor.getString(index23);
+			int index24 = cursor.getColumnIndex(DatabaseHelper.COLUMN_NOTIFICATIONS_BOOLEAN);
+			String str24 = cursor.getString(index24);
+			int index25 = cursor.getColumnIndex(DatabaseHelper.COLUMN_MESSAGE_COUNT_TOTAL_RECEIVED);
+			String str25 = cursor.getString(index25);
 
 			pulled_data.add(str0);
 			pulled_data.add(str1);
@@ -218,34 +225,9 @@ public class TEMPDatabaseAdapter {
 			pulled_data.add(str21);
 			pulled_data.add(str22);
 			pulled_data.add(str23);
+			pulled_data.add(str24);
+			pulled_data.add(str25);
 
-			/*
-			//Add the items to the buffer
-			buffer.append(str0
-							+ "~|~" + str1
-							+ "~|~" + str2
-							+ "~|~" + str3
-							+ "~|~" + str4
-							+ "~|~" + str5
-							+ "~|~" + str6
-							+ "~|~" + str7
-							+ "~|~" + str8
-							+ "~|~" + str9
-							+ "~|~" + str10
-							+ "~|~" + str11
-							+ "~|~" + str12
-							+ "~|~" + str13
-							+ "~|~" + str14
-							+ "~|~" + str15
-							+ "~|~" + str16
-							+ "~|~" + str17
-							+ "~|~" + str18
-							+ "~|~" + str19
-							+ "~|~" + str20
-							+ "~|~" + str21
-							+ "~|~" + str22
-			);
-			*/
 		}
 
 		return pulled_data;
@@ -323,7 +305,7 @@ public class TEMPDatabaseAdapter {
 	}
 
 	//Updates a name in the database
-	public int updateName(String widget_id, List<String> newData){
+	public int updateRow(String widget_id, List<String> newData){
 
 		//Creating an SQL database by referencing the adapter,
 		//which references the helper object, which opens the database
@@ -357,6 +339,8 @@ public class TEMPDatabaseAdapter {
 		contentValues.put(helper.COLUMN_COLOR_FONT_CHOICE,  newData.get(21));
 		contentValues.put(helper.COLUMN_SESSION_ID,  newData.get(22));
 		contentValues.put(helper.COLUMN_EMPIRE_ID,  newData.get(23));
+		contentValues.put(helper.COLUMN_NOTIFICATIONS_BOOLEAN, newData.get(24));
+		contentValues.put(helper.COLUMN_MESSAGE_COUNT_TOTAL_RECEIVED, newData.get(25));
 
 		//The last parameter in update needs a string array, not a string, so creating the array here
 		String[] whereArgs = {widget_id};
@@ -397,7 +381,7 @@ public class TEMPDatabaseAdapter {
 
 		private static final String DATABASE_NAME = "widgetdatabase";
 		private static final String TABLE_NAME = "widgettable";
-		private static final int DATBASE_VERSION = 2;
+		private static final int DATBASE_VERSION = 5;
 		private static final String UID = "_id";
 		private static final String DROP_TABLE = "DROP TABLE IF EXISTS "+ TABLE_NAME;
 		// Column with the foreign key into the location table.
@@ -448,6 +432,12 @@ public class TEMPDatabaseAdapter {
 		public static final String COLUMN_SESSION_ID = "session_id";
 		//Foreign Key
 		public static final String COLUMN_EMPIRE_ID = "empire_id";
+		// Stored as a String, actually a boolean, true or false
+		public static final String COLUMN_NOTIFICATIONS_BOOLEAN = "notifications_boolean";
+		// Stored as a String, actually an int of the total number of messages received. This factors in the tag they chose
+		public static final String COLUMN_MESSAGE_COUNT_TOTAL_RECEIVED = "message_count_total_received";
+
+
 
 		private Context context; //In case we need context
 
@@ -476,7 +466,9 @@ public class TEMPDatabaseAdapter {
 				+ COLUMN_COLOR_BACKGROUND_CHOICE + " VARCHAR(255),"
 				+ COLUMN_COLOR_FONT_CHOICE + " VARCHAR(255),"
 				+ COLUMN_SESSION_ID + " VARCHAR(255),"
-				+ COLUMN_EMPIRE_ID + " VARCHAR(255)"
+				+ COLUMN_EMPIRE_ID + " VARCHAR(255),"
+				+ COLUMN_NOTIFICATIONS_BOOLEAN + " VARCHAR(255),"
+				+ COLUMN_MESSAGE_COUNT_TOTAL_RECEIVED + " VARCHAR(255)"
 				+");";
 
 		//Constructor
@@ -488,7 +480,6 @@ public class TEMPDatabaseAdapter {
 
 		//This is called when the database is called for the first time
 		public void onCreate(SQLiteDatabase db) {
-			Log.d("Line 449 ", "Called");
 			try {
 				db.execSQL(CREATE_TABLE);
 				Log.d("Database ", "Has been created");
@@ -501,7 +492,6 @@ public class TEMPDatabaseAdapter {
 		//This is called when the database schema is changed (IE new columns or tables or deleting tables)
 		//YOU CAN use the ALTER TABLE call instead whenever you change a table if you don't want to use this
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			Log.d("Line 472", "Called");
 			try {
 				db.execSQL(DROP_TABLE);
 				Log.d("Database ", "Has been Dropped");
