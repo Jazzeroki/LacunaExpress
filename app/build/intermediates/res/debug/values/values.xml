@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/arrays.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/arrays.xml -->
     <eat-comment/>
     <string-array name="color_choices_names">
         <item name="white">white</item>
@@ -20,7 +20,7 @@
         <item name="blue">blue</item>
         <item name="navy">navy</item>
     </string-array>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/dimens.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <array name="letter_tile_colors">
 	    <item>#f16364</item>
@@ -32,7 +32,7 @@
 	    <item>#2093cd</item>
 	    <item>#ad62a7</item>
 	</array>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/arrays.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/arrays.xml -->
     <eat-comment/>
     <string-array name="syncFrequency">
         <item name="choice_0">Blue Glass</item>
@@ -58,7 +58,7 @@
         <item name="choice_8">xmas</item>
         <item name="choice_9">lacuna_logo</item>
     </string-array>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <attr format="reference" name="drawerArrowStyle"/>
     <attr format="dimension" name="height"/>
@@ -76,20 +76,20 @@
     <color name="abc_search_url_text_selected">@android:color/black</color>
     <color name="accent_material_dark">@color/material_deep_teal_200</color>
     <color name="accent_material_light">@color/material_deep_teal_500</color>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/color.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/color.xml -->
     <eat-comment/>
     <color name="aqua">#00FFFF</color>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <color name="background_floating_material_dark">#ff424242</color>
     <color name="background_floating_material_light">#ffeeeeee</color>
     <color name="background_material_dark">#ff303030</color>
     <color name="background_material_light">#ffeeeeee</color>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/color.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/color.xml -->
     <eat-comment/>
     <color name="black">#000000</color>
     <color name="blue">#0000FF</color>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <color name="bright_foreground_disabled_material_dark">#80ffffff</color>
     <color name="bright_foreground_disabled_material_light">#80000000</color>
@@ -103,39 +103,39 @@
     <color name="dim_foreground_disabled_material_light">#80323232</color>
     <color name="dim_foreground_material_dark">#ffbebebe</color>
     <color name="dim_foreground_material_light">#ff323232</color>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/color.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/color.xml -->
     <eat-comment/>
     <color name="fuchsia">#FF00FF</color>
     <color name="gray">#808080</color>
     <color name="green">#008000</color>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <color name="highlighted_text_material_dark">#6680cbc4</color>
     <color name="highlighted_text_material_light">#66009688</color>
     <color name="hint_foreground_material_dark">@color/bright_foreground_disabled_material_dark</color>
     <color name="hint_foreground_material_light">@color/bright_foreground_disabled_material_light</color>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/color.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/color.xml -->
     <eat-comment/>
     <color name="lime">#00FF00</color>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <color name="link_text_material_dark">@color/material_deep_teal_200</color>
     <color name="link_text_material_light">@color/material_deep_teal_500</color>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/color.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/color.xml -->
     <eat-comment/>
     <color name="maroon">#800000</color>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <color name="material_blue_grey_800">#ff37474f</color>
     <color name="material_blue_grey_900">#ff263238</color>
     <color name="material_blue_grey_950">#ff21272b</color>
     <color name="material_deep_teal_200">#ff80cbc4</color>
     <color name="material_deep_teal_500">#ff009688</color>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/color.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/color.xml -->
     <eat-comment/>
     <color name="navy">#000080</color>
     <color name="olive">#808000</color>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <color name="primary_dark_material_dark">#ff000000</color>
     <color name="primary_dark_material_light">#ff757575</color>
@@ -145,11 +145,11 @@
     <color name="primary_text_default_material_light">#de000000</color>
     <color name="primary_text_disabled_material_dark">#4Dffffff</color>
     <color name="primary_text_disabled_material_light">#39000000</color>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/color.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/color.xml -->
     <eat-comment/>
     <color name="purple">#800080</color>
     <color name="red">#FF0000</color>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <color name="ripple_material_dark">#40ffffff</color>
     <color name="ripple_material_light">#40000000</color>
@@ -157,14 +157,14 @@
     <color name="secondary_text_default_material_light">#8a000000</color>
     <color name="secondary_text_disabled_material_dark">#36ffffff</color>
     <color name="secondary_text_disabled_material_light">#24000000</color>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/color.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/color.xml -->
     <eat-comment/>
     <color name="silver">#C0C0C0</color>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <color name="switch_thumb_normal_material_dark">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/color.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/color.xml -->
     <eat-comment/>
     <color name="teal">#008080</color>
     <color name="white">#FFFFFF</color>
@@ -192,7 +192,7 @@
     <declare-styleable name="Toolbar"><attr format="reference" name="titleTextAppearance"/><attr format="reference" name="subtitleTextAppearance"/><attr name="title"/><attr name="subtitle"/><attr name="android:gravity"/><attr format="dimension" name="titleMargins"/><attr format="dimension" name="titleMarginStart"/><attr format="dimension" name="titleMarginEnd"/><attr format="dimension" name="titleMarginTop"/><attr format="dimension" name="titleMarginBottom"/><attr name="contentInsetStart"/><attr name="contentInsetEnd"/><attr name="contentInsetLeft"/><attr name="contentInsetRight"/><attr format="dimension" name="maxButtonHeight"/><attr format="reference" name="theme"/><attr format="reference" name="collapseIcon"/><attr format="string" name="collapseContentDescription"/><attr name="popupTheme"/><attr format="reference" name="navigationIcon"/><attr format="string" name="navigationContentDescription"/><attr name="android:minHeight"/></declare-styleable>
     <declare-styleable name="View"><attr format="dimension" name="paddingStart"/><attr format="dimension" name="paddingEnd"/><attr name="android:focusable"/></declare-styleable>
     <declare-styleable name="ViewStubCompat"><attr name="android:layout"/><attr name="android:inflatedId"/><attr name="android:id"/></declare-styleable>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <dimen name="abc_action_bar_default_height_material">56dp</dimen>
     <dimen name="abc_action_bar_default_padding_material">4dp</dimen>
@@ -231,11 +231,11 @@
     <dimen name="abc_text_size_subtitle_material_toolbar">16dp</dimen>
     <dimen name="abc_text_size_title_material">20sp</dimen>
     <dimen name="abc_text_size_title_material_toolbar">20dp</dimen>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/dimens.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <item name="dialog_fixed_height_major" type="dimen">80%</item>
     <item name="dialog_fixed_height_minor" type="dimen">100%</item>
@@ -243,11 +243,11 @@
     <item name="dialog_fixed_width_minor" type="dimen">320dp</item>
     <item format="float" name="disabled_alpha_material_dark" type="dimen">0.30</item>
     <item format="float" name="disabled_alpha_material_light" type="dimen">0.26</item>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/dimens.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="letter_tile_size">144dp</dimen>
     <dimen name="tile_letter_font_size">66sp</dimen>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <item name="action_bar_activity_content" type="id"/>
     <item name="action_bar_spinner" type="id"/>
@@ -275,16 +275,17 @@
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
     <string name="abc_toolbar_collapse_description">Collapse</string>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="action_settings">Settings</string>
     <string name="app_name">Lacuna Express</string>
     <string name="delete_selected">Delete Selected</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_captcha">Captcha</string>
     <string name="title_activity_planet_options">PlanetOptions</string>
     <string name="title_activity_utilities">Utilities</string>
     <string name="use_positions">Use Positions</string>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
@@ -296,7 +297,7 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <style name="Base.TextAppearance.AppCompat" parent="android:TextAppearance">
         <item name="android:textColor">?android:textColorPrimary</item>
@@ -1050,7 +1051,7 @@
         <item name="android:scaleType">center</item>
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="MyListBackContent">
         <item name="android:layout_width">fill_parent</item>
@@ -1083,7 +1084,7 @@
         <item name="android:maxLines">2</item>
         <item name="android:ellipsize">end</item>
     </style>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
     <eat-comment/>
     <style name="Platform.AppCompat" parent="android:Theme">
         <item name="android:windowNoTitle">true</item>
@@ -1369,7 +1370,7 @@
     <style name="Widget.AppCompat.Spinner.DropDown.ActionBar" parent="Base.Widget.AppCompat.Spinner.DropDown.ActionBar"/>
     <style name="Widget.AppCompat.Toolbar" parent="Base.Widget.AppCompat.Toolbar"/>
     <style name="Widget.AppCompat.Toolbar.Button.Navigation" parent="Base.Widget.AppCompat.Toolbar.Button.Navigation"/>
-    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="WithoutBackground" parent="AppTheme">
         <item name="android:windowBackground">@null</item>

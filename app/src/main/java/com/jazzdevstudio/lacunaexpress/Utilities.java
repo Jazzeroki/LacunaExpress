@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.JazzDevStudio.LacunaExpress.Captcha.CheckCaptcha;
+import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Captcha;
 import com.JazzDevStudio.LacunaExpress.R;
 import com.JazzDevStudio.LacunaExpress.SelectMessageActivity2;
 
@@ -31,8 +33,8 @@ public class Utilities extends Activity implements View.OnClickListener {
     private void Initialize(){
         Log.d("Utilities.Initialize", "initializing Activity");
         planet = (Button) findViewById(R.id.buttonPlanetUtilities);
-        station = (Button) findViewById(R.id.buttonPlanetUtilities);
-        mail = (Button) findViewById(R.id.buttonPlanetUtilities);
+        station = (Button) findViewById(R.id.buttonStationUtilities);
+        mail = (Button) findViewById(R.id.buttonMailUtilities);
 
         planet.setOnClickListener(this);
         station.setOnClickListener(this);
@@ -106,10 +108,8 @@ public class Utilities extends Activity implements View.OnClickListener {
                 finish();
                 break;
             case R.id.buttonStationUtilities:
-                //openActivity = new Intent (this, PlanetOptions.class);
-                //openActivity.putExtra("displayString", getIntent().getExtras().getString("displayString"));
-                //startActivity(openActivity);
-                //finish();
+                CheckCaptcha c = new CheckCaptcha(getIntent().getExtras().getString("displayString"), this);
+                c.execute();
                 break;
             case R.id.buttonMailUtilities:
                 openActivity = new Intent (this, SelectMessageActivity2.class);
