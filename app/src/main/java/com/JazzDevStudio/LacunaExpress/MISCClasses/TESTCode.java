@@ -249,7 +249,7 @@ public class TEMPMailWidgetConfig extends Activity implements serverFinishedList
 
 	String color_background_choice, font_color_choice;
 
-	String chosen_accout_string;
+	String chosen_account_string;
 
 	//Total number of messages
 	String message_count_string;
@@ -568,7 +568,7 @@ public class TEMPMailWidgetConfig extends Activity implements serverFinishedList
 
 			passed_data.add(widget_id); //0
 			passed_data.add(Integer.toString(sync_frequency)); //1
-			passed_data.add(chosen_accout_string); //2
+			passed_data.add(chosen_account_string); //2
 			passed_data.add(Integer.toString(message_count_int)); //3
 
 			I am writing all of these in as the specific tag chosen because as the App widget ID is unique, it
@@ -619,12 +619,12 @@ public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 		if (parent == widget_mail_config_spinner_account){
 		//Get the position within the spinner
 		int position0 = widget_mail_config_spinner_account.getSelectedItemPosition();
-		chosen_accout_string = user_accounts.get(position0);
-		Log.d("SelectMessage.onItemSelected assigning selected account", "word in spinner "+ chosen_accout_string);
+		chosen_account_string = user_accounts.get(position0);
+		Log.d("SelectMessage.onItemSelected assigning selected account", "word in spinner "+ chosen_account_string);
 
 		if (tag_chosen.equalsIgnoreCase("All")){
 		//Check the account via the spinner chosen
-		selectedAccount = AccountMan.GetAccount(chosen_accout_string);
+		selectedAccount = AccountMan.GetAccount(chosen_account_string);
 		Log.d("SelectMessage.onItemSelected", "Tag All Calling View Inbox");
 		String request = Inbox.ViewInbox(selectedAccount.sessionID);
 		Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);
@@ -635,7 +635,7 @@ public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 		s.execute(sRequest);
 		} else {
 		//Check the account via the spinner chosen
-		selectedAccount = AccountMan.GetAccount(chosen_accout_string);
+		selectedAccount = AccountMan.GetAccount(chosen_account_string);
 		Log.d("SelectMessage.onItemSelected", "Tag Word in spinner Calling View Inbox");
 		String request = Inbox.ViewInbox(selectedAccount.sessionID, tag_chosen);
 		Log.d("SelectMessage.OnSelectedItem Request to server", request);
@@ -658,7 +658,7 @@ public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 		Log.d("SelectMessage.onItemSelected", "Second Spinner Tag All Calling View Inbox");
 		String request = Inbox.ViewInbox(selectedAccount.sessionID);
 		Log.d("SelectMessage.OnSelectedItem Request to server", request);
-		Log.d("Select Message Activity, SelectedAccount", chosen_accout_string);
+		Log.d("Select Message Activity, SelectedAccount", chosen_account_string);
 		ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
 		AsyncServer s = new AsyncServer();
 		s.addListener(this);
@@ -667,7 +667,7 @@ public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 		Log.d("SelectMessage.onItemSelected", "Second Spinner word in spinner All Calling View Inbox");
 		String request = Inbox.ViewInbox(selectedAccount.sessionID, tag_chosen);
 		Log.d("SelectMessage.OnSelectedItem Request to server", request);
-		Log.d("Select Message Activity, SelectedAccount", chosen_accout_string);
+		Log.d("Select Message Activity, SelectedAccount", chosen_account_string);
 		ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
 		AsyncServer s = new AsyncServer();
 		s.addListener(this);

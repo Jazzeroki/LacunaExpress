@@ -129,11 +129,15 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 
 			user_name = "Loading...";
 			tag_chosen = "All";
-			color_background_choice = "blue";
-			font_color_choice = "white";
+			color_background_choice = "white";
+			font_color_choice = "black";
 			message_count_int = "-1";
 			message_count_string = "-1";
 			sync_frequency = "15";
+
+			// Register an onClickListener
+			Intent clickIntent = new Intent(this.getApplicationContext(),
+					SelectMessageActivity2.class);
 
 			try {
 				sync_frequency = db_data.get(1);
@@ -191,6 +195,15 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 				Log.d("Database", "Has been queried");
 
 				//contentValues.put(helper.COLUMN_SESSION_ID,  newData.get(22)); //May need...
+
+				if (user_name.equalsIgnoreCase("Loading...")){
+					//Do nothing as it is useless to pass loading...
+				} else {
+					//Add these 2 so that when clicked on, it will open up to that specific mail user and tag
+					clickIntent.putExtra("chosen_account_string", user_name);
+					Log.d("Service :", "Username passed via clickintent = " + user_name);
+					clickIntent.putExtra("tag_chosen", tag_chosen);
+				}
 
 			} catch (Exception e){
 				Log.d("Database", "Has NOT been queried");
@@ -255,18 +268,6 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 				e.printStackTrace();
 			}
 
-
-			// Register an onClickListener
-			Intent clickIntent = new Intent(this.getApplicationContext(),
-					SelectMessageActivity2.class);
-
-
-
-			//Set all remote IDs with respective texts
-
-			//Set the message count
-
-
 			//Set the Tag choice
 			String tag_chosen_v1 = "Tag Chosen:\n" + tag_chosen;
 			remoteViews.setTextViewText(R.id.widget_mail_tag_choice, tag_chosen_v1);
@@ -284,18 +285,22 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 
 			remoteViews.setFloat(R.id.widget_mail_tag_choice, "setTextSize", 10);
 
-			int messages_with_tag;
+			int messages_with_tag = -1;
 
-			if (tag_chosen.equalsIgnoreCase("All")){
-				Log.d("Message count string is at:", message_count_int);
-				remoteViews.setTextViewText(R.id.widget_mail_message_count, message_count_int);
-				messages_with_tag = Integer.parseInt(message_count_int);
-			} else {
-				Log.d("Message count string is at:", message_count_string);
-				remoteViews.setTextViewText(R.id.widget_mail_message_count, message_count_string);
-				messages_with_tag = Integer.parseInt(message_count_string);
+			try {
+				if (tag_chosen.equalsIgnoreCase("All")) {
+					Log.d("Message count string is at:", message_count_int);
+					remoteViews.setTextViewText(R.id.widget_mail_message_count, message_count_int);
+					messages_with_tag = Integer.parseInt(message_count_int);
+				} else {
+					Log.d("Message count string is at:", message_count_string);
+					remoteViews.setTextViewText(R.id.widget_mail_message_count, message_count_string);
+					messages_with_tag = Integer.parseInt(message_count_string);
+				}
+
+			} catch (NullPointerException e){
+				e.printStackTrace();
 			}
-
 			//Set the remote views dependent upon new data received
 			//Check the number of messages and adjust the font size of the number of messages displayed. Prevents out of bounds on screen
 			Log.d("Num messages", Integer.toString(messages_with_tag));
@@ -314,13 +319,18 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 
 			/* Finished setting remoteViews */
 
-			clickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-			clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,
-					allWidgetIds);
+			if (user_name.equalsIgnoreCase("Loading...")){
+				//Do nothing, on wrong loop through
+			} else {
+				clickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+				clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,
+						allWidgetIds);
 
-			PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, clickIntent, 0);
-			//Set the onClickListener the TEXTVIEW. If the click the textview, it opens up the SelectMessageActivity2
-			remoteViews.setOnClickPendingIntent(R.id.widget_mail_message_count, pendingIntent);
+				PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, clickIntent, 0);
+				//Set the onClickListener the TEXTVIEW. If the click the textview, it opens up the SelectMessageActivity2
+				remoteViews.setOnClickPendingIntent(R.id.widget_mail_message_count, pendingIntent);
+			}
+
 
 
 			//PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, clickIntent,
@@ -435,17 +445,20 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 			//Log.d("OnPostExecute", "Firing On Post Execute");
 			ResponseReceived();
 
-			String messages_with_tag;
+			String messages_with_tag = "-1";
 
-
-			if (tag_chosen_async.equalsIgnoreCase("All")){
-				Log.d("Message count string is at:", Integer.toString(async_message_count_int));
-				rv1.setTextViewText(R.id.widget_mail_message_count, Integer.toString(async_message_count_int));
-				messages_with_tag = Integer.toString(async_message_count_int);
-			} else {
-				Log.d("Message count string is at:", async_message_count_string);
-				rv1.setTextViewText(R.id.widget_mail_message_count, async_message_count_string);
-				messages_with_tag = async_message_count_string;
+			try {
+				if (tag_chosen_async.equalsIgnoreCase("All")) {
+					Log.d("Message count string is at:", Integer.toString(async_message_count_int));
+					rv1.setTextViewText(R.id.widget_mail_message_count, Integer.toString(async_message_count_int));
+					messages_with_tag = Integer.toString(async_message_count_int);
+				} else {
+					Log.d("Message count string is at:", async_message_count_string);
+					rv1.setTextViewText(R.id.widget_mail_message_count, async_message_count_string);
+					messages_with_tag = async_message_count_string;
+				}
+			} catch (NullPointerException e){
+				e.printStackTrace();
 			}
 
 			//Set the remote views dependent upon new data received
@@ -474,7 +487,7 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 					int x = total_num_messages - old_total_num_messages;
 					//Create a notification icon
 					String body = "You have " + x + " new messages " + user_name;
-					String title = "New " + tag_chosen_async + " Messages";
+					String title = "New " + tag_chosen_async;
 					notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 					Notifications.addNotification(context, notificationManager, uniqueID,
 							body, title, "SelectMessageActivity2", user_name, tag_chosen_async);

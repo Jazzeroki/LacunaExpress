@@ -63,7 +63,7 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 
 	String color_background_choice, font_color_choice;
 
-	String chosen_accout_string;
+	String chosen_account_string;
 
 	//Total number of messages
 	String message_count_string;
@@ -351,7 +351,7 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 		Uri uri = build.build();
 		Intent intentUpdate = new Intent(c, MailWidgetProvider.class);
 		//Add user account choice
-		intentUpdate.putExtra("user_name", chosen_accout_string);
+		intentUpdate.putExtra("user_name", chosen_account_string);
 		intentUpdate.putExtra("tag_chosen", tag_chosen);
 		intentUpdate.setAction(LOG);//Set an action anyway to filter it in onReceive()
 		intentUpdate.setData(uri);//One Alarm per instance.
@@ -377,7 +377,7 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 		//Return the original widget ID, found in onCreate().
 		Intent resultValue = new Intent(c, SelectMessageActivity2.class);
 		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, awID);
-		resultValue.putExtra("chosen_accout_string", chosen_accout_string);
+		resultValue.putExtra("chosen_account_string", chosen_account_string);
 		resultValue.putExtra("tag_chosen", tag_chosen);
 		setResult(RESULT_OK, resultValue);
 		Toast.makeText(this, "Your widget will update shortly", Toast.LENGTH_LONG).show();
@@ -399,7 +399,7 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 			List<String> passed_data = new ArrayList<>();
 
 			passed_data = CreateListForDB.CreateList(
-					widget_id, Integer.toString(sync_frequency), chosen_accout_string,
+					widget_id, Integer.toString(sync_frequency), chosen_account_string,
 					Integer.toString(message_count_int), message_count_string, tag_chosen,
 					color_background_choice, font_color_choice, selectedAccount.sessionID,
 					selectedAccount.homePlanetID, Boolean.toString(notifications_option),
@@ -428,12 +428,12 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 		if (parent == widget_mail_config_spinner_account){
 			//Get the position within the spinner
 			int position0 = widget_mail_config_spinner_account.getSelectedItemPosition();
-			chosen_accout_string = user_accounts.get(position0);
-			Log.d("SelectMessage.onItemSelected assigning selected account", "word in spinner "+ chosen_accout_string);
+			chosen_account_string = user_accounts.get(position0);
+			Log.d("SelectMessage.onItemSelected assigning selected account", "word in spinner "+ chosen_account_string);
 
 			if (tag_chosen.equalsIgnoreCase("All")){
 				//Check the account via the spinner chosen
-				selectedAccount = AccountMan.GetAccount(chosen_accout_string);
+				selectedAccount = AccountMan.GetAccount(chosen_account_string);
 				Log.d("SelectMessage.onItemSelected", "Tag All Calling View Inbox");
 				String request = Inbox.ViewInbox(selectedAccount.sessionID);
 				Log.d("Select Message Activity, SelectedAccount", selectedAccount.userName);
@@ -444,7 +444,7 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 				s.execute(sRequest);
 			} else {
 				//Check the account via the spinner chosen
-				selectedAccount = AccountMan.GetAccount(chosen_accout_string);
+				selectedAccount = AccountMan.GetAccount(chosen_account_string);
 				Log.d("SelectMessage.onItemSelected", "Tag Word in spinner Calling View Inbox");
 				String request = Inbox.ViewInbox(selectedAccount.sessionID, tag_chosen);
 				Log.d("SelectMessage.OnSelectedItem Request to server", request);
@@ -467,7 +467,7 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 				Log.d("SelectMessage.onItemSelected", "Second Spinner Tag All Calling View Inbox");
 				String request = Inbox.ViewInbox(selectedAccount.sessionID);
 				Log.d("SelectMessage.OnSelectedItem Request to server", request);
-				Log.d("Select Message Activity, SelectedAccount", chosen_accout_string);
+				Log.d("Select Message Activity, SelectedAccount", chosen_account_string);
 				ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
 				AsyncServer s = new AsyncServer();
 				s.addListener(this);
@@ -476,7 +476,7 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 				Log.d("SelectMessage.onItemSelected", "Second Spinner word in spinner All Calling View Inbox");
 				String request = Inbox.ViewInbox(selectedAccount.sessionID, tag_chosen);
 				Log.d("SelectMessage.OnSelectedItem Request to server", request);
-				Log.d("Select Message Activity, SelectedAccount", chosen_accout_string);
+				Log.d("Select Message Activity, SelectedAccount", chosen_account_string);
 				ServerRequest sRequest = new ServerRequest(selectedAccount.server, Inbox.url, request);
 				AsyncServer s = new AsyncServer();
 				s.addListener(this);

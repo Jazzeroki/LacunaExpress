@@ -17,7 +17,7 @@ import java.util.Calendar;
 /*
  * This class is setup to provide utilities for refreshing Session Date
  */
-public class sessionRefresh extends AsyncTask<String, Void, Void> {
+public class SessionRefresh extends AsyncTask<String, Void, Void> {
 
 	@Override
 	protected Void doInBackground(String... params) {

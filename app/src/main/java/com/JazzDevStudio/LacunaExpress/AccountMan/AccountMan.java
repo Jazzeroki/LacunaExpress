@@ -6,7 +6,7 @@ package com.JazzDevStudio.LacunaExpress.AccountMan;
 import android.os.Environment;
 import android.util.Log;
 
-import com.JazzDevStudio.LacunaExpress.MISCClasses.sessionRefresh;
+import com.JazzDevStudio.LacunaExpress.MISCClasses.SessionRefresh;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -291,7 +291,7 @@ public class AccountMan {
                     if(a.sessionExpires.equals(null)||a.sessionExpires.before(Calendar.getInstance())) {
                         //if (a.sessionExpires.after(Calendar.getInstance())) {
                             Log.d("AccountMan.Load", "Sessions have expired. Refreshing");
-                            sessionRefresh r = new sessionRefresh();
+                            SessionRefresh r = new SessionRefresh();
                             r.execute("i");
                             try {
                                 Thread.sleep(1000 * (accounts.accounts.size()));

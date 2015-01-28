@@ -17,7 +17,7 @@ import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
 import com.JazzDevStudio.LacunaExpress.Database.TEMPDatabaseAdapter;
 import com.JazzDevStudio.LacunaExpress.MISCClasses.IsMyActivityRunning;
-import com.JazzDevStudio.LacunaExpress.MISCClasses.sessionRefresh;
+import com.JazzDevStudio.LacunaExpress.MISCClasses.SessionRefresh;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -97,7 +97,7 @@ public class Splash extends Activity {
                         try {
 
                             if (a.size() > 0) {
-                                sessionRefresh r = new sessionRefresh();
+                                SessionRefresh r = new SessionRefresh();
                                 r.execute("i");
                                 Thread.sleep((1500 * a.size()));
                             }

@@ -128,8 +128,9 @@ public class MailWidgetProvider extends AppWidgetProvider {
 
 			try {
 				db.deleteRow(Integer.toString(appWidgetId));
+				Log.d("Database ", "Row successfully deleted");
 			} catch (Exception e){
-				Log.d("Database", "Could not delete row = " + Integer.toString(appWidgetId));
+				Log.d("Database ", "Could not delete row = " + Integer.toString(appWidgetId));
 			}
 
 			try {
