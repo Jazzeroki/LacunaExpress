@@ -8,5 +8,6 @@
     <string name="delete_selected">Delete Selected</string>
     <string name="title_activity_utilities">Utilities</string>
     <string name="title_activity_planet_options">PlanetOptions</string>
+    <string name="title_activity_captcha">Captcha</string>
 
 </resources>

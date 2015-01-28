@@ -2,9 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.JazzDevStudio.LacunaExpress"
     android:versionCode="3"
-    android:versionName="0.11" > 
-	
-	<!-- SDK Levels -->
+    android:versionName="0.11" > <!-- SDK Levels -->
     <uses-sdk
         android:minSdkVersion="17"
         android:targetSdkVersion="20" />
@@ -14,7 +12,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- End Application -->
 
+
+    <!-- End Manifest -->
     <!-- Application Declarations -->
     <application
         android:allowBackup="true"
@@ -100,21 +101,21 @@
         <!-- Widget Config Activity -->
         <activity
             android:name=".Widget.WidgetConfig"
-            android:label="Widget Config">
+            android:label="Widget Config" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
-
         </activity>
 
-        <!--Adding the ContentProvider -->
+        <!-- Adding the ContentProvider -->
         <provider
-            android:authorities="com.JazzDevStudio.LacunaExpress"
             android:name=".Database.DatabaseProvider"
-            />
+            android:authorities="com.JazzDevStudio.LacunaExpress" />
 
+        <activity
+            android:name=".Captcha.Captcha"
+            android:label="@string/title_activity_captcha" >
+        </activity>
     </application>
-    <!-- End Application -->
 
-<!--End Manifest -->
 </manifest>
