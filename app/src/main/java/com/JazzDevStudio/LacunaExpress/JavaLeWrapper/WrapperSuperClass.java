@@ -10,7 +10,33 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
     protected static Gson gson = new Gson();
     //protected static StringWriter w = new StringWriter();
     //protected static JsonWriter writer = new JsonWriter(w);
-
+    protected static String Request(String method, String sessionID){
+        String b = "0";
+        try{
+            StringWriter w = new StringWriter();
+            JsonWriter writer = new JsonWriter(w);
+            writer.beginObject();
+            writer.name("jsonrpc").value(2);
+            writer.name("id").value(1);
+            writer.name("method").value(method);
+            writer.name("params").beginArray();
+            writer.value(sessionID);
+            //writer.value(id);
+            writer.endArray();
+            writer.endObject();
+            writer.flush();
+            writer.close();
+            b = gson.toJson(writer);
+            //writer.flush();
+            b = CleanJsonObject(b);
+        }catch(IOException e){
+            System.out.println("ioexception");
+        }catch(NullPointerException e){
+            System.out.println("null pointer exception");
+        }finally{
+        }
+        return b;
+    }
     protected static String Request(String method, String sessionID, String id){
         String b = "0";
         try{
@@ -93,6 +119,35 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
         }
         return b;
     }
+        protected static String Request(String method, String sessionID, String id, String one, String two, String three){
+            String b = "0";
+            try{
+                StringWriter w = new StringWriter();
+                JsonWriter writer = new JsonWriter(w);
+                writer.beginObject();
+                writer.name("jsonrpc").value(2);
+                writer.name("id").value(1);
+                writer.name("method").value(method);
+                writer.name("params").beginArray();
+                writer.value(sessionID);
+                writer.value(id);
+                writer.value(one);
+                writer.value(two);
+                writer.value(three);
+                writer.endArray();
+                writer.endObject();
+                //writer.close();
+                b = gson.toJson(writer);
+                //writer.flush();
+                b = CleanJsonObject(b);
+            }catch(IOException e){
+                System.out.println("ioexception");
+            }catch(NullPointerException e){
+                System.out.println("null pointer exception");
+            }finally{
+            }
+            return b;
+        }
 
     protected static String BasicRequest(String method, String sessionID, String id){
         String b = "0";
