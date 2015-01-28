@@ -14,7 +14,7 @@ public class AccountInfo{
         this.sessionDate = sessionDate;
         this.defaultAccount = defaultAccount;
     }
-    public String userName, password, aPIKey, server, sessionID, sessionDate, displayString, homePlanetID;
+    public String userName, password, aPIKey, server, sessionID, sessionDate, captchaDate, displayString, homePlanetID;
     public Boolean defaultAccount;
     public Calendar sessionExpires;
     public HashMap<String, String>colonies, stations, bodiesCombined;
