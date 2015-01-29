@@ -13,9 +13,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <!-- End Application -->
-
-
     <!-- End Manifest -->
     <!-- Application Declarations -->
     <application
@@ -112,6 +111,11 @@
         <provider
             android:name="com.JazzDevStudio.LacunaExpress.Database.DatabaseProvider"
             android:authorities="com.JazzDevStudio.LacunaExpress" />
+
+        <activity
+            android:name="com.JazzDevStudio.LacunaExpress.Captcha.Captcha"
+            android:label="@string/title_activity_captcha" >
+        </activity>
     </application>
 
 </manifest>
