@@ -1,13 +1,15 @@
 package com.JazzDevStudio.LacunaExpress.Captcha;
 
+import android.content.Context;
+
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
-import com.JazzDevStudio.LacunaExpress.MISCClasses.CheckInternetConnection;
 
 /**
  * Created by Alma on 1/27/2015.
  */
 public class CheckCaptcha {
-    public static Boolean CheckCaptcha(String displayName){
+
+    public static Boolean CheckCaptcha(String displayName, Context context){
         //if(CheckInternetConnection.haveNetworkConnection())
         AccountMan.GetAccount(displayName);
         /*
