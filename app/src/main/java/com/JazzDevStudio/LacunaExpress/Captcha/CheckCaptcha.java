@@ -69,12 +69,12 @@ public class CheckCaptcha extends AsyncTask<String, Void, Void> {
 
                 //Starting UI
                 //Log.d("CheckCaptcha", "Starting Intent");
-                //Intent openActivity = new Intent(context, com.JazzDevStudio.LacunaExpress.Captcha.Captcha.class);
-                //openActivity.putExtra("displayString", account.displayString);
+                Intent openActivity = new Intent(context, com.JazzDevStudio.LacunaExpress.Captcha.Captcha.class);
+                openActivity.putExtra("displayString", account.displayString);
                 //openActivity.putExtra("imageURL", response.result.url);
-                //openActivity.putExtra("guid", response.result.guid);
+                openActivity.putExtra("guid", res.result.guid);
                 //Log.d("CheckCaptcha", "inserting image");
-                //openActivity.putExtra("image", bitmap);
+                openActivity.putExtra("image", bitmap);
                 //context.startAc
                 //need to watch this as this likely should not work.
                 //((Activity)context).startActivityForResult(openActivity, 1);
@@ -93,27 +93,7 @@ public class CheckCaptcha extends AsyncTask<String, Void, Void> {
         return null;
     }
 
-    private class CheckAnswer extends AsyncTask<Void, Void, Void>{
-        private final String displayName, answer, guid;
-        private Context context;
-        CheckAnswer(String displayName, Context context, String answer, String guid){
-            this.displayName = displayName;
-            this.context = context;
-            this.answer = answer;
-            this.guid = guid;
-        }
-        @Override
-        protected Void doInBackground(Void... params) {
-            AccountInfo account = GetAccount(displayName);
-            String r = Captcha.Solve(account.sessionID, guid, answer);
-            Log.d("CheckCaptcha.Solve", r);
-            AsyncServer s = new AsyncServer();
-            r = s.ServerRequest(account.server, Captcha.url, r);
-            Gson gson = new Gson();
-            Response res = gson.fromJson(r, Response.class);
-            return null;
-        }
-    }
+
 
    /* public static Boolean CheckCaptcha(String displayName, Context context){
         if(CheckInternetConnection.haveNetworkConnection(context)){
@@ -122,4 +102,25 @@ public class CheckCaptcha extends AsyncTask<String, Void, Void> {
         }*/
 
 
+}
+class CheckAnswer extends AsyncTask<Void, Void, Void>{
+    private final String displayName, answer, guid;
+    private Context context;
+    CheckAnswer(Context context, String displayName, String answer, String guid){
+        this.displayName = displayName;
+        this.context = context;
+        this.answer = answer;
+        this.guid = guid;
+    }
+    @Override
+    protected Void doInBackground(Void... params) {
+        AccountInfo account = GetAccount(displayName);
+        String r = Captcha.Solve(account.sessionID, guid, answer);
+        Log.d("CheckCaptcha.Solve", r);
+        AsyncServer s = new AsyncServer();
+        r = s.ServerRequest(account.server, Captcha.url, r);
+        Gson gson = new Gson();
+        Response res = gson.fromJson(r, Response.class);
+        return null;
+    }
 }

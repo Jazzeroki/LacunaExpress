@@ -22,6 +22,8 @@ public class Captcha extends Activity implements View.OnClickListener, serverFin
     private Button button;
     private EditText text;
     private ImageView image;
+    private Intent i;
+    //private Bundle bundle;
 
     private void Initialize(){
         Log.d("CheckCaptcha", "Initializing UI");
@@ -31,8 +33,8 @@ public class Captcha extends Activity implements View.OnClickListener, serverFin
 
         button.setOnClickListener(this);
 
-        Intent intent = getIntent();
-        Bitmap bitmap = (Bitmap) intent.getParcelableExtra("image");
+        Intent i = getIntent();
+        Bitmap bitmap = (Bitmap) i.getParcelableExtra("image");
 
         image.setImageBitmap(bitmap);
     }
@@ -68,7 +70,10 @@ public class Captcha extends Activity implements View.OnClickListener, serverFin
 
     @Override
     public void onClick(View v) {
-
+        text.toString();
+        //CheckAnswer(String displayName, Context context, String answer, String guid)
+        CheckAnswer c = new CheckAnswer(this, getIntent().getStringExtra("displayName"),text.getText().toString(), getIntent().getStringExtra("guid"));
+        //CheckCaptcha.CheckAnswer c = new CheckCaptcha.CheckAnswer(getIntent().getStringExtra("displayName"),this, text.getText(), getIntent().getStringExtra("guid"));
     }
 
     @Override
