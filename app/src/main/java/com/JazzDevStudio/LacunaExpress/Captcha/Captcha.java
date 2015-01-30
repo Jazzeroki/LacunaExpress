@@ -1,5 +1,6 @@
 package com.JazzDevStudio.LacunaExpress.Captcha;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -15,8 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.JazzDevStudio.LacunaExpress.R;
+import com.JazzDevStudio.LacunaExpress.Server.serverFinishedListener;
 
-public class Captcha extends ActionBarActivity implements View.OnClickListener {
+public class Captcha extends Activity implements View.OnClickListener, serverFinishedListener {
     private Button button;
     private EditText text;
     private ImageView image;
@@ -66,6 +68,11 @@ public class Captcha extends ActionBarActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+
+    }
+
+    @Override
+    public void onResponseReceived(String reply) {
 
     }
 }

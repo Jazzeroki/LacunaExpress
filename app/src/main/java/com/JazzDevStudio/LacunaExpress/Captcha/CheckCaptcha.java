@@ -1,5 +1,6 @@
 package com.JazzDevStudio.LacunaExpress.Captcha;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,12 +9,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
-import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
-import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Empire;
 import com.JazzDevStudio.LacunaExpress.LEWrapperResponse.Response;
 import com.JazzDevStudio.LacunaExpress.MISCClasses.CheckInternetConnection;
 import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Captcha;
-import com.JazzDevStudio.LacunaExpress.PlanetOptions;
 import com.JazzDevStudio.LacunaExpress.Server.AsyncServer;
 import com.google.gson.Gson;
 
@@ -70,13 +68,17 @@ public class CheckCaptcha extends AsyncTask<String, Void, Void> {
                 Bitmap bitmap = BitmapFactory.decodeStream(input);
 
                 //Starting UI
-                Log.d("CheckCaptcha", "Starting Intent");
-                Intent openActivity = new Intent(context, com.JazzDevStudio.LacunaExpress.Captcha.Captcha.class);
+                //Log.d("CheckCaptcha", "Starting Intent");
+                //Intent openActivity = new Intent(context, com.JazzDevStudio.LacunaExpress.Captcha.Captcha.class);
                 //openActivity.putExtra("displayString", account.displayString);
                 //openActivity.putExtra("imageURL", response.result.url);
                 //openActivity.putExtra("guid", response.result.guid);
-                openActivity.putExtra("image", bitmap);
-                context.startActivity(openActivity);
+                //Log.d("CheckCaptcha", "inserting image");
+                //openActivity.putExtra("image", bitmap);
+                //context.startAc
+                //need to watch this as this likely should not work.
+                //((Activity)context).startActivityForResult(openActivity, 1);
+                //context.startActivity(openActivity);
 
                 //img.setImageBitmap(bitmap);
 
@@ -89,6 +91,28 @@ public class CheckCaptcha extends AsyncTask<String, Void, Void> {
 
         }
         return null;
+    }
+
+    private class CheckAnswer extends AsyncTask<Void, Void, Void>{
+        private final String displayName, answer, guid;
+        private Context context;
+        CheckAnswer(String displayName, Context context, String answer, String guid){
+            this.displayName = displayName;
+            this.context = context;
+            this.answer = answer;
+            this.guid = guid;
+        }
+        @Override
+        protected Void doInBackground(Void... params) {
+            AccountInfo account = GetAccount(displayName);
+            String r = Captcha.Solve(account.sessionID, guid, answer);
+            Log.d("CheckCaptcha.Solve", r);
+            AsyncServer s = new AsyncServer();
+            r = s.ServerRequest(account.server, Captcha.url, r);
+            Gson gson = new Gson();
+            Response res = gson.fromJson(r, Response.class);
+            return null;
+        }
     }
 
    /* public static Boolean CheckCaptcha(String displayName, Context context){
