@@ -77,7 +77,7 @@ public class CheckCaptcha extends AsyncTask<String, Void, Void> {
                 //context.startAc
                 //need to watch this as this likely should not work.
                 //((Activity)context).startActivityForResult(openActivity, 1);
-                //context.startActivity(openActivity);
+                context.startActivity(openActivity);
 
                 //img.setImageBitmap(bitmap);
 
