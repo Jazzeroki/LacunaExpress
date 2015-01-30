@@ -1,6 +1,5 @@
 package com.JazzDevStudio.LacunaExpress.Captcha;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,9 +8,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
+import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Captcha;
 import com.JazzDevStudio.LacunaExpress.LEWrapperResponse.Response;
 import com.JazzDevStudio.LacunaExpress.MISCClasses.CheckInternetConnection;
-import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Captcha;
 import com.JazzDevStudio.LacunaExpress.Server.AsyncServer;
 import com.google.gson.Gson;
 
@@ -25,7 +24,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import java.io.InputStream;
 import java.net.URL;
 
-import static com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan.*;
+import static com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan.GetAccount;
 
 /**
  * Created by Alma on 1/27/2015.
@@ -123,4 +122,5 @@ class CheckAnswer extends AsyncTask<Void, Void, Void>{
         Response res = gson.fromJson(r, Response.class);
         return null;
     }
+
 }

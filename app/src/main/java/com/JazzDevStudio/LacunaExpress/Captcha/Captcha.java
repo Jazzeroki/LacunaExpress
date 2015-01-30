@@ -3,8 +3,6 @@ package com.JazzDevStudio.LacunaExpress.Captcha;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.JazzDevStudio.LacunaExpress.R;
 import com.JazzDevStudio.LacunaExpress.Server.serverFinishedListener;
@@ -74,6 +71,9 @@ public class Captcha extends Activity implements View.OnClickListener, serverFin
         //CheckAnswer(String displayName, Context context, String answer, String guid)
         CheckAnswer c = new CheckAnswer(this, getIntent().getStringExtra("displayName"),text.getText().toString(), getIntent().getStringExtra("guid"));
         //CheckCaptcha.CheckAnswer c = new CheckCaptcha.CheckAnswer(getIntent().getStringExtra("displayName"),this, text.getText(), getIntent().getStringExtra("guid"));
+
+	    //Execute the checkAnswer
+	    c.execute();
     }
 
     @Override

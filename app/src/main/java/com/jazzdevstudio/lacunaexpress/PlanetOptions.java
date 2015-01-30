@@ -2,7 +2,6 @@ package com.JazzDevStudio.LacunaExpress;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,18 +9,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import java.util.ArrayList;
 
-import com.JazzDevStudio.LacunaExpress.R;
+import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
+import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.SortedSet;
 
 public class PlanetOptions extends Activity implements AdapterView.OnItemSelectedListener {
-    com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo account;
+    AccountInfo account;
     Spinner planetList;
     ArrayList<String> planetNamesForSpinner = new ArrayList<String>();
     ArrayAdapter<String> planetAdapter;
@@ -36,7 +32,7 @@ public class PlanetOptions extends Activity implements AdapterView.OnItemSelecte
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if(extras != null){
-          account = com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan.GetAccount(extras.getString("displayName"));
+          account = AccountMan.GetAccount(extras.getString("displayName"));
         }
         if(account != null){
             planetNamesForSpinner = (ArrayList<String>)account.colonies.values();

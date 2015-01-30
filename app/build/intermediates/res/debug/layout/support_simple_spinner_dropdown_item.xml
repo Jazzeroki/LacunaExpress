@@ -22,4 +22,4 @@
           android:singleLine="true"
           android:layout_width="match_parent"
           android:layout_height="?attr/dropdownListPreferredItemHeight"
-          android:ellipsize="marquee"/><!-- From: file:/C:/Users/Alma/Documents/GitHub/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/layout/support_simple_spinner_dropdown_item.xml -->
+          android:ellipsize="marquee"/><!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/layout/support_simple_spinner_dropdown_item.xml -->
