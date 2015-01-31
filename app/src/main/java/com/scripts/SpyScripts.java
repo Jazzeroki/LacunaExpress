@@ -290,4 +290,7 @@ public class SpyScripts {
     	//result.captured_count shows how many prisoners are on the planet
     }
      */
+    static void ExecuteAllPrisoners(String displayName, String planetName){
+
+    }
 }
