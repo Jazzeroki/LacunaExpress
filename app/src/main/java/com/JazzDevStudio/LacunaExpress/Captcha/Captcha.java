@@ -69,11 +69,13 @@ public class Captcha extends Activity implements View.OnClickListener, serverFin
     public void onClick(View v) {
         text.toString();
         //CheckAnswer(String displayName, Context context, String answer, String guid)
-        CheckAnswer c = new CheckAnswer(this, getIntent().getStringExtra("displayName"),text.getText().toString(), getIntent().getStringExtra("guid"));
+        CheckAnswer c = new CheckAnswer(this, getIntent().getStringExtra("displayString"),text.getText().toString(), getIntent().getStringExtra("guid"));
+
         //CheckCaptcha.CheckAnswer c = new CheckCaptcha.CheckAnswer(getIntent().getStringExtra("displayName"),this, text.getText(), getIntent().getStringExtra("guid"));
 
 	    //Execute the checkAnswer
 	    c.execute();
+        finish();
     }
 
     @Override

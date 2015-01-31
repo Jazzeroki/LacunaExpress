@@ -1,5 +1,7 @@
 package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
 
+import android.util.Log;
+
 /**
  * Created by Alma on 1/27/2015.
  */
@@ -29,7 +31,8 @@ public class Captcha extends  LESuperClass{
         */
     }
     public static String Solve(String sessionID, String guid, String solution){
-        return Request("solve", sessionID, guid, solution);
+        Log.d("Solve", "creating string");
+        return Request("solve", sessionID,"1", guid, solution);
 
         /*StartOfObject(1, "solve");
         String i = "0";

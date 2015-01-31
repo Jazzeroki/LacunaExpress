@@ -116,6 +116,19 @@
             android:name="com.JazzDevStudio.LacunaExpress.Captcha.Captcha"
             android:label="@string/title_activity_captcha" >
         </activity>
+
+        <service
+            android:name="com.scripts.TestIntentService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name="com.JazzDevStudio.LacunaExpress.Scripts.SpyScripts"
+            android:exported="false" >
+        </service>
+        <service
+            android:name="com.JazzDevStudio.LacunaExpress.Scripts.ShipYardScripts"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>
