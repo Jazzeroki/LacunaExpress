@@ -126,7 +126,13 @@ class CheckAnswer extends AsyncTask<Void, Void, Void>{
         AsyncServer s = new AsyncServer();
         r = s.ServerRequest(account.server, Captcha.url, r);
         Gson gson = new Gson();
-        Response res = gson.fromJson(r, Response.class);
+        CaptchaResponse res = gson.fromJson(r, CaptchaResponse.class);
+        if(res.result == 1){
+            //still need to implement what happens if result is bad or good
+            //if good result will ==1
+        }
+
+        //returning null seems to be causing and error need to change return type later
         return null;
     }
 

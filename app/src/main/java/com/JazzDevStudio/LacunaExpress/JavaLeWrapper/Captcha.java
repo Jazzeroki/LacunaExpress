@@ -32,7 +32,7 @@ public class Captcha extends  LESuperClass{
     }
     public static String Solve(String sessionID, String guid, String solution){
         Log.d("Solve", "creating string");
-        return Request("solve", sessionID,"1", guid, solution);
+        return Request("solve", sessionID,guid, solution);
 
         /*StartOfObject(1, "solve");
         String i = "0";
