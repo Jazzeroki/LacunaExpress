@@ -69,7 +69,6 @@ public class SelectMessageActivity2 extends Activity implements serverFinishedLi
 	//For debugging
 	int counter = 0;
 	int counter2 = 0;
-	int temp_counter = 0;
 
 	//Preferences
 	SharedPreferences prefs;

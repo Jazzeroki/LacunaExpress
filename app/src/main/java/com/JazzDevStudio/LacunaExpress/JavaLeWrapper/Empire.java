@@ -54,7 +54,7 @@ public class Empire extends LESuperClass{
         LoginObject(int i, String u, String p) {
             params[0] = u;
             params[1] = p;
-            params[2] = "6266769d-1f73-4325-a40f-6660c4c6440d";
+            params[2] = "6266769d-1f73-4325-a40f-6660c4c6440d";  //API Key
             id = i;
         }
         String jsonrpc = "2.0";

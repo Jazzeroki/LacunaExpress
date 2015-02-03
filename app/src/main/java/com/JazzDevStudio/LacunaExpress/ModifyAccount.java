@@ -109,7 +109,7 @@ public class ModifyAccount extends Activity implements serverFinishedListener, O
 	            Log.d("Request to server", request);
 	            ServerRequest sRequest = new ServerRequest(server, Empire.url, request);
 	            AsyncServer s = new AsyncServer();
-	            s.addListener(this); //Not really sure why this is erroring out... Any Ideas Jazz?
+	            s.addListener(this); 
 	            s.execute(sRequest);
 	            Log.d("Login", "Login Success");
 	            //AsyncServer clears all listeners after the requests have been recieved.

@@ -51,6 +51,7 @@ public class AsyncServer extends AsyncTask<ServerRequest, Void, String> {
             Log.d("AsyncServer.ServerRequest URL", (gameServer+"/" + methodURL));
             Log.d("AsyncServer.ServerRequest","Request string "+JsonRequest);
             URL url = new URL(gameServer+"/" + methodURL);
+	        Log.d("Outbound URL", url.toString());
             URLConnection connection = url.openConnection();
             connection.setDoOutput(true);
             OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
