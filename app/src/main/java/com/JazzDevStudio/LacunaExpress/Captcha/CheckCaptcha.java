@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 import static com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan.GetAccount;
+import static com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Captcha.Solve;
 
 /**
  * Created by Alma on 1/27/2015.
@@ -77,7 +78,7 @@ public class CheckCaptcha extends AsyncTask<String, Void, Void> {
                 //context.startAc
                 //need to watch this as this likely should not work.
                 //((Activity)context).startActivityForResult(openActivity, 1);
-                //context.startActivity(openActivity);
+                context.startActivity(openActivity);
 
                 //img.setImageBitmap(bitmap);
 
@@ -106,6 +107,9 @@ class CheckAnswer extends AsyncTask<Void, Void, Void>{
     private final String displayName, answer, guid;
     private Context context;
     CheckAnswer(Context context, String displayName, String answer, String guid){
+        Log.d("CheckAnswer guid", guid);
+        Log.d("CheckAnswer displayname", displayName);
+        Log.d("CheckAnswer answer", answer);
         this.displayName = displayName;
         this.context = context;
         this.answer = answer;
@@ -113,13 +117,22 @@ class CheckAnswer extends AsyncTask<Void, Void, Void>{
     }
     @Override
     protected Void doInBackground(Void... params) {
+        Log.d("CheckAnswer.doinbackground", "getting Account");
         AccountInfo account = GetAccount(displayName);
-        String r = Captcha.Solve(account.sessionID, guid, answer);
+        Log.d("CheckAnswer sessionID", account.sessionID);
+        Log.d("CheckAnswer creating solution string", "creating solution string");
+        String r = Solve(account.sessionID, guid, answer);
         Log.d("CheckCaptcha.Solve", r);
         AsyncServer s = new AsyncServer();
         r = s.ServerRequest(account.server, Captcha.url, r);
         Gson gson = new Gson();
-        Response res = gson.fromJson(r, Response.class);
+        CaptchaResponse res = gson.fromJson(r, CaptchaResponse.class);
+        if(res.result == 1){
+            //still need to implement what happens if result is bad or good
+            //if good result will ==1
+        }
+
+        //returning null seems to be causing and error need to change return type later
         return null;
     }
 

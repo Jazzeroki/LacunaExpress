@@ -12,9 +12,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <!-- End Application -->
-
-
     <!-- End Manifest -->
     <!-- Application Declarations -->
     <application
@@ -116,6 +115,19 @@
             android:name=".Captcha.Captcha"
             android:label="@string/title_activity_captcha" >
         </activity>
+
+        <service
+            android:name="com.scripts.TestIntentService"
+            android:exported="false" >
+        </service>
+        <service
+            android:name=".Scripts.SpyScripts"
+            android:exported="false" >
+        </service>
+        <service
+            android:name=".Scripts.ShipYardScripts"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

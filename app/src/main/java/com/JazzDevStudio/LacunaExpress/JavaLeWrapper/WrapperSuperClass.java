@@ -79,9 +79,10 @@ package com.JazzDevStudio.LacunaExpress.JavaLeWrapper;
             writer.value(one);
             writer.endArray();
             writer.endObject();
+            writer.flush();
             writer.close();
             b = gson.toJson(writer);
-            writer.flush();
+            //writer.flush();
             b = CleanJsonObject(b);
         }catch(IOException e){
             System.out.println("ioexception");
