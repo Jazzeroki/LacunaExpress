@@ -195,15 +195,21 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 
 		//This block populates user_accounts for values to display in the select account spinner
 		ReadInAccounts();
-		if(accounts.size() == 1){
+		if (accounts == null) {
+			//In case there is a corrupted file
+			L.makeToast(this, "No Accounts detected, Let's add an account");
+			Intent openActivity = new Intent(this, AddAccount.class);
+			startActivity(openActivity);
+			finish();
+		} else if (accounts.size() == 1) {
 			selectedAccount = accounts.get(0);
 			Log.d("SelectMessage.Initialize", "only 1 account setting as default" + selectedAccount.displayString);
 			user_accounts.add(selectedAccount.displayString);
-		} else{
-			for(AccountInfo i: accounts){
-				Log.d("SelectMessage.Initialize", "Multiple accounts found, Setting Default account to selected account: "+i.displayString); //
+		} else {
+			for (AccountInfo i : accounts) {
+				Log.d("SelectMessage.Initialize", "Multiple accounts found, Setting Default account to selected account: " + i.displayString); //
 				user_accounts.add(i.displayString);
-				if(i.defaultAccount)
+				if (i.defaultAccount)
 					selectedAccount = i;
 			}
 		}
@@ -560,7 +566,17 @@ public class WidgetConfig extends Activity implements serverFinishedListener, Vi
 	private void ReadInAccounts() {
 		Log.d("SelectAccountActivity.ReadInAccounts", "checking for file" + AccountMan.CheckForFile());
 		accounts = AccountMan.GetAccounts();
-		Log.d("SelectAccountActivity.ReadInAccounts", String.valueOf(accounts.size()));
+
+		if (accounts != null){
+			Log.d("SelectAccountActivity.ReadInAccounts", String.valueOf(accounts.size()));
+		} else {
+			//If no account exists, open the activity to add an account
+			L.makeToast(this, "No Accounts detected, Let's add an account");
+			Intent openActivity = new Intent(this, AddAccount.class);
+			startActivity(openActivity);
+			finish();
+		}
+
 	}
 
 	//Set the background image as per shared preferences

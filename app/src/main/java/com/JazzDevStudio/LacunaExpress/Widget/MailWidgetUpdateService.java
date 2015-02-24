@@ -74,16 +74,22 @@ public class MailWidgetUpdateService extends Service implements serverFinishedLi
 
 		//Begin pulling data:
 		//This block populates user_accounts for values to display in the select account spinner
-		ReadInAccounts();
-		if(accounts.size() == 1){
-			selectedAccount = accounts.get(0);
-			Log.d("SelectMessage.Initialize", "only 1 account setting as default" + selectedAccount.displayString);
-			user_accounts.add(selectedAccount.displayString);
-		} else{
-			for(AccountInfo i: accounts){
-				Log.d("SelectMessage.Initialize", "Multiple accounts found, Setting Default account to selected account: "+i.displayString); //
-				user_accounts.add(i.displayString);
+		//In case there is nothing in the file, this will error out
+		try {
+			ReadInAccounts();
+			if (accounts.size() == 1) {
+				selectedAccount = accounts.get(0);
+				Log.d("SelectMessage.Initialize", "only 1 account setting as default" + selectedAccount.displayString);
+				user_accounts.add(selectedAccount.displayString);
+			} else {
+				for (AccountInfo i : accounts) {
+					Log.d("SelectMessage.Initialize", "Multiple accounts found, Setting Default account to selected account: " + i.displayString); //
+					user_accounts.add(i.displayString);
+				}
 			}
+
+		} catch (NullPointerException e){
+			e.printStackTrace();
 		}
 
 		Log.d(LOG, "OnStart Called");

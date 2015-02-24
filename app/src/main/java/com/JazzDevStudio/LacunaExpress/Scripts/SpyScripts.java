@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.content.Intent;
 
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
-import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Captcha;
 import com.JazzDevStudio.LacunaExpress.JavaLeWrapper.Security;
 import com.JazzDevStudio.LacunaExpress.LEWrapperResponse.Response;
 import com.JazzDevStudio.LacunaExpress.Server.AsyncServer;
@@ -37,7 +36,7 @@ public class SpyScripts extends IntentService {
         if (intent != null) {
             final String action = intent.getAction();
             if(ACTIONS_EXECUTE_ALL_CAPTURED_SPIES.equals(action)){
-                ScriptUtilities.GetBuildingID(intent.getStringExtra("displayName"), intent.getStringExtra("planetName"));
+                //ScriptUtilities.GetBuildingID(intent.getStringExtra("displayName"), intent.getStringExtra("planetName")); //This is giving a syntax error
             }
             if (ACTION_FOO.equals(action)) {
                 final String param1 = intent.getStringExtra(EXTRA_PARAM1);
