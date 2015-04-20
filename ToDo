@@ -3,5 +3,7 @@
 Upgrade Section:
     -Add a simple  upgrade section that allows for spinner of planets, spinner of buildings, upgrade level to, option to level up to max (30 or if highest lib level - Need try catch here for people who do not have lvl 30 / resources / halls). 
     -Separate spinner for glyph buildings / resource buildings / spy buildings / misc buildings
-    -Add bottom option for ALL planets (for a 1 click simplicty but ADD a safeguard so people understand what it does quite clearly).
+    -Add bottom option for ALL planets (for a 1 click simplicty but ADD a safeguard so people understand what it does 
+    quite clearly).
     -Figure out a way to cancel the upgrades via an abort button if the user changes mind
+    -Patrick will work on this project, though I shed al responsibility for making it look 'pretty'.
