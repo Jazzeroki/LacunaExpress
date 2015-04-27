@@ -99,6 +99,13 @@
     <color name="bright_foreground_material_light">@android:color/black</color>
     <color name="button_material_dark">#ff5a595b</color>
     <color name="button_material_light">#ffd6d7d7</color>
+    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/build/intermediates/exploded-aar/net.steamcrafted/load-toast/1.0.5/res/values/values.xml -->
+    <eat-comment/>
+    <color name="color_accent">#7c4dff</color>
+    <color name="color_error">#f44336</color>
+    <color name="color_success">#3CCD88</color>
+    <!-- From: file:/C:/Users/PatrickSSD2/Studio%20Workspace%202014-12-15/LacunaExpress/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/res/values/values.xml -->
+    <eat-comment/>
     <color name="dim_foreground_disabled_material_dark">#80bebebe</color>
     <color name="dim_foreground_disabled_material_light">#80323232</color>
     <color name="dim_foreground_material_dark">#ffbebebe</color>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
@@ -16,10 +17,13 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
-import java.util.ArrayList;
-
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountInfo;
 import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
+import com.JazzDevStudio.LacunaExpress.MISCClasses.L;
+
+import net.steamcrafted.loadtoast.LoadToast;
+
+import java.util.ArrayList;
 
 
 
@@ -46,6 +50,9 @@ public class SelectAccount extends Activity implements OnClickListener, AdapterV
 	    prefs = PreferenceManager.getDefaultSharedPreferences(this);
 	    //Set layout
 	    setTheBackground();
+
+
+
 
         ReadInAccounts();
         if(accounts.size() == 1){

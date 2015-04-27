@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -18,6 +19,8 @@ import com.JazzDevStudio.LacunaExpress.AccountMan.AccountMan;
 import com.JazzDevStudio.LacunaExpress.Database.TEMPDatabaseAdapter;
 import com.JazzDevStudio.LacunaExpress.MISCClasses.IsMyActivityRunning;
 import com.JazzDevStudio.LacunaExpress.MISCClasses.SessionRefresh;
+
+import net.steamcrafted.loadtoast.LoadToast;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -65,7 +68,8 @@ public class Splash extends Activity {
 		//Check if there is internet connection
 		do_we_have_network_connection = haveNetworkConnection();
 
-		//DO SOMETHING HERE IF NO INTERNET CONNECTION HAPPENS
+
+
 
 
 		if (music_on == true){

@@ -2,9 +2,12 @@ package com.JazzDevStudio.LacunaExpress.MISCClasses;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
+
+import net.steamcrafted.loadtoast.LoadToast;
 
 //This is a class for shortcuts of code. Allows for reusability
 public class L extends Activity{
@@ -74,6 +77,33 @@ public class L extends Activity{
 			Log.d("Lengthy String", str);
 	}
 
+	/**
+	 * Really cool looking toast. Much easier to see
+	 * @param context
+	 */
+	public static LoadToast neatStuff(Context context){
 
+		/*
+		final LoadToast lt =  L.neatStuff(this);
+	    Handler handler22 = new Handler();
+	    handler22.postDelayed(new Runnable() {
+		    public void run() {
+			    lt.success();
+			    lt.error();
+		    }
+	    }, (1000*3));
+		 */
+
+		LoadToast lt = new LoadToast(context);
+		lt.setText("STUFF!");
+		lt.setBackgroundColor(Color.RED);
+		lt.setTextColor(Color.RED).setBackgroundColor(Color.GREEN).setProgressColor(Color.BLUE);
+		lt.show();
+		lt.setTranslationY(100);
+
+
+
+		return lt;
+	}
 	//
 }
